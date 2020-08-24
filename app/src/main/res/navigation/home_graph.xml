@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/home_graph.xml"
+    app:startDestination="@id/featured">
+
+    <fragment
+        android:id="@+id/featured"
+        android:name="dev.forcetower.playtime.view.featured.MoviesFeaturedFragment"
+        android:label="MoviesFeaturedFragment" />
+</navigation>
