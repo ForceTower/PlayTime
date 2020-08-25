@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/home_graph.xml"
-    app:startDestination="@id/featured">
+    app:startDestination="@id/movie_details">
 
     <fragment
-        android:id="@+id/featured"
+        android:id="@+id/movies_featured"
         android:name="dev.forcetower.playtime.view.featured.MoviesFeaturedFragment"
-        android:label="MoviesFeaturedFragment" />
+        android:label="MoviesFeaturedFragment" >
+        <action
+            android:id="@+id/action_movies_featured_to_movie_details"
+            app:destination="@id/movie_details" />
+    </fragment>
+    <fragment
+        android:id="@+id/movie_details"
+        android:name="dev.forcetower.playtime.view.details.DetailsFragment"
+        android:label="DetailsFragment" />
 </navigation>

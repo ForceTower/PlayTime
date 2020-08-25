@@ -1,7 +1,6 @@
 package dev.forcetower.playtime.view
 
 import android.os.Bundle
-import android.view.ViewGroup
 import androidx.core.view.WindowCompat
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
@@ -9,7 +8,6 @@ import com.google.android.material.snackbar.Snackbar
 import dev.forcetower.playtime.R
 import dev.forcetower.playtime.databinding.ActivityMainBinding
 import dev.forcetower.toolkit.components.BaseActivity
-import eightbitlab.com.blurview.RenderScriptBlur
 
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -22,16 +20,6 @@ class MainActivity : BaseActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
-
-        val decorView = window.decorView
-        val rootView = decorView.findViewById<ViewGroup>(android.R.id.content)
-        val windowBackground = rootView.background
-        binding.blurView
-            .setupWith(rootView)
-            .setFrameClearDrawable(windowBackground)
-            .setBlurAlgorithm(RenderScriptBlur(this))
-            .setBlurRadius(6f)
-            .setHasFixedTransformationMatrix(true)
     }
 
     override fun onSupportNavigateUp() = navController.navigateUp()

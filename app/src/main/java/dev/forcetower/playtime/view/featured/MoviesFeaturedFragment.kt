@@ -28,14 +28,14 @@ class MoviesFeaturedFragment : BaseFragment() {
         binding.recyclerMovies.adapter = adapter
 
 
-        adapter.submitList(listOf(
-            MovieFeatured(1, "Spider Man: Homecoming", "2017/04/20", "https://image.tmdb.org/t/p/original/tPpYGm2mVecue7Bk3gNVoSPA5qn.jpg"),
-            MovieFeatured(2, "Spider Man: Homecoming", "2017/04/20", "https://image.tmdb.org/t/p/original/tPpYGm2mVecue7Bk3gNVoSPA5qn.jpg"),
-            MovieFeatured(3, "Spider Man: Homecoming", "2017/04/20", "https://image.tmdb.org/t/p/original/tPpYGm2mVecue7Bk3gNVoSPA5qn.jpg"),
-            MovieFeatured(4, "Spider Man: Homecoming", "2017/04/20", "https://image.tmdb.org/t/p/original/tPpYGm2mVecue7Bk3gNVoSPA5qn.jpg"),
-            MovieFeatured(5, "Spider Man: Homecoming", "2017/04/20", "https://image.tmdb.org/t/p/original/tPpYGm2mVecue7Bk3gNVoSPA5qn.jpg"),
-            MovieFeatured(6, "Spider Man: Homecoming", "2017/04/20", "https://image.tmdb.org/t/p/original/tPpYGm2mVecue7Bk3gNVoSPA5qn.jpg"),
-            MovieFeatured(7, "Spider Man: Homecoming", "2017/04/20", "https://image.tmdb.org/t/p/original/tPpYGm2mVecue7Bk3gNVoSPA5qn.jpg"),
-        ))
+//        adapter.submitList(listOf(
+//            MovieFeatured(1, "Spider Man: Homecoming", "2017/04/20", "https://image.tmdb.org/t/p/original/tPpYGm2mVecue7Bk3gNVoSPA5qn.jpg"),
+//            MovieFeatured(2, "Spider Man: Homecoming", "2017/04/20", "https://image.tmdb.org/t/p/original/tPpYGm2mVecue7Bk3gNVoSPA5qn.jpg"),
+//            MovieFeatured(3, "Spider Man: Homecoming", "2017/04/20", "https://image.tmdb.org/t/p/original/tPpYGm2mVecue7Bk3gNVoSPA5qn.jpg"),
+//            MovieFeatured(4, "Spider Man: Homecoming", "2017/04/20", "https://image.tmdb.org/t/p/original/tPpYGm2mVecue7Bk3gNVoSPA5qn.jpg"),
+//            MovieFeatured(5, "Spider Man: Homecoming", "2017/04/20", "https://image.tmdb.org/t/p/original/tPpYGm2mVecue7Bk3gNVoSPA5qn.jpg"),
+//            MovieFeatured(6, "Spider Man: Homecoming", "2017/04/20", "https://image.tmdb.org/t/p/original/tPpYGm2mVecue7Bk3gNVoSPA5qn.jpg"),
+//            MovieFeatured(7, "Spider Man: Homecoming", "2017/04/20", "https://image.tmdb.org/t/p/original/tPpYGm2mVecue7Bk3gNVoSPA5qn.jpg"),
+//        ))
     }
 }

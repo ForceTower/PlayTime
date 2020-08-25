@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="movie"
+            type="dev.forcetower.playtime.core.model.ui.MovieFeatured" />
+
+        <variable
+            name="listener"
+            type="com.bumptech.glide.request.RequestListener&lt;android.graphics.drawable.Drawable&gt;" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:imageUrl="@{movie.backgroundUrl}"
+            app:listener="@{listener}"
+            app:blurImage="@{true}"
+            app:blurRadius="@{25}"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
+        <View
+            android:id="@+id/overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:background="#9C000000"/>
+
+        <View
+            android:id="@+id/overlay_dark"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior=".widget.behavior.ScrollingAlphaBehavior"
+            android:alpha="0.0"
+            android:background="#000000"/>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:clipToPadding="false"
+                android:paddingBottom="24dp"
+                app:paddingTopSystemWindowInsets="@{true}"
+                app:paddingStartSystemWindowInsets="@{true}"
+                app:paddingEndSystemWindowInsets="@{true}"
+                app:paddingBottomSystemWindowInsets="@{true}">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="32dp">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/cover"
+                        android:layout_width="0dp"
+                        android:layout_height="200dp"
+                        android:layout_marginTop="100dp"
+                        android:elevation="8dp"
+                        android:scaleType="centerCrop"
+                        app:imageUrl="@{movie.posterUrl}"
+                        app:layout_constraintDimensionRatio="W,2:3"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:roundedViewRadius="@{6}"
+                        tools:src="@tools:sample/backgrounds/scenic" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/movie_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="36dp"
+                        android:layout_marginTop="48dp"
+                        android:gravity="center"
+                        android:text="@{movie.name}"
+                        android:textAlignment="gravity"
+                        android:textColor="?attr/colorOnMovieFeatured"
+                        android:textSize="30sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cover"
+                        tools:text="The Lion King" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_watch_trailer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="36dp"
+                        android:letterSpacing="0.01"
+                        android:text="Assistir Trailer"
+                        android:textAllCaps="false"
+                        android:textColor="?attr/colorOnMovieFeatured"
+                        app:icon="@drawable/ic_outline_play_arrow_24"
+                        app:cornerRadius="28dp"
+                        app:elevation="0dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/movie_title" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/runtime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:textColor="?attr/colorOnMovieFeatured"
+                        android:text="144 min"
+                        android:layout_marginHorizontal="8dp"
+                        app:layout_constraintEnd_toStartOf="@+id/genres"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_watch_trailer"
+                        tools:text="148 min" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/genres"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="8dp"
+                        android:textColor="?attr/colorOnMovieFeatured"
+                        android:text="Familia - Aventura"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/runtime"
+                        app:layout_constraintTop_toTopOf="@+id/runtime"
+                        tools:text="Family - Adventure" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:text="Sinopse"
+                    android:textSize="18sp"
+                    android:textColor="?attr/colorOnMovieFeatured"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:text="@{movie.resume}"
+                    android:textColor="?android:attr/textColorSecondaryInverse"
+                    tools:text="@tools:sample/lorem"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:text="@{movie.resume}"
+                    android:textColor="?android:attr/textColorSecondaryInverse"
+                    tools:text="@tools:sample/lorem"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:text="@{movie.resume}"
+                    android:textColor="?android:attr/textColorSecondaryInverse"
+                    tools:text="@tools:sample/lorem"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:text="@{movie.resume}"
+                    android:textColor="?android:attr/textColorSecondaryInverse"
+                    tools:text="@tools:sample/lorem"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:text="@{movie.resume}"
+                    android:textColor="?android:attr/textColorSecondaryInverse"
+                    tools:text="@tools:sample/lorem"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:text="@{movie.resume}"
+                    android:textColor="?android:attr/textColorSecondaryInverse"
+                    tools:text="@tools:sample/lorem"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:text="@{movie.resume}"
+                    android:textColor="?android:attr/textColorSecondaryInverse"
+                    tools:text="@tools:sample/lorem"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

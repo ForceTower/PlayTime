@@ -14,19 +14,5 @@
             android:name="androidx.navigation.fragment.NavHostFragment"
             app:navGraph="@navigation/home_graph"
             app:defaultNavHost="true"/>
-
-        <eightbitlab.com.blurview.BlurView
-            android:id="@+id/blur_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom">
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottom_nav"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:elevation="0dp"
-                app:backgroundTint="#80FFFFFF"
-                app:menu="@menu/home_bottom_nav"/>
-        </eightbitlab.com.blurview.BlurView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

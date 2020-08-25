@@ -37,16 +37,20 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="16dp"
-            android:textSize="30sp"
-            android:textColor="?attr/colorOnMovieFeatured"
+            android:layout_height="0dp"
+            android:layout_margin="16dp"
             android:text="@{movie.name}"
-            app:textAllCaps="true"
+            android:textColor="?attr/colorOnMovieFeatured"
+            android:textSize="30sp"
+            android:textAlignment="gravity"
+            android:gravity="bottom"
             app:layout_constraintBottom_toBottomOf="@id/cover"
             app:layout_constraintEnd_toEndOf="@id/cover"
             app:layout_constraintStart_toStartOf="@id/cover"
-            tools:text="Pirates of the Caribbean"/>
+            app:layout_constraintTop_toTopOf="@id/cover"
+            app:paddingEndSystemWindowInsets="@{true}"
+            app:paddingStartSystemWindowInsets="@{true}"
+            app:textAllCaps="true"
+            tools:text="Pirates of the Caribbean" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
