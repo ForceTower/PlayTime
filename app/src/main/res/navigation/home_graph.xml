@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/home_graph.xml"
-    app:startDestination="@id/movie_details">
+    app:startDestination="@id/movies_featured">
 
     <fragment
         android:id="@+id/movies_featured"
@@ -14,5 +14,9 @@
     <fragment
         android:id="@+id/movie_details"
         android:name="dev.forcetower.playtime.view.details.DetailsFragment"
-        android:label="DetailsFragment" />
+        android:label="DetailsFragment" >
+        <argument
+            android:name="movieId"
+            app:argType="integer" />
+    </fragment>
 </navigation>

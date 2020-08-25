@@ -6,7 +6,7 @@
     <data>
         <variable
             name="movie"
-            type="dev.forcetower.playtime.core.model.ui.MovieFeatured" />
+            type="dev.forcetower.playtime.core.model.storage.Movie" />
 
         <variable
             name="listener"
@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:imageUrl="@{movie.backgroundUrl}"
+            app:tmdbUrl="@{movie.backdropPath}"
             app:listener="@{listener}"
             app:blurImage="@{true}"
             app:blurRadius="@{25}"
@@ -69,12 +69,12 @@
                         android:layout_marginTop="100dp"
                         android:elevation="8dp"
                         android:scaleType="centerCrop"
-                        app:imageUrl="@{movie.posterUrl}"
+                        app:tmdbUrl="@{movie.posterPath}"
                         app:layout_constraintDimensionRatio="W,2:3"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:roundedViewRadius="@{6}"
+                        app:roundedViewRadius="@{12}"
                         tools:src="@tools:sample/backgrounds/scenic" />
 
                     <com.google.android.material.textview.MaterialTextView
@@ -84,7 +84,7 @@
                         android:layout_marginHorizontal="36dp"
                         android:layout_marginTop="48dp"
                         android:gravity="center"
-                        android:text="@{movie.name}"
+                        android:text="@{movie.title}"
                         android:textAlignment="gravity"
                         android:textColor="?attr/colorOnMovieFeatured"
                         android:textSize="30sp"
@@ -92,6 +92,23 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/cover"
                         tools:text="The Lion King" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tagline"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="36dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@{movie.tagline}"
+                        android:textColor="?attr/colorOnMovieFeatured"
+                        android:textSize="16sp"
+                        android:textAlignment="gravity"
+                        android:gravity="center"
+                        app:goneUnless="@{movie.tagline != null}"
+                        app:layout_constraintTop_toBottomOf="@id/movie_title"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:text="It could happen to anyone"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_watch_trailer"
@@ -107,7 +124,7 @@
                         app:elevation="0dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/movie_title" />
+                        app:layout_constraintTop_toBottomOf="@+id/tagline" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/runtime"
@@ -151,7 +168,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginHorizontal="24dp"
-                    android:text="@{movie.resume}"
+                    android:text="@{movie.overview}"
                     android:textColor="?android:attr/textColorSecondaryInverse"
                     tools:text="@tools:sample/lorem"/>
 
@@ -160,7 +177,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginHorizontal="24dp"
-                    android:text="@{movie.resume}"
+                    android:text="@{movie.overview}"
                     android:textColor="?android:attr/textColorSecondaryInverse"
                     tools:text="@tools:sample/lorem"/>
 
@@ -169,7 +186,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginHorizontal="24dp"
-                    android:text="@{movie.resume}"
+                    android:text="@{movie.overview}"
                     android:textColor="?android:attr/textColorSecondaryInverse"
                     tools:text="@tools:sample/lorem"/>
 
@@ -178,7 +195,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginHorizontal="24dp"
-                    android:text="@{movie.resume}"
+                    android:text="@{movie.overview}"
                     android:textColor="?android:attr/textColorSecondaryInverse"
                     tools:text="@tools:sample/lorem"/>
 
@@ -187,7 +204,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginHorizontal="24dp"
-                    android:text="@{movie.resume}"
+                    android:text="@{movie.overview}"
                     android:textColor="?android:attr/textColorSecondaryInverse"
                     tools:text="@tools:sample/lorem"/>
 
@@ -196,7 +213,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginHorizontal="24dp"
-                    android:text="@{movie.resume}"
+                    android:text="@{movie.overview}"
                     android:textColor="?android:attr/textColorSecondaryInverse"
                     tools:text="@tools:sample/lorem"/>
 
@@ -205,7 +222,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginHorizontal="24dp"
-                    android:text="@{movie.resume}"
+                    android:text="@{movie.overview}"
                     android:textColor="?android:attr/textColorSecondaryInverse"
                     tools:text="@tools:sample/lorem"/>
 

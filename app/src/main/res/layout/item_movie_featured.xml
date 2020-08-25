@@ -6,18 +6,23 @@
     <data>
         <variable
             name="movie"
-            type="dev.forcetower.playtime.core.model.ui.MovieFeatured" />
+            type="dev.forcetower.playtime.core.model.storage.Movie" />
+
+        <variable
+            name="actions"
+            type="dev.forcetower.playtime.view.featured.MovieActions" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> actions.onMovieClick(movie)}">
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/cover"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleType="center"
-            app:imageUrl="@{movie.backgroundUrl}"
+            app:tmdbUrl="@{movie.backdropPath}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -39,7 +44,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="16dp"
-            android:text="@{movie.name}"
+            android:text="@{movie.title}"
             android:textColor="?attr/colorOnMovieFeatured"
             android:textSize="30sp"
             android:textAlignment="gravity"

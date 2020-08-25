@@ -10,9 +10,9 @@ class ScrollingAlphaBehavior @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null
 ) : CoordinatorLayout.Behavior<View>(context, attributeSet) {
-    // todo these values should be a device screen query
-    private val triggerSize = 500f
-    private val range = 800f
+    private val height = context.resources.displayMetrics.heightPixels
+    private val triggerSize = height / 4
+    private val range = height / 3
 
     private var scrollAccumulator = 0
 
@@ -42,7 +42,7 @@ class ScrollingAlphaBehavior @JvmOverloads constructor(
         if (scrollAccumulator >= triggerSize) {
             val value = (scrollAccumulator - triggerSize).coerceAtMost(range)
 
-            val percent = (value / range).coerceIn(0.0f..1.0f)
+            val percent = ((value * 0.7f) / range).coerceIn(0.0f..0.7f)
 
             child.alpha = percent
         } else if (scrollAccumulator < triggerSize) {

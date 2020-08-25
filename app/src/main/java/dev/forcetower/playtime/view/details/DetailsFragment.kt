@@ -8,28 +8,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.ColorUtils
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import androidx.palette.graphics.Palette
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import dev.forcetower.playtime.core.model.ui.MovieFeatured
+import dagger.hilt.android.AndroidEntryPoint
+import dev.forcetower.playtime.core.model.ui.MovieSimpleUI
 import dev.forcetower.playtime.databinding.FragmentMovieDetailsBinding
 import dev.forcetower.toolkit.components.BaseFragment
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
+@AndroidEntryPoint
 class DetailsFragment : BaseFragment() {
+    private val args by navArgs<DetailsFragmentArgs>()
     private lateinit var binding: FragmentMovieDetailsBinding
 
-    private val movie = MovieFeatured(
-        1,
-        "Star Wars: A Ascenção Skywalker",
-        "2017/04/20",
-        "https://image.tmdb.org/t/p/original/3mTyM2kywFuDmq3RQa2TFIpVCHt.jpg",
-        "https://image.tmdb.org/t/p/original/jOzrELAzFxtMx2I4uDGHOotdfsS.jpg",
-        "Com o retorno do Imperador Palpatine, todos voltam a temer seu poder e, com isso, a Resistência toma a frente da batalha que ditará os rumos da galáxia. Treinando para ser uma completa Jedi, Rey (Daisy Ridley) ainda se encontra em conflito com seu passado e futuro, mas teme pelas respostas que pode conseguir a partir de sua complexa ligação com Kylo Ren (Adam Driver), que também se encontra em conflito pela Força."
-    )
+    private val viewModel: DetailsViewModel by viewModels()
 
     private val listener = object : RequestListener<Drawable> {
         override fun onLoadFailed(
@@ -81,12 +80,13 @@ class DetailsFragment : BaseFragment() {
         return FragmentMovieDetailsBinding.inflate(inflater, container, false).also {
             binding = it
             binding.listener = listener
-            binding.movie = movie
         }.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Timber.d("View created...")
+        viewModel.movie(args.movieId).observe(viewLifecycleOwner) {
+            binding.movie = it
+        }
     }
 }

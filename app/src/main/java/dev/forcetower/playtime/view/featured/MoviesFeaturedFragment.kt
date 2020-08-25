@@ -4,20 +4,31 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import dev.forcetower.playtime.core.model.ui.MovieFeatured
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import dev.forcetower.playtime.databinding.FragmentMoviesFeaturedBinding
 import dev.forcetower.toolkit.components.BaseFragment
+import dev.forcetower.toolkit.lifecycle.EventObserver
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
+@AndroidEntryPoint
 class MoviesFeaturedFragment : BaseFragment() {
     private lateinit var binding: FragmentMoviesFeaturedBinding
     private lateinit var adapter: FeaturedAdapter
+
+    private val viewModel by activityViewModels<FeaturedViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        adapter = FeaturedAdapter()
+        adapter = FeaturedAdapter(viewModel)
         return FragmentMoviesFeaturedBinding.inflate(inflater, container, false).also {
             binding = it
         }.root
@@ -27,15 +38,15 @@ class MoviesFeaturedFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerMovies.adapter = adapter
 
+        lifecycleScope.launch {
+            viewModel.movies().collect {
+                adapter.submitData(it)
+            }
+        }
 
-//        adapter.submitList(listOf(
-//            MovieFeatured(1, "Spider Man: Homecoming", "2017/04/20", "https://image.tmdb.org/t/p/original/tPpYGm2mVecue7Bk3gNVoSPA5qn.jpg"),
-//            MovieFeatured(2, "Spider Man: Homecoming", "2017/04/20", "https://image.tmdb.org/t/p/original/tPpYGm2mVecue7Bk3gNVoSPA5qn.jpg"),
-//            MovieFeatured(3, "Spider Man: Homecoming", "2017/04/20", "https://image.tmdb.org/t/p/original/tPpYGm2mVecue7Bk3gNVoSPA5qn.jpg"),
-//            MovieFeatured(4, "Spider Man: Homecoming", "2017/04/20", "https://image.tmdb.org/t/p/original/tPpYGm2mVecue7Bk3gNVoSPA5qn.jpg"),
-//            MovieFeatured(5, "Spider Man: Homecoming", "2017/04/20", "https://image.tmdb.org/t/p/original/tPpYGm2mVecue7Bk3gNVoSPA5qn.jpg"),
-//            MovieFeatured(6, "Spider Man: Homecoming", "2017/04/20", "https://image.tmdb.org/t/p/original/tPpYGm2mVecue7Bk3gNVoSPA5qn.jpg"),
-//            MovieFeatured(7, "Spider Man: Homecoming", "2017/04/20", "https://image.tmdb.org/t/p/original/tPpYGm2mVecue7Bk3gNVoSPA5qn.jpg"),
-//        ))
+        viewModel.movieClick.observe(viewLifecycleOwner, EventObserver {
+            val directions = MoviesFeaturedFragmentDirections.actionMoviesFeaturedToMovieDetails(it.id)
+            findNavController().navigate(directions)
+        })
     }
 }
