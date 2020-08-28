@@ -14,7 +14,6 @@ object ObjectConverters {
             val parser = DateTimeFormatter.ofPattern("yyyy-MM-dd")
             LocalDate.parse(string, parser)
         } catch (e: Throwable) {
-            Timber.e(e, "Unable to parse ${jsonPrimitive.asString}")
             null
         }
     }

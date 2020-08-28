@@ -38,4 +38,7 @@ abstract class MovieDao : BaseDao<Movie>() {
 
     @Query("SELECT * FROM Movie WHERE id = :id")
     abstract fun getById(id: Int): LiveData<Movie>
+
+    @Query("DELETE FROM Movie")
+    abstract suspend fun deleteAll()
 }

@@ -44,6 +44,7 @@ buildscript {
         play_publisher = "2.7.1"
     }
     repositories {
+        //maven { url '\\\\wsl\$\\Ubuntu-18.04\\home\\forcetower\\development\\androidx-master-dev\\out\\androidx\\build\\support_repo' }
         google()
         jcenter()
         maven { url "https://plugins.gradle.org/m2/" }
@@ -62,6 +63,8 @@ buildscript {
 
 allprojects {
     repositories {
+        mavenLocal()
+//        maven { url "\\\\wsl\$\\Ubuntu-18.04\\home\\forcetower\\development\\androidx-master-dev\\out\\androidx\\build\\support_repo" }
         google()
         jcenter()
         maven { url "https://plugins.gradle.org/m2/" }

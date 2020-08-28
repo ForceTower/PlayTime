@@ -1,4 +1,4 @@
-package dev.forcetower.playtime.core.source.network.mediator
+package dev.forcetower.playtime.core.source.mediator
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
@@ -12,7 +12,6 @@ import dev.forcetower.playtime.core.source.network.TMDbService
 import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException
-import java.io.InvalidObjectException
 
 @OptIn(ExperimentalPagingApi::class)
 class MovieRemoteMediator(
@@ -39,6 +38,9 @@ class MovieRemoteMediator(
             val endReached = response.page == response.totalPages
 
             database.withTransaction {
+                if (loadType == LoadType.REFRESH) {
+                    database.movies().deleteAll()
+                }
                 database.movies().insertOrUpdateSimple(response.results.map { MovieBase.fromDTO(it, response.page) })
                 Timber.d("Inserted ${response.results.size} movies")
             }

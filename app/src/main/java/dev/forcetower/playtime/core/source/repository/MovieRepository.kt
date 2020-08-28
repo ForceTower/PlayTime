@@ -7,7 +7,7 @@ import androidx.paging.PagingData
 import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.core.source.network.TMDbService
 import dev.forcetower.playtime.core.source.local.PlayDB
-import dev.forcetower.playtime.core.source.network.mediator.MovieRemoteMediator
+import dev.forcetower.playtime.core.source.mediator.MovieRemoteMediator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
@@ -22,7 +22,8 @@ class MovieRepository @Inject constructor(
     fun movies(): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(
-                20,
+                pageSize = 20,
+                initialLoadSize = 20,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = { database.movies().getMovieSource() },
