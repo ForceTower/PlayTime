@@ -2,6 +2,7 @@ package dev.forcetower.playtime.core.model.insertion
 
 import dev.forcetower.playtime.core.model.dto.MovieSimple
 import dev.forcetower.playtime.core.model.storage.Movie
+import timber.log.Timber
 import java.time.LocalDate
 
 data class MovieBase(
@@ -14,11 +15,11 @@ data class MovieBase(
     val adult: Boolean,
     val voteAverage: Double,
     val releaseDate: LocalDate?,
-    // this is a keep state of page
-    val page: Int
+    // the tmdb index of the movie
+    val position: Int
 ) {
     companion object {
-        fun fromDTO(dto: MovieSimple, page: Int): MovieBase {
+        fun fromDTO(dto: MovieSimple, position: Int): MovieBase {
             return MovieBase(
                 dto.id,
                 dto.title,
@@ -29,7 +30,7 @@ data class MovieBase(
                 dto.adult,
                 dto.voteAverage,
                 dto.releaseDate,
-                page
+                position
             )
         }
 
@@ -45,7 +46,7 @@ data class MovieBase(
                 voteAverage,
                 releaseDate,
                 null,
-                page
+                position
             )
         }
     }

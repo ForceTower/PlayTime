@@ -17,6 +17,5 @@ data class Movie(
     val voteAverage: Double,
     val releaseDate: LocalDate?,
     val tagline: String?,
-    // this is a keep state of page
-    val page: Int
+    val position: Int
 )

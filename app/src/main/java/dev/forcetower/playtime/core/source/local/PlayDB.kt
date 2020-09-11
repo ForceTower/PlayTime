@@ -11,7 +11,7 @@ import dev.forcetower.playtime.core.source.local.dao.MovieDao
 @Database(entities = [
     Genre::class,
     Movie::class
-], version = 1, exportSchema = true)
+], version = 2, exportSchema = true)
 @TypeConverters(value = [DateConverters::class])
 abstract class PlayDB : RoomDatabase() {
     abstract fun genres(): GenreDao

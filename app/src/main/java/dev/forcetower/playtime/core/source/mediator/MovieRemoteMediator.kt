@@ -19,19 +19,27 @@ class MovieRemoteMediator(
     private val service: TMDbService
 ) : RemoteMediator<Int, Movie>() {
     override suspend fun load(loadType: LoadType, state: PagingState<Int, Movie>): MediatorResult {
+        val pageSize = state.config.pageSize
         val page = when(loadType) {
-            LoadType.REFRESH -> getRemoteKeyClosestToCurrentPosition(state)?.page ?: 1
+            LoadType.REFRESH -> {
+                val i = getRemoteKeyClosestToCurrentPosition(state)?.position ?: 1
+                indexToPage(i, pageSize)
+            }
             LoadType.PREPEND -> {
-                val p = getRemoteKeyForFirstItem(state)?.page ?: 1
+                val i = getRemoteKeyForFirstItem(state)?.position ?: 1
+                val p = indexToPage(i, pageSize)
                 val n = p - 1
                 if (n < 1) return MediatorResult.Success(endOfPaginationReached = true)
                 n
             }
             LoadType.APPEND -> {
-                val p = getRemoteKeyForLastItem(state)?.page ?: 1
+                val i = getRemoteKeyForLastItem(state)?.position ?: 1
+                val p = indexToPage(i, pageSize)
                 p + 1
             }
         }
+        
+        Timber.d("Will fetch page: $page")
 
         try {
             val response = service.moviesPopular(page)
@@ -41,7 +49,9 @@ class MovieRemoteMediator(
                 if (loadType == LoadType.REFRESH) {
                     database.movies().deleteAll()
                 }
-                database.movies().insertOrUpdateSimple(response.results.map { MovieBase.fromDTO(it, response.page) })
+                database.movies().insertOrUpdateSimple(response.results.mapIndexed { index, it ->
+                    MovieBase.fromDTO(it, (response.page - 1) * pageSize + index)
+                })
                 Timber.d("Inserted ${response.results.size} movies")
             }
             return MediatorResult.Success(endOfPaginationReached = endReached)
@@ -64,5 +74,9 @@ class MovieRemoteMediator(
 
     private fun getRemoteKeyForLastItem(state: PagingState<Int, Movie>): Movie? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
+    }
+
+    private fun indexToPage(position: Int, pageSize: Int = 20): Int {
+        return (position / pageSize) + 1
     }
 }

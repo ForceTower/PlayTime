@@ -34,6 +34,7 @@ object AppModule {
     fun database(@ApplicationContext context: Context) =
         Room.databaseBuilder(context, PlayDB::class.java, "play.db")
             .enableMultiInstanceInvalidation()
+            .fallbackToDestructiveMigration()
             .build()
 
     @Provides

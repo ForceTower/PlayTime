@@ -24,7 +24,7 @@ class MovieRepository @Inject constructor(
             config = PagingConfig(
                 pageSize = 20,
                 initialLoadSize = 20,
-                enablePlaceholders = false
+                enablePlaceholders = true
             ),
             pagingSourceFactory = { database.movies().getMovieSource() },
             remoteMediator = MovieRemoteMediator(database, service)
