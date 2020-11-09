@@ -61,7 +61,7 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.10'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.0'
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(':toolkit')
 
@@ -72,7 +72,7 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipe_refresh"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout"
     implementation "com.google.android.material:material:$google_material"
-    implementation "androidx.recyclerview:recyclerview:1.2.0-alpha05"
+    implementation "androidx.recyclerview:recyclerview:1.2.0-alpha06"
     implementation "androidx.palette:palette:$pallete"
     implementation "androidx.fragment:fragment:$fragment"
     implementation "androidx.fragment:fragment-ktx:$fragment"
@@ -85,13 +85,10 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle"
 
-    implementation "androidx.navigation:navigation-ui:$navigation"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation"
-    implementation "androidx.navigation:navigation-fragment:$navigation"
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation"
 
     // Paging
-    implementation "androidx.paging:paging-runtime:$paging"
     implementation "androidx.paging:paging-runtime-ktx:$paging"
 
     // Dependency injection
@@ -119,10 +116,8 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$glide"
     kapt "com.github.bumptech.glide:compiler:$glide"
 
-    implementation 'com.eightbitlab:blurview:1.6.3'
-
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation 'junit:junit:4.13.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
 }

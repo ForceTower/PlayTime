@@ -2,10 +2,10 @@
 buildscript {
     ext.kotlin_version = "1.4.10"
     ext {
-        ktx = '1.5.0-alpha02'
+        ktx = '1.5.0-alpha04'
         app_compat = '1.2.0'
         google_material = '1.2.1'
-        constraint_layout = "2.0.0"
+        constraint_layout = '2.0.4'
         annotation = "1.1.0"
         exif_interface = "1.1.0"
         pallete = "1.0.0"
@@ -15,10 +15,10 @@ buildscript {
         view_pager = "1.0.0"
 
         // Architecture
-        room = '2.3.0-alpha02'
+        room = '2.3.0-alpha03'
         lifecycle = '2.2.0'
-        paging = '3.0.0-alpha06'
-        navigation = '2.3.0'
+        paging = '3.0.0-alpha08'
+        navigation = '2.3.1'
 
         // Dependency Injection
         dagger = '2.28'
@@ -31,7 +31,7 @@ buildscript {
         lottie = '3.3.1'
 
         // Networking
-        okhttp = '4.8.1'
+        okhttp = '4.9.0'
         retrofit = '2.9.0'
 
         // Others
@@ -40,7 +40,7 @@ buildscript {
         // Build Versions
         android_gradle_plugin = '4.0.1'
         kotlinter = "1.26.0"
-        hilt_dagger = '2.28.3-alpha'
+        hilt_dagger = '2.29.1-alpha'
         play_publisher = "2.7.1"
     }
     repositories {
@@ -52,7 +52,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.android.tools.build:gradle:4.0.1"
+        classpath 'com.android.tools.build:gradle:4.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigation"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_dagger"
