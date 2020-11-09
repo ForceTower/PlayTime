@@ -21,7 +21,6 @@ class FeaturedAdapter(
 
     override fun onBindViewHolder(holder: MovieHolder, position: Int) {
         holder.binding.movie = getItem(position)
-        holder.binding.position = position.toString()
     }
 
     class MovieHolder(val binding: ItemMovieFeaturedBinding, actions: MovieActions) : RecyclerView.ViewHolder(binding.root) {

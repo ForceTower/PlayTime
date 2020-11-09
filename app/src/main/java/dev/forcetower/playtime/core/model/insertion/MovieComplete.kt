@@ -1,13 +1,8 @@
-package dev.forcetower.playtime.core.model.storage
+package dev.forcetower.playtime.core.model.insertion
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import java.time.LocalDate
 
-@Entity
-data class Movie(
-    @PrimaryKey
+data class MovieComplete(
     val id: Int,
     val title: String,
     val overview: String,
@@ -18,7 +13,5 @@ data class Movie(
     val adult: Boolean,
     val voteAverage: Double,
     val releaseDate: LocalDate?,
-    val tagline: String?,
-    @ColumnInfo(defaultValue = "0")
-    val position: Int
+    val tagline: String?
 )

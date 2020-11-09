@@ -73,8 +73,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout"
     implementation "com.google.android.material:material:$google_material"
     implementation "androidx.recyclerview:recyclerview:1.2.0-alpha06"
-    implementation "androidx.palette:palette:$pallete"
-    implementation "androidx.fragment:fragment:$fragment"
+    implementation "androidx.palette:palette-ktx:$pallete"
     implementation "androidx.fragment:fragment-ktx:$fragment"
     implementation "androidx.viewpager2:viewpager2:$view_pager"
 

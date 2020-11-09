@@ -18,6 +18,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import dagger.hilt.android.AndroidEntryPoint
 import dev.forcetower.playtime.core.model.ui.MovieSimpleUI
+import dev.forcetower.playtime.core.util.PaletteUtils.getFirstNonBright
 import dev.forcetower.playtime.databinding.FragmentMovieDetailsBinding
 import dev.forcetower.toolkit.components.BaseFragment
 import timber.log.Timber
@@ -50,17 +51,15 @@ class DetailsFragment : BaseFragment() {
         ): Boolean {
             if (resource is BitmapDrawable) {
                 val palette = Palette.from(resource.bitmap).generate()
-                val dominant = palette.getDominantColor(Color.BLACK)
+
+                val dominant = palette.getFirstNonBright()
                 val dominantAlpha = ColorUtils.setAlphaComponent(dominant, 0xB2)
                 binding.overlay.setBackgroundColor(dominantAlpha)
-
-
-                val vibrant = palette.getDarkVibrantColor(Color.BLACK)
-                val vibrantAlpha = ColorUtils.setAlphaComponent(vibrant, 0XF0)
-                binding.btnWatchTrailer.setBackgroundColor(vibrantAlpha)
+                binding.btnWatchTrailer.setBackgroundColor(dominantAlpha)
             } else {
                 val alpha = ColorUtils.setAlphaComponent(Color.BLACK, 0xB2)
                 binding.overlay.setBackgroundColor(alpha)
+                binding.btnWatchTrailer.setBackgroundColor(alpha)
             }
             startPostponedEnterTransition()
             return false
@@ -86,7 +85,8 @@ class DetailsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.movie(args.movieId).observe(viewLifecycleOwner) {
-            binding.movie = it
+            Timber.d("Updated data: $it")
+            binding.value = it
         }
     }
 }

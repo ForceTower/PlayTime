@@ -17,11 +17,11 @@ buildscript {
         // Architecture
         room = '2.3.0-alpha03'
         lifecycle = '2.2.0'
-        paging = '3.0.0-alpha08'
+        paging = '3.0.0-alpha07'
         navigation = '2.3.1'
 
         // Dependency Injection
-        dagger = '2.28'
+        dagger = '2.29.1'
 
         // Logs
         timber = "4.7.1"
@@ -63,7 +63,7 @@ buildscript {
 
 allprojects {
     repositories {
-//        mavenLocal()
+        mavenLocal()
 //        maven { url "\\\\wsl\$\\Ubuntu-18.04\\home\\forcetower\\development\\androidx-master-dev\\out\\androidx\\build\\support_repo" }
         google()
         jcenter()

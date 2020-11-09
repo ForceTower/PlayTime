@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="movie"
-            type="dev.forcetower.playtime.core.model.storage.Movie" />
+            name="value"
+            type="dev.forcetower.playtime.core.model.ui.MovieWithRelations" />
 
         <variable
             name="listener"
@@ -21,10 +21,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:tmdbUrl="@{movie.backdropPath}"
+            app:tmdbUrl="@{value.movie.backdropPath}"
             app:listener="@{listener}"
             app:blurImage="@{true}"
             app:blurRadius="@{25}"
+            app:crossFade="@{true}"
             tools:src="@tools:sample/backgrounds/scenic" />
 
         <View
@@ -69,7 +70,7 @@
                         android:layout_marginTop="100dp"
                         android:elevation="8dp"
                         android:scaleType="centerCrop"
-                        app:tmdbUrl="@{movie.posterPath}"
+                        app:tmdbUrl="@{value.movie.posterPath}"
                         app:layout_constraintDimensionRatio="W,2:3"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -84,7 +85,7 @@
                         android:layout_marginHorizontal="36dp"
                         android:layout_marginTop="48dp"
                         android:gravity="center"
-                        android:text="@{movie.title}"
+                        android:text="@{value.movie.title}"
                         android:textAlignment="gravity"
                         android:textColor="?attr/colorOnMovieFeatured"
                         android:textSize="30sp"
@@ -99,12 +100,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="36dp"
                         android:layout_marginTop="8dp"
-                        android:text="@{movie.tagline}"
+                        android:text="@{value.movie.tagline}"
                         android:textColor="?attr/colorOnMovieFeatured"
                         android:textSize="16sp"
                         android:textAlignment="gravity"
                         android:gravity="center"
-                        app:goneUnless="@{movie.tagline != null}"
+                        app:goneUnless="@{value.movie.tagline != null}"
                         app:layout_constraintTop_toBottomOf="@id/movie_title"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -116,50 +117,56 @@
                         android:layout_height="56dp"
                         android:layout_marginTop="36dp"
                         android:letterSpacing="0.01"
-                        android:text="Assistir Trailer"
+                        android:text="@string/watch_trailer"
                         android:textAllCaps="false"
                         android:textColor="?attr/colorOnMovieFeatured"
                         app:icon="@drawable/ic_outline_play_arrow_24"
                         app:cornerRadius="28dp"
                         app:elevation="0dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="?attr/colorOnMovieFeatured"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tagline" />
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/runtime"
-                        android:layout_width="wrap_content"
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginHorizontal="8dp"
                         android:layout_marginTop="16dp"
-                        android:textColor="?attr/colorOnMovieFeatured"
-                        android:text="144 min"
-                        android:layout_marginHorizontal="8dp"
-                        app:layout_constraintEnd_toStartOf="@+id/genres"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintHorizontal_chainStyle="packed"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:gravity="center"
                         app:layout_constraintTop_toBottomOf="@+id/btn_watch_trailer"
-                        tools:text="148 min" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/genres"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="8dp"
-                        android:textColor="?attr/colorOnMovieFeatured"
-                        android:text="Familia - Aventura"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/runtime"
-                        app:layout_constraintTop_toTopOf="@+id/runtime"
-                        tools:text="Family - Adventure" />
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/runtime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="?attr/colorOnMovieFeatured"
+                            android:text="@{@string/movie_runtime_format(value.movie.runtime)}"
+                            android:layout_marginHorizontal="8dp"
+                            app:goneUnless="@{value.movie.runtime != null &amp;&amp; value.movie.runtime > 0}"
+                            tools:text="148 min" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/genres"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="8dp"
+                            android:textColor="?attr/colorOnMovieFeatured"
+                            android:text="@{value.genresString(2)}"
+                            app:goneUnless="@{value.genres.size() > 0}"
+                            tools:text="Family - Adventure" />
+                    </androidx.appcompat.widget.LinearLayoutCompat>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="24dp"
-                    android:text="Sinopse"
+                    android:text="@string/movie_overview"
                     android:textSize="18sp"
                     android:textColor="?attr/colorOnMovieFeatured"/>
 
@@ -168,61 +175,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginHorizontal="24dp"
-                    android:text="@{movie.overview}"
-                    android:textColor="?android:attr/textColorSecondaryInverse"
-                    tools:text="@tools:sample/lorem"/>
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginHorizontal="24dp"
-                    android:text="@{movie.overview}"
-                    android:textColor="?android:attr/textColorSecondaryInverse"
-                    tools:text="@tools:sample/lorem"/>
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginHorizontal="24dp"
-                    android:text="@{movie.overview}"
-                    android:textColor="?android:attr/textColorSecondaryInverse"
-                    tools:text="@tools:sample/lorem"/>
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginHorizontal="24dp"
-                    android:text="@{movie.overview}"
-                    android:textColor="?android:attr/textColorSecondaryInverse"
-                    tools:text="@tools:sample/lorem"/>
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginHorizontal="24dp"
-                    android:text="@{movie.overview}"
-                    android:textColor="?android:attr/textColorSecondaryInverse"
-                    tools:text="@tools:sample/lorem"/>
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginHorizontal="24dp"
-                    android:text="@{movie.overview}"
-                    android:textColor="?android:attr/textColorSecondaryInverse"
-                    tools:text="@tools:sample/lorem"/>
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginHorizontal="24dp"
-                    android:text="@{movie.overview}"
+                    android:text="@{value.movie.overview}"
                     android:textColor="?android:attr/textColorSecondaryInverse"
                     tools:text="@tools:sample/lorem"/>
 

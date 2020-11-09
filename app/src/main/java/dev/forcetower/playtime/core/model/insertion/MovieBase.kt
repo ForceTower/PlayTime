@@ -1,8 +1,6 @@
 package dev.forcetower.playtime.core.model.insertion
 
-import dev.forcetower.playtime.core.model.dto.MovieSimple
-import dev.forcetower.playtime.core.model.storage.Movie
-import timber.log.Timber
+import dev.forcetower.playtime.core.model.dto.values.MovieSimple
 import java.time.LocalDate
 
 data class MovieBase(
@@ -30,22 +28,6 @@ data class MovieBase(
                 dto.adult,
                 dto.voteAverage,
                 dto.releaseDate,
-                position
-            )
-        }
-
-        fun MovieBase.toMovie(): Movie {
-            return Movie(
-                id,
-                title,
-                overview,
-                posterPath,
-                backdropPath,
-                video,
-                adult,
-                voteAverage,
-                releaseDate,
-                null,
                 position
             )
         }

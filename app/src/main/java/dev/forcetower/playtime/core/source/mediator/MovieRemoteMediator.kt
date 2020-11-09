@@ -7,6 +7,7 @@ import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import dev.forcetower.playtime.core.model.insertion.MovieBase
 import dev.forcetower.playtime.core.model.storage.Movie
+import dev.forcetower.playtime.core.model.storage.MovieGenre
 import dev.forcetower.playtime.core.source.local.PlayDB
 import dev.forcetower.playtime.core.source.network.TMDbService
 import retrofit2.HttpException
@@ -20,6 +21,7 @@ class MovieRemoteMediator(
 ) : RemoteMediator<Int, Movie>() {
     override suspend fun load(loadType: LoadType, state: PagingState<Int, Movie>): MediatorResult {
         val pageSize = state.config.pageSize
+        Timber.d("load() $loadType")
         val page = when(loadType) {
             LoadType.REFRESH -> {
                 val i = getRemoteKeyClosestToCurrentPosition(state)?.position ?: 1
@@ -48,12 +50,16 @@ class MovieRemoteMediator(
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     database.movies().deleteAll()
+                    database.genres().insertOrUpdate(service.genres().genres)
                 }
                 database.movies().insertOrUpdateSimple(response.results.mapIndexed { index, it ->
                     MovieBase.fromDTO(it, (response.page - 1) * pageSize + index)
                 })
+                val associations = response.results.flatMap { simple -> simple.genreIds.map { MovieGenre(simple.id, it) } }
+                database.genres().insertAssociations(associations)
                 Timber.d("Inserted ${response.results.size} movies")
             }
+            Timber.d("End reached? $endReached")
             return MediatorResult.Success(endOfPaginationReached = endReached)
         } catch (error: HttpException) {
             Timber.e(error, "Error during fetch")

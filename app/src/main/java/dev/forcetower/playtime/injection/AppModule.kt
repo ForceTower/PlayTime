@@ -21,6 +21,7 @@ import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import timber.log.Timber
 import java.time.LocalDate
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -49,27 +50,25 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun interceptor() = object : Interceptor {
-        override fun intercept(chain: Interceptor.Chain): Response {
-            val request = chain.request()
-            val host = request.url.host
-            return if (host.contains(Constants.TMDB_URL, ignoreCase = true)) {
-                val headers = request.headers.newBuilder()
-                    .add("Accept", "application/json")
-                    .build()
+    fun interceptor() = Interceptor { chain ->
+        val request = chain.request()
+        val host = request.url.host
+        if (host.contains(Constants.TMDB_URL, ignoreCase = true)) {
+            val headers = request.headers.newBuilder()
+                .add("Accept", "application/json")
+                .build()
 
-                val url = request.url.newBuilder()
-                    .addQueryParameter("api_key", Constants.TMDB_API_KEY)
-                    .addQueryParameter("language", Locale.getDefault().toLanguageTag())
-                    .build()
+            val url = request.url.newBuilder()
+                .addQueryParameter("api_key", Constants.TMDB_API_KEY)
+                .addQueryParameter("language", Locale.getDefault().toLanguageTag())
+                .build()
 
-                val renewed = request.newBuilder().url(url).headers(headers).build()
+            val renewed = request.newBuilder().url(url).headers(headers).build()
 
-                chain.proceed(renewed)
-            } else {
-                val requested = request.newBuilder().addHeader("Accept", "application/json").build()
-                chain.proceed(requested)
-            }
+            chain.proceed(renewed)
+        } else {
+            val requested = request.newBuilder().addHeader("Accept", "application/json").build()
+            chain.proceed(requested)
         }
     }
 
@@ -82,7 +81,9 @@ object AppModule {
             .readTimeout(1, TimeUnit.MINUTES)
             .writeTimeout(1, TimeUnit.MINUTES)
             .addInterceptor(interceptor)
-            .addInterceptor(HttpLoggingInterceptor().apply {
+            .addInterceptor(HttpLoggingInterceptor {
+                Timber.d(it)
+            }.apply {
                 level = if (BuildConfig.DEBUG)
                     HttpLoggingInterceptor.Level.BASIC
                 else

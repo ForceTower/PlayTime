@@ -1,8 +1,8 @@
 package dev.forcetower.playtime.core.source.network
 
-import dev.forcetower.playtime.core.model.dto.GenresResponse
-import dev.forcetower.playtime.core.model.dto.MovieDetailed
-import dev.forcetower.playtime.core.model.dto.MoviesResponse
+import dev.forcetower.playtime.core.model.dto.response.GenresResponse
+import dev.forcetower.playtime.core.model.dto.values.MovieDetailed
+import dev.forcetower.playtime.core.model.dto.response.MoviesResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

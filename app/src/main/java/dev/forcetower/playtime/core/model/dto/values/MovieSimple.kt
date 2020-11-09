@@ -1,4 +1,4 @@
-package dev.forcetower.playtime.core.model.dto
+package dev.forcetower.playtime.core.model.dto.values
 
 import java.time.LocalDate
 

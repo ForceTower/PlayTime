@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "b79435a53f28ba4b411ba4df30497a27",
+    "identityHash": "d51bd59c411d4ad3708e4797c43e5a02",
     "entities": [
       {
         "tableName": "Genre",
@@ -32,7 +32,7 @@
       },
       {
         "tableName": "Movie",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT NOT NULL, `overview` TEXT NOT NULL, `posterPath` TEXT, `backdropPath` TEXT, `video` INTEGER NOT NULL, `adult` INTEGER NOT NULL, `voteAverage` REAL NOT NULL, `releaseDate` INTEGER, `tagline` TEXT, `position` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT NOT NULL, `overview` TEXT NOT NULL, `posterPath` TEXT, `backdropPath` TEXT, `runtime` INTEGER, `video` INTEGER NOT NULL, `adult` INTEGER NOT NULL, `voteAverage` REAL NOT NULL, `releaseDate` INTEGER, `tagline` TEXT, `position` INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -62,6 +62,12 @@
             "fieldPath": "backdropPath",
             "columnName": "backdropPath",
             "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "runtime",
+            "columnName": "runtime",
+            "affinity": "INTEGER",
             "notNull": false
           },
           {
@@ -98,7 +104,8 @@
             "fieldPath": "position",
             "columnName": "position",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "0"
           }
         ],
         "primaryKey": {
@@ -114,7 +121,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b79435a53f28ba4b411ba4df30497a27')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd51bd59c411d4ad3708e4797c43e5a02')"
     ]
   }
 }

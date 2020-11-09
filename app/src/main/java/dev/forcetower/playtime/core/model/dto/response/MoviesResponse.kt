@@ -1,4 +1,6 @@
-package dev.forcetower.playtime.core.model.dto
+package dev.forcetower.playtime.core.model.dto.response
+
+import dev.forcetower.playtime.core.model.dto.values.MovieSimple
 
 data class MoviesResponse(
     val page: Int,

@@ -4,7 +4,9 @@ import androidx.lifecycle.liveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.room.withTransaction
 import dev.forcetower.playtime.core.model.storage.Movie
+import dev.forcetower.playtime.core.model.storage.MovieGenre
 import dev.forcetower.playtime.core.source.network.TMDbService
 import dev.forcetower.playtime.core.source.local.PlayDB
 import dev.forcetower.playtime.core.source.mediator.MovieRemoteMediator
@@ -22,9 +24,7 @@ class MovieRepository @Inject constructor(
     fun movies(): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 20,
-                initialLoadSize = 20,
-                enablePlaceholders = true
+                pageSize = 20
             ),
             pagingSourceFactory = { database.movies().getMovieSource() },
             remoteMediator = MovieRemoteMediator(database, service)
@@ -32,9 +32,20 @@ class MovieRepository @Inject constructor(
     }
 
     fun movie(id: Int) = liveData(Dispatchers.IO) {
-        emitSource(database.movies().getById(id))
+        emitSource(database.movies().getByIdWithGenres(id))
         try {
             val response = service.movieDetails(id)
+            val associations = response.genres.map { MovieGenre(response.id, it.id) }
+            val videos = response.videos.results.map { it.asMovieVideo(response.id) }
+            val cast = response.credits.cast.map { it.asCast(response.id) }
+
+            database.withTransaction {
+                database.genres().insertOrUpdate(response.genres)
+                database.movies().insertOrUpdateComplete(response.asMovieComplete())
+                database.genres().insertAssociations(associations)
+                database.videos().insertOrUpdate(videos)
+                database.cast().insertOrUpdate(cast)
+            }
         } catch (error: Throwable) {
             Timber.e(error, "Error during details")
         }
