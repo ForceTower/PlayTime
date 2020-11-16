@@ -16,7 +16,8 @@ import timber.log.Timber
     "useBlurSupport",
     "blurRadius",
     "blurSampling",
-    "crossFade"
+    "crossFade",
+    "fallbackResource"
 ], requireAll = false)
 fun tmdbUrl(
     imageView: ImageView,
@@ -28,7 +29,8 @@ fun tmdbUrl(
     useBlurSupport: Boolean?,
     blurRadius: Int?,
     blurSampling: Int?,
-    crossFade: Boolean?
+    crossFade: Boolean?,
+    fallbackResource: Int?
 ) {
     val context = imageView.context
     val config = when (context.resources.displayMetrics.widthPixels) {
@@ -38,7 +40,7 @@ fun tmdbUrl(
         else -> "original"
     }
     if (tmdbUrl == null) {
-        imageUrl(imageView, "https://image.freepik.com/vetores-gratis/erro-com-efeito-de-falha-na-tela-erro-404-pagina-nao-encontrada_143407-1.jpg", null, clipCircle, listener, dontTransform, blurImage, useBlurSupport, blurRadius, blurSampling, crossFade)
+        imageUrl(imageView, "https://image.freepik.com/vetores-gratis/erro-com-efeito-de-falha-na-tela-erro-404-pagina-nao-encontrada_143407-1.jpg", null, clipCircle, listener, dontTransform, blurImage, useBlurSupport, blurRadius, blurSampling, fallbackResource, crossFade)
     } else {
         imageUrl(
             imageView,
@@ -51,6 +53,7 @@ fun tmdbUrl(
             useBlurSupport,
             blurRadius,
             blurSampling,
+            fallbackResource,
             crossFade
         )
     }
