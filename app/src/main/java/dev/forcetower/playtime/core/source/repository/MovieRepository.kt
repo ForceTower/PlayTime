@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import androidx.room.withTransaction
 import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.core.model.storage.MovieGenre
+import dev.forcetower.playtime.core.model.storage.Release
 import dev.forcetower.playtime.core.source.network.TMDbService
 import dev.forcetower.playtime.core.source.local.PlayDB
 import dev.forcetower.playtime.core.source.mediator.MovieRemoteMediator
@@ -38,6 +39,7 @@ class MovieRepository @Inject constructor(
             val associations = response.genres.map { MovieGenre(response.id, it.id) }
             val videos = response.videos.results.map { it.asMovieVideo(response.id) }
             val cast = response.credits.cast.map { it.asCast(response.id) }
+            val releases = response.releaseDates.results.flatMap { it.mapToReleases(response.id) }
 
             database.withTransaction {
                 database.genres().insertOrUpdate(response.genres)
@@ -45,6 +47,8 @@ class MovieRepository @Inject constructor(
                 database.genres().insertAssociations(associations)
                 database.videos().insertOrUpdate(videos)
                 database.cast().insertOrUpdate(cast)
+                database.releases().deleteAllFromMovie(response.id)
+                database.releases().insertOrUpdate(releases)
             }
         } catch (error: Throwable) {
             Timber.e(error, "Error during details")

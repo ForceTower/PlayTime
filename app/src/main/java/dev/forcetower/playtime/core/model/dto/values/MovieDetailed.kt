@@ -20,10 +20,11 @@ data class MovieDetailed(
     val voteAverage: Double,
     val genres: List<Genre>,
     val releaseDate: LocalDate,
-    val status: String,
+    val status: String?,
     val tagline: String,
     val videos: Results<MovieVideo>,
-    val credits: MovieCredits
+    val credits: MovieCredits,
+    val releaseDates: Results<MovieRelease>
 ) {
     fun asMovieComplete(): MovieComplete {
         return MovieComplete(
@@ -37,7 +38,8 @@ data class MovieDetailed(
             adult,
             voteAverage,
             releaseDate,
-            tagline
+            tagline,
+            status
         )
     }
 }

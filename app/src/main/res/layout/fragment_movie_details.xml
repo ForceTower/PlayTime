@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:tmdbUrl="@{value.movie.backdropPath}"
+            app:tmdbUrl="@{value.movie.backdropPath != null ? value.movie.backdropPath : value.movie.posterPath}"
             app:listener="@{listener}"
             app:blurImage="@{true}"
             app:blurRadius="@{25}"
@@ -133,7 +133,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginHorizontal="8dp"
+                        android:layout_marginHorizontal="16dp"
                         android:layout_marginTop="16dp"
                         android:gravity="center"
                         app:layout_constraintTop_toBottomOf="@+id/btn_watch_trailer"
@@ -159,6 +159,18 @@
                             android:text="@{value.genresString(2)}"
                             app:goneUnless="@{value.genres.size() > 0}"
                             tools:text="Family - Adventure" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="8dp"
+                            android:text="@{value.movie.status}"
+                            android:textColor="?attr/colorOnMovieFeatured"
+                            android:textAlignment="gravity"
+                            android:gravity="center"
+                            app:goneUnless="@{value.movie.status != null &amp;&amp; !value.movie.status.empty}"
+                            tools:text="Released"/>
                     </androidx.appcompat.widget.LinearLayoutCompat>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

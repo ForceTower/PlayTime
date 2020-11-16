@@ -23,6 +23,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import timber.log.Timber
 import java.time.LocalDate
+import java.time.ZonedDateTime
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -96,6 +97,7 @@ object AppModule {
     fun gson(): Gson =
         GsonBuilder()
             .registerTypeAdapter(LocalDate::class.java, ObjectConverters.LD_DESERIALIZER)
+            .registerTypeAdapter(ZonedDateTime::class.java, ObjectConverters.ZDT_DESERIALIZER)
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .serializeNulls()
             .create()

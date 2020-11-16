@@ -19,6 +19,7 @@ data class Movie(
     val voteAverage: Double,
     val releaseDate: LocalDate?,
     val tagline: String?,
+    val status: String?,
     @ColumnInfo(defaultValue = "0")
     val position: Int
 )

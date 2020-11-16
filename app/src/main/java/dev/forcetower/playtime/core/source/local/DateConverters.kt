@@ -1,7 +1,8 @@
 package dev.forcetower.playtime.core.source.local
 
 import androidx.room.TypeConverter
-import java.time.LocalDate
+import java.time.*
+import java.time.format.DateTimeFormatter
 
 object DateConverters {
     @TypeConverter
@@ -13,5 +14,29 @@ object DateConverters {
     fun longToLocalDate(long: Long?): LocalDate? {
         long ?: return null
         return LocalDate.ofEpochDay(long)
+    }
+
+    @JvmStatic
+    @TypeConverter
+    fun localDateTimeTimeToLong(date: LocalDateTime): Long {
+        return date.toInstant(ZoneOffset.UTC).epochSecond
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun longToLocalDateTime(value: Long): LocalDateTime {
+        return LocalDateTime.ofInstant(Instant.ofEpochSecond(value), ZoneId.of("UTC"))
+    }
+
+    @JvmStatic
+    @TypeConverter
+    fun zonedDateTimeToLong(date: ZonedDateTime): Long {
+        return date.toInstant().epochSecond
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun longToZonedDateTime(value: Long): ZonedDateTime {
+        return ZonedDateTime.ofInstant(Instant.ofEpochSecond(value), ZoneId.of("UTC"))
     }
 }

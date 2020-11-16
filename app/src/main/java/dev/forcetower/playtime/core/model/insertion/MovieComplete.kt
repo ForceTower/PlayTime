@@ -13,5 +13,6 @@ data class MovieComplete(
     val adult: Boolean,
     val voteAverage: Double,
     val releaseDate: LocalDate?,
-    val tagline: String?
+    val tagline: String?,
+    val status: String?
 )

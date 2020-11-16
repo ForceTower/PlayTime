@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "fb21e1cde97930cd3c962b7355f04a64",
+    "identityHash": "83354db0d01c84e017c4f2b32a5b30c8",
     "entities": [
       {
         "tableName": "Genre",
@@ -32,7 +32,7 @@
       },
       {
         "tableName": "Movie",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT NOT NULL, `overview` TEXT NOT NULL, `posterPath` TEXT, `backdropPath` TEXT, `runtime` INTEGER, `video` INTEGER NOT NULL, `adult` INTEGER NOT NULL, `voteAverage` REAL NOT NULL, `releaseDate` INTEGER, `tagline` TEXT, `position` INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT NOT NULL, `overview` TEXT NOT NULL, `posterPath` TEXT, `backdropPath` TEXT, `runtime` INTEGER, `video` INTEGER NOT NULL, `adult` INTEGER NOT NULL, `voteAverage` REAL NOT NULL, `releaseDate` INTEGER, `tagline` TEXT, `status` TEXT, `position` INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -97,6 +97,12 @@
           {
             "fieldPath": "tagline",
             "columnName": "tagline",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -337,12 +343,59 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "Release",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`movieId` INTEGER NOT NULL, `iso` TEXT NOT NULL, `certification` TEXT NOT NULL, `type` INTEGER NOT NULL, `releaseDate` INTEGER NOT NULL, PRIMARY KEY(`movieId`, `type`, `iso`, `releaseDate`))",
+        "fields": [
+          {
+            "fieldPath": "movieId",
+            "columnName": "movieId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "iso",
+            "columnName": "iso",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "certification",
+            "columnName": "certification",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "releaseDate",
+            "columnName": "releaseDate",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "movieId",
+            "type",
+            "iso",
+            "releaseDate"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fb21e1cde97930cd3c962b7355f04a64')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '83354db0d01c84e017c4f2b32a5b30c8')"
     ]
   }
 }
