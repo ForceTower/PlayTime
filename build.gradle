@@ -17,7 +17,7 @@ buildscript {
         // Architecture
         room = '2.3.0-alpha03'
         lifecycle = '2.2.0'
-        paging = '3.0.0-alpha07'
+        paging = '3.0.0-alpha09'
         navigation = '2.3.1'
 
         // Dependency Injection
@@ -52,7 +52,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:4.1.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigation"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_dagger"
