@@ -1,6 +1,7 @@
 package dev.forcetower.playtime.view.featured
 
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -20,7 +21,11 @@ class FeaturedAdapter(
     }
 
     override fun onBindViewHolder(holder: MovieHolder, position: Int) {
-        holder.binding.movie = getItem(position)
+        val item = getItem(position)
+        holder.binding.movie = item
+        holder.binding.root.setTag(R.id.movie_id_tag, item?.id)
+        holder.binding.executePendingBindings()
+        ViewCompat.setTransitionName(holder.binding.cover, holder.binding.root.context.getString(R.string.transition_movie_poster, item?.id))
     }
 
     class MovieHolder(val binding: ItemMovieFeaturedBinding, actions: MovieActions) : RecyclerView.ViewHolder(binding.root) {

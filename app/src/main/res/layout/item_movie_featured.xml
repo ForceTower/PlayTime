@@ -17,46 +17,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="@{() -> actions.onMovieClick(movie)}">
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/cover"
-            android:layout_width="0dp"
+            android:layout_width="120dp"
             android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginVertical="8dp"
+            android:elevation="4dp"
             android:scaleType="center"
-            app:tmdbUrl="@{movie.backdropPath != null ? movie.backdropPath : movie.posterPath}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="H,16:9"
-            tools:src="@tools:sample/backgrounds/scenic"/>
-
-        <View
-            android:id="@+id/overlay"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="?attr/movieFeaturedOverlay"
-            app:layout_constraintStart_toStartOf="@id/cover"
-            app:layout_constraintEnd_toEndOf="@id/cover"
-            app:layout_constraintTop_toTopOf="@id/cover"
-            app:layout_constraintBottom_toBottomOf="@id/cover"/>
+            app:layout_constraintDimensionRatio="H,2:3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:roundedViewRadius="@{12}"
+            app:tmdbUrl="@{movie.posterPath != null ? movie.posterPath : movie.backdropPath}"
+            app:configWidthDivider="@{3}"
+            tools:src="@tools:sample/backgrounds/scenic" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/materialTextView"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:gravity="bottom"
             android:text="@{movie.title}"
             android:textAlignment="gravity"
-            android:textColor="?attr/colorOnMovieFeatured"
-            android:textSize="30sp"
-            app:layout_constraintBottom_toBottomOf="@id/cover"
-            app:layout_constraintEnd_toEndOf="@id/cover"
-            app:layout_constraintStart_toStartOf="@id/cover"
-            app:layout_constraintTop_toTopOf="@id/cover"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="18sp"
+            android:textFontWeight="600"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cover"
+            app:layout_constraintTop_toTopOf="@+id/cover"
             app:paddingEndSystemWindowInsets="@{true}"
             app:paddingStartSystemWindowInsets="@{true}"
-            app:textAllCaps="true"
             tools:text="Pirates of the Caribbean" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

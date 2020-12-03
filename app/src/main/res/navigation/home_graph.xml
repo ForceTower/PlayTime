@@ -18,5 +18,9 @@
         <argument
             android:name="movieId"
             app:argType="integer" />
+        <argument
+            android:name="lastImage"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 </navigation>

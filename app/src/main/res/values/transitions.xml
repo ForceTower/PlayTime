@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="transition_movie_poster" translatable="false">transition_movie_poster_%1$d</string>
+</resources>

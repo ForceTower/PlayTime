@@ -9,11 +9,19 @@
             type="dev.forcetower.playtime.core.model.ui.MovieWithRelations" />
 
         <variable
+            name="lastImage"
+            type="String" />
+
+        <variable
             name="release"
             type="dev.forcetower.playtime.core.model.storage.Release" />
 
         <variable
             name="listener"
+            type="com.bumptech.glide.request.RequestListener&lt;android.graphics.drawable.Drawable&gt;" />
+
+        <variable
+            name="posterListener"
             type="com.bumptech.glide.request.RequestListener&lt;android.graphics.drawable.Drawable&gt;" />
     </data>
 
@@ -79,8 +87,10 @@
                     android:layout_marginTop="64dp"
                     android:elevation="8dp"
                     android:scaleType="centerCrop"
-                    app:tmdbUrl="@{value.movie.posterPath}"
+                    app:listener="@{posterListener}"
+                    app:tmdbUrl="@{value.movie.posterPath != null ? value.movie.posterPath : lastImage}"
                     app:roundedViewRadius="@{12}"
+                    app:configWidthDivider="@{3}"
                     android:layout_gravity="center"
                     tools:src="@tools:sample/backgrounds/scenic" />
 

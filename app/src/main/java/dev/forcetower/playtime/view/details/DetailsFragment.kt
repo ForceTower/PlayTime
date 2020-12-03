@@ -4,12 +4,16 @@ import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.transition.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.SharedElementCallback
 import androidx.core.graphics.ColorUtils
+import androidx.core.view.ViewCompat
 import androidx.core.view.doOnLayout
 import androidx.fragment.app.viewModels
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -23,6 +27,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
 import dagger.hilt.android.AndroidEntryPoint
+import dev.forcetower.playtime.R
 import dev.forcetower.playtime.core.model.ui.MovieSimpleUI
 import dev.forcetower.playtime.core.util.PaletteUtils.getFirstNonBright
 import dev.forcetower.playtime.databinding.FragmentMovieDetailsBinding
@@ -73,9 +78,44 @@ class DetailsFragment : BaseFragment() {
         }
     }
 
+    private val posterListener = object : RequestListener<Drawable> {
+        override fun onLoadFailed(
+            e: GlideException?,
+            model: Any?,
+            target: Target<Drawable>?,
+            isFirstResource: Boolean
+        ): Boolean {
+            startPostponedEnterTransition()
+            return false
+        }
+
+        override fun onResourceReady(
+            resource: Drawable?,
+            model: Any?,
+            target: Target<Drawable>?,
+            dataSource: DataSource?,
+            isFirstResource: Boolean
+        ): Boolean {
+            startPostponedEnterTransition()
+            return false
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        postponeEnterTransition(500, TimeUnit.MILLISECONDS)
+        postponeEnterTransition()
+
+        val transition = TransitionSet()
+            .addTransition(ChangeBounds().apply {
+                pathMotion = ArcMotion()
+            })
+            .addTransition(ChangeTransform())
+            .addTransition(ChangeClipBounds())
+            .addTransition(ChangeImageTransform())
+            .setOrdering(TransitionSet.ORDERING_TOGETHER)
+            .setInterpolator(FastOutSlowInInterpolator())
+
+        sharedElementEnterTransition = transition
     }
 
     override fun onCreateView(
@@ -86,6 +126,8 @@ class DetailsFragment : BaseFragment() {
         val view =  FragmentMovieDetailsBinding.inflate(inflater, container, false).also {
             binding = it
             binding.listener = listener
+            binding.posterListener = posterListener
+            binding.lastImage = args.lastImage
         }.root
 
         imagesAdapter = ImagesAdapter()
@@ -97,16 +139,17 @@ class DetailsFragment : BaseFragment() {
         }
 
         binding.up.setOnClickListener { findNavController().popBackStack() }
-
+        binding.cover.transitionName = getString(R.string.transition_movie_poster, args.movieId)
         lifecycle.addObserver(binding.youtubePlayerView)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        ViewCompat.setTransitionName(binding.cover, getString(R.string.transition_movie_poster, args.movieId))
         viewModel.movie(args.movieId).observe(viewLifecycleOwner) {
-            Timber.d("Updated data: $it")
             binding.value = it
+
             imagesAdapter.submitList(it.images.filter { img -> img.type == 0 }.sortedByDescending { img -> img.voteAverage }.take(4))
 
             if (!videoLoaded) {
@@ -121,10 +164,13 @@ class DetailsFragment : BaseFragment() {
                     })
                 }
             }
+
+            binding.executePendingBindings()
         }
 
         viewModel.releaseDate(args.movieId).observe(viewLifecycleOwner) {
             binding.release = it
+            binding.executePendingBindings()
         }
     }
 }
