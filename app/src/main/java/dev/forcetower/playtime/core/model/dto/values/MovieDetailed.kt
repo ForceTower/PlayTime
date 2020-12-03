@@ -24,7 +24,8 @@ data class MovieDetailed(
     val tagline: String,
     val videos: Results<MovieVideo>,
     val credits: MovieCredits,
-    val releaseDates: Results<MovieRelease>
+    val releaseDates: Results<MovieRelease>,
+    val images: MovieImages
 ) {
     fun asMovieComplete(): MovieComplete {
         return MovieComplete(

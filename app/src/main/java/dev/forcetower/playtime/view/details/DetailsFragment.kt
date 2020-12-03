@@ -26,9 +26,9 @@ import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class DetailsFragment : BaseFragment() {
-    private val args by navArgs<DetailsFragmentArgs>()
     private lateinit var binding: FragmentMovieDetailsBinding
-
+    private lateinit var imagesAdapter: ImagesAdapter
+    private val args by navArgs<DetailsFragmentArgs>()
     private val viewModel: DetailsViewModel by viewModels()
 
     private val listener = object : RequestListener<Drawable> {
@@ -75,11 +75,21 @@ class DetailsFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return FragmentMovieDetailsBinding.inflate(inflater, container, false).also {
+    ): View {
+        val view =  FragmentMovieDetailsBinding.inflate(inflater, container, false).also {
             binding = it
             binding.listener = listener
         }.root
+
+        imagesAdapter = ImagesAdapter()
+        binding.recyclerImages.apply {
+            adapter = imagesAdapter
+            itemAnimator?.run {
+                changeDuration = 0L
+            }
+        }
+
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -87,6 +97,11 @@ class DetailsFragment : BaseFragment() {
         viewModel.movie(args.movieId).observe(viewLifecycleOwner) {
             Timber.d("Updated data: $it")
             binding.value = it
+            imagesAdapter.submitList(it.images.filter { img -> img.type == 0 }.sortedByDescending { img -> img.voteAverage }.take(4))
+        }
+
+        viewModel.releaseDate(args.movieId).observe(viewLifecycleOwner) {
+            binding.release = it
         }
     }
 }

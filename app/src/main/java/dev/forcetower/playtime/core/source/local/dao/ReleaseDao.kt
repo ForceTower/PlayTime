@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import dev.forcetower.playtime.core.model.storage.Release
 import dev.forcetower.toolkit.database.dao.BaseDao
+import kotlinx.coroutines.flow.Flow
 import java.time.ZonedDateTime
 
 @Dao
@@ -17,4 +18,7 @@ abstract class ReleaseDao : BaseDao<Release>() {
 
     @Query("DELETE FROM `Release` WHERE movieId = :movieId")
     abstract suspend fun deleteAllFromMovie(movieId: Int)
+
+    @Query("SELECT * FROM `Release` WHERE movieId = :movieId")
+    abstract fun getReleaseDates(movieId: Int): Flow<List<Release>>
 }

@@ -3,10 +3,7 @@ package dev.forcetower.playtime.core.model.ui
 import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
-import dev.forcetower.playtime.core.model.storage.Genre
-import dev.forcetower.playtime.core.model.storage.Movie
-import dev.forcetower.playtime.core.model.storage.MovieGenre
-import dev.forcetower.playtime.core.model.storage.Video
+import dev.forcetower.playtime.core.model.storage.*
 
 data class MovieWithRelations(
     @Embedded
@@ -18,7 +15,9 @@ data class MovieWithRelations(
     )
     val genres: List<Genre>,
     @Relation(entityColumn = "movieId", parentColumn = "id")
-    val videos: List<Video>
+    val videos: List<Video>,
+    @Relation(entityColumn = "movieId", parentColumn = "id")
+    val images: List<Image>
 ) {
     fun genresString(number: Int = 2) = genres.take(number).joinToString(" / ") { it.name }
 }

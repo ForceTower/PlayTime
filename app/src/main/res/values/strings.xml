@@ -3,4 +3,11 @@
     <string name="movie_overview">Sinopse</string>
     <string name="watch_trailer">Assistir Trailer</string>
     <string name="movie_runtime_format">%1$d min</string>
+    <string name="movie_backdrops">Imagens de Fundo</string>
+    <string name="get_notified">Me avise</string>
+    <string name="no_release_date_info">Sem data de lançamento</string>
+    <string name="release_date_theater_future_format">Nos cinemas em %1$s</string>
+    <string name="release_date_theater_past_format">Estreou no cinemas em %1$s</string>
+    <string name="release_date_digital_future_format">Disponível em %1$s</string>
+    <string name="release_date_digital_past_format">Disponível desde %1$s</string>
 </resources>

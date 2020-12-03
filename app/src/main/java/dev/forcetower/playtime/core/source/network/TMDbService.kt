@@ -6,6 +6,7 @@ import dev.forcetower.playtime.core.model.dto.response.MoviesResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import java.util.*
 
 interface TMDbService {
     @GET("genre/movie/list")
@@ -17,6 +18,7 @@ interface TMDbService {
     @GET("movie/{movieId}")
     suspend fun movieDetails(
         @Path("movieId") movieId: Int,
-        @Query("append_to_response") append: String = "videos,credits,release_dates"
+        @Query("append_to_response") append: String = "videos,credits,release_dates,images",
+        @Query("include_image_language") imageLang: String = "${Locale.getDefault().language},null"
     ): MovieDetailed
 }
