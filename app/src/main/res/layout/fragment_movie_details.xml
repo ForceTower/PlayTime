@@ -30,6 +30,7 @@
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/backdrop"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
@@ -38,6 +39,7 @@
             app:blurImage="@{true}"
             app:blurRadius="@{25}"
             app:crossFade="@{true}"
+            app:configWidthDivider="@{3}"
             tools:src="@tools:sample/backgrounds/scenic" />
 
         <View

@@ -24,19 +24,19 @@
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
             android:layout_marginVertical="8dp"
-            android:elevation="4dp"
             android:scaleType="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="H,2:3"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:elevationAfterLoad="@{4}"
             app:roundedViewRadius="@{12}"
-            app:tmdbUrl="@{movie.posterPath != null ? movie.posterPath : movie.backdropPath}"
+            app:tmdbUrl="@{movie.posterPath}"
             app:configWidthDivider="@{3}"
             tools:src="@tools:sample/backgrounds/scenic" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/materialTextView"
+            android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -52,5 +52,52 @@
             app:paddingEndSystemWindowInsets="@{true}"
             app:paddingStartSystemWindowInsets="@{true}"
             tools:text="Pirates of the Caribbean" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/overview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:gravity="bottom"
+            android:text="@{movie.overview}"
+            android:textAlignment="gravity"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="12sp"
+            android:maxLines="3"
+            android:ellipsize="end"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cover"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            app:paddingEndSystemWindowInsets="@{true}"
+            app:paddingStartSystemWindowInsets="@{true}"
+            tools:text="@tools:sample/lorem/random" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/rating"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cover"
+            app:layout_constraintTop_toBottomOf="@+id/overview">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{@string/movie_rating_format(movie.voteAverage)}"
+                android:textColor="?attr/colorAccent"
+                android:textSize="18sp"
+                android:textFontWeight="600"
+                tools:text="9.4"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/out_of_10"
+                android:textColor="?android:attr/textColorSecondary"/>
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

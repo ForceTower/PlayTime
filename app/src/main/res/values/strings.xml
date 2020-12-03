@@ -13,4 +13,6 @@
     <string name="already_watched">Já assisti</string>
     <string name="navigate_up">Voltar</string>
     <string name="add_to_watchlist">Adicionar à lista</string>
+    <string name="movie_rating_format">%1$.1f</string>
+    <string name="out_of_10">/10</string>
 </resources>

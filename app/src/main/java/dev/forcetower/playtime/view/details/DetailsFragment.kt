@@ -50,7 +50,6 @@ class DetailsFragment : BaseFragment() {
             target: Target<Drawable>?,
             isFirstResource: Boolean
         ): Boolean {
-            startPostponedEnterTransition()
             return false
         }
 
@@ -73,7 +72,6 @@ class DetailsFragment : BaseFragment() {
                 binding.overlay.setBackgroundColor(alpha)
                 binding.btnWatchTrailer.setBackgroundColor(alpha)
             }
-            startPostponedEnterTransition()
             return false
         }
     }
@@ -103,7 +101,7 @@ class DetailsFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        postponeEnterTransition()
+        postponeEnterTransition(500L, TimeUnit.MILLISECONDS)
 
         val transition = TransitionSet()
             .addTransition(ChangeBounds().apply {
