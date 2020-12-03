@@ -67,8 +67,8 @@ class MovieRepository @Inject constructor(
             .map { values ->
                 val (digital, theater) = values.partition { it.type >= 4 }
                 when {
-                    digital.isNotEmpty() -> digital.maxByOrNull { it.releaseDate }
-                    theater.isNotEmpty() -> theater.maxByOrNull { it.releaseDate }
+                    digital.isNotEmpty() -> digital.minByOrNull { it.releaseDate }
+                    theater.isNotEmpty() -> theater.minByOrNull { it.releaseDate }
                     else -> null
                 }
             }

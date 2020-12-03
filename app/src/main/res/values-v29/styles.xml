@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="PlayTime" parent="BaseTheme">
+        <item name="android:forceDarkAllowed">false</item>1
+    </style>
+
     <style name="PlayTime.Home">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:windowLightStatusBar">@bool/not_on_night_mode</item>

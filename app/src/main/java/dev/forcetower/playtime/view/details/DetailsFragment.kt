@@ -8,14 +8,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.ColorUtils
+import androidx.core.view.doOnLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.palette.graphics.Palette
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
 import dagger.hilt.android.AndroidEntryPoint
 import dev.forcetower.playtime.core.model.ui.MovieSimpleUI
 import dev.forcetower.playtime.core.util.PaletteUtils.getFirstNonBright
@@ -30,6 +36,7 @@ class DetailsFragment : BaseFragment() {
     private lateinit var imagesAdapter: ImagesAdapter
     private val args by navArgs<DetailsFragmentArgs>()
     private val viewModel: DetailsViewModel by viewModels()
+    private var videoLoaded = false
 
     private val listener = object : RequestListener<Drawable> {
         override fun onLoadFailed(
@@ -89,6 +96,9 @@ class DetailsFragment : BaseFragment() {
             }
         }
 
+        binding.up.setOnClickListener { findNavController().popBackStack() }
+
+        lifecycle.addObserver(binding.youtubePlayerView)
         return view
     }
 
@@ -98,6 +108,19 @@ class DetailsFragment : BaseFragment() {
             Timber.d("Updated data: $it")
             binding.value = it
             imagesAdapter.submitList(it.images.filter { img -> img.type == 0 }.sortedByDescending { img -> img.voteAverage }.take(4))
+
+            if (!videoLoaded) {
+                val video = it.videos.firstOrNull { vid -> vid.site == "YouTube" }
+                if (video != null) {
+                    videoLoaded = true
+                    binding.youtubePlayerView.visibility = View.VISIBLE
+                    binding.youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                        override fun onReady(youTubePlayer: YouTubePlayer) {
+                            youTubePlayer.cueVideo(video.key, 0.0f)
+                        }
+                    })
+                }
+            }
         }
 
         viewModel.releaseDate(args.movieId).observe(viewLifecycleOwner) {

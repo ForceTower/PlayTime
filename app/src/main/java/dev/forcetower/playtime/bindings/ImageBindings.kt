@@ -17,7 +17,8 @@ import timber.log.Timber
     "blurRadius",
     "blurSampling",
     "crossFade",
-    "fallbackResource"
+    "fallbackResource",
+    "configWidthDivider"
 ], requireAll = false)
 fun tmdbUrl(
     imageView: ImageView,
@@ -30,10 +31,12 @@ fun tmdbUrl(
     blurRadius: Int?,
     blurSampling: Int?,
     crossFade: Boolean?,
-    fallbackResource: Int?
+    fallbackResource: Int?,
+    configWidthDivider: Int?
 ) {
     val context = imageView.context
-    val config = when (context.resources.displayMetrics.widthPixels) {
+    val divider = configWidthDivider ?: 1
+    val config = when (context.resources.displayMetrics.widthPixels / divider) {
         in 0..500 -> "w300"
         in 501..1000 -> "w780"
         in 1001..1600 -> "w1280"

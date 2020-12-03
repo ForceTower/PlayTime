@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="PlayTime" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="BaseTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -10,6 +10,8 @@
         <item name="colorOnMovieFeatured">#FFFFFF</item>
         <item name="movieFeaturedOverlay">@color/movieFeaturedOverlay</item>
     </style>
+
+    <style name="PlayTime" parent="BaseTheme" />
 
     <style name="PlayTime.Home">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
