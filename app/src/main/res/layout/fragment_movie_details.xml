@@ -72,21 +72,11 @@
                 app:paddingEndSystemWindowInsets="@{true}"
                 app:paddingBottomSystemWindowInsets="@{true}">
 
-                <ImageButton
-                    android:id="@+id/up"
-                    android:layout_width="?actionBarSize"
-                    android:layout_height="?actionBarSize"
-                    android:layout_gravity="start|top"
-                    android:background="?selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/navigate_up"
-                    app:tint="?attr/colorOnMovieFeatured"
-                    app:srcCompat="@drawable/ic_arrow_back_black_24dp" />
-
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/cover"
                     android:layout_width="133dp"
                     android:layout_height="200dp"
-                    android:layout_marginTop="64dp"
+                    android:layout_marginTop="120dp"
                     android:elevation="8dp"
                     android:scaleType="centerCrop"
                     app:listener="@{posterListener}"
@@ -271,5 +261,18 @@
 
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.core.widget.NestedScrollView>
+
+        <ImageButton
+            android:id="@+id/up"
+            android:layout_width="?actionBarSize"
+            android:layout_height="?actionBarSize"
+            android:layout_gravity="start|top"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/navigate_up"
+            app:layout_behavior=".widget.behavior.PushUpBehavior"
+            app:tint="?attr/colorOnMovieFeatured"
+            app:srcCompat="@drawable/ic_arrow_back_black_24dp"
+            app:marginTopSystemWindowInsets="@{true}"
+            app:marginStartSystemWindowInsets="@{true}"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

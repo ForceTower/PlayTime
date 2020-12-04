@@ -141,6 +141,11 @@ class DetailsFragment : BaseFragment() {
         binding.up.setOnClickListener { findNavController().popBackStack() }
         binding.cover.transitionName = getString(R.string.transition_movie_poster, args.movieId)
         lifecycle.addObserver(binding.youtubePlayerView)
+
+        binding.content.setOnScrollChangeListener { _, scrollX, scrollY, _, _ ->
+            Timber.d("scroll X: $scrollX, scrollY: $scrollY")
+        }
+
         return view
     }
 
@@ -179,6 +184,10 @@ class DetailsFragment : BaseFragment() {
         viewModel.releaseDate(args.movieId).observe(viewLifecycleOwner) {
             binding.release = it
             binding.executePendingBindings()
+        }
+
+        binding.movieTitle.doOnLayout {
+            Timber.d("topper ${binding.movieTitle.top}")
         }
     }
 
