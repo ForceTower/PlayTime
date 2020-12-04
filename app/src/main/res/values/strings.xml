@@ -19,4 +19,7 @@
     <string name="logo_name_end">Time</string>
     <string name="nav_search">Buscar</string>
     <string name="search_app_bar">Buscar por filmes</string>
+    <string name="nav_movies_popular">Populares</string>
+    <string name="nav_movies_saved">Salvos</string>
+    <string name="nav_profile">Perfil</string>
 </resources>
