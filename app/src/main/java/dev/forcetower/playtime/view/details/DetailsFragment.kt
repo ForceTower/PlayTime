@@ -8,6 +8,7 @@ import android.transition.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.SharedElementCallback
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewCompat
@@ -31,6 +32,7 @@ import dev.forcetower.playtime.R
 import dev.forcetower.playtime.core.model.ui.MovieSimpleUI
 import dev.forcetower.playtime.core.util.PaletteUtils.getFirstNonBright
 import dev.forcetower.playtime.databinding.FragmentMovieDetailsBinding
+import dev.forcetower.playtime.widget.behavior.ScrollingAlphaBehavior
 import dev.forcetower.toolkit.components.BaseFragment
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -159,6 +161,14 @@ class DetailsFragment : BaseFragment() {
                         override fun onReady(youTubePlayer: YouTubePlayer) {
                             youTubePlayer.cueVideo(video.key, 0.0f)
                         }
+
+                        override fun onStateChange(youTubePlayer: YouTubePlayer, state: PlayerConstants.PlayerState) {
+                            when (state) {
+                                PlayerConstants.PlayerState.PLAYING -> dimBackground()
+                                PlayerConstants.PlayerState.PAUSED, PlayerConstants.PlayerState.ENDED -> resetBackground()
+                                else -> Unit
+                            }
+                        }
                     })
                 }
             }
@@ -169,6 +179,18 @@ class DetailsFragment : BaseFragment() {
         viewModel.releaseDate(args.movieId).observe(viewLifecycleOwner) {
             binding.release = it
             binding.executePendingBindings()
+        }
+    }
+
+    private fun dimBackground() {
+        (binding.overlayDark.layoutParams as? CoordinatorLayout.LayoutParams)?.run {
+            (behavior as? ScrollingAlphaBehavior)?.dimBackground()
+        }
+    }
+
+    private fun resetBackground() {
+        (binding.overlayDark.layoutParams as? CoordinatorLayout.LayoutParams)?.run {
+            (behavior as? ScrollingAlphaBehavior)?.returnBackground()
         }
     }
 }
