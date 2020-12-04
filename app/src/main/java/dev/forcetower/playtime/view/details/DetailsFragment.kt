@@ -142,10 +142,6 @@ class DetailsFragment : BaseFragment() {
         binding.cover.transitionName = getString(R.string.transition_movie_poster, args.movieId)
         lifecycle.addObserver(binding.youtubePlayerView)
 
-        binding.content.setOnScrollChangeListener { _, scrollX, scrollY, _, _ ->
-            Timber.d("scroll X: $scrollX, scrollY: $scrollY")
-        }
-
         return view
     }
 
