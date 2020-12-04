@@ -12,12 +12,10 @@ data class MovieBase(
     val video: Boolean,
     val adult: Boolean,
     val voteAverage: Double,
-    val releaseDate: LocalDate?,
-    // the tmdb index of the movie
-    val position: Int
+    val releaseDate: LocalDate?
 ) {
     companion object {
-        fun fromDTO(dto: MovieSimple, position: Int): MovieBase {
+        fun fromDTO(dto: MovieSimple): MovieBase {
             return MovieBase(
                 dto.id,
                 dto.title,
@@ -27,8 +25,7 @@ data class MovieBase(
                 dto.video,
                 dto.adult,
                 dto.voteAverage,
-                dto.releaseDate,
-                position
+                dto.releaseDate
             )
         }
     }

@@ -7,6 +7,7 @@ import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import dev.forcetower.playtime.core.model.insertion.MovieBase
 import dev.forcetower.playtime.core.model.storage.Movie
+import dev.forcetower.playtime.core.model.storage.MovieFeedIndex
 import dev.forcetower.playtime.core.model.storage.MovieGenre
 import dev.forcetower.playtime.core.source.local.PlayDB
 import dev.forcetower.playtime.core.source.network.TMDbService
@@ -19,6 +20,7 @@ class MovieRemoteMediator(
     private val database: PlayDB,
     private val service: TMDbService
 ) : RemoteMediator<Int, Movie>() {
+
     override suspend fun load(loadType: LoadType, state: PagingState<Int, Movie>): MediatorResult {
         val pageSize = state.config.pageSize
         Timber.d("load() $loadType")
@@ -49,14 +51,18 @@ class MovieRemoteMediator(
 
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    database.movies().deleteAll()
+                    database.feedIndex.deleteIndex()
                     database.genres().insertOrUpdate(service.genres().genres)
                 }
-                database.movies().insertOrUpdateSimple(response.results.mapIndexed { index, it ->
-                    MovieBase.fromDTO(it, (response.page - 1) * pageSize + index)
-                })
+                database.movies().insertOrUpdateSimple(response.results.map { MovieBase.fromDTO(it) })
                 val associations = response.results.flatMap { simple -> simple.genreIds.map { MovieGenre(simple.id, it) } }
                 database.genres().insertAssociations(associations)
+
+                val indices = response.results.mapIndexed { index, it ->
+                    MovieFeedIndex(it.id, (response.page - 1) * pageSize + index)
+                }
+
+                database.feedIndex.insertAllIgnore(indices)
                 Timber.d("Inserted ${response.results.size} movies")
             }
             Timber.d("End reached? $endReached")
@@ -70,16 +76,22 @@ class MovieRemoteMediator(
         }
     }
 
-    private fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, Movie>): Movie? {
-        return state.anchorPosition?.let { state.closestItemToPosition(it) }
+    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, Movie>): MovieFeedIndex? {
+        return state.anchorPosition?.let { state.closestItemToPosition(it) }?.let {
+            database.feedIndex.getFeedIndexByIdDirect(it.id)
+        }
     }
 
-    private fun getRemoteKeyForFirstItem(state: PagingState<Int, Movie>): Movie? {
-        return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, Movie>): MovieFeedIndex? {
+        return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let {
+            database.feedIndex.getFeedIndexByIdDirect(it.id)
+        }
     }
 
-    private fun getRemoteKeyForLastItem(state: PagingState<Int, Movie>): Movie? {
-        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, Movie>): MovieFeedIndex? {
+        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let {
+            database.feedIndex.getFeedIndexByIdDirect(it.id)
+        }
     }
 
     private fun indexToPage(position: Int, pageSize: Int = 20): Int {

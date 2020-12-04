@@ -15,4 +15,8 @@
     <string name="add_to_watchlist">Adicionar à lista</string>
     <string name="movie_rating_format">%1$.1f</string>
     <string name="out_of_10">/10</string>
+    <string name="logo_name_start">Play</string>
+    <string name="logo_name_end">Time</string>
+    <string name="nav_search">Buscar</string>
+    <string name="search_app_bar">Buscar por filmes</string>
 </resources>

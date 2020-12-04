@@ -8,8 +8,8 @@ import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import dev.forcetower.playtime.BuildConfig
 import dev.forcetower.playtime.Constants
 import dev.forcetower.playtime.core.source.network.TMDbService
@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 object AppModule {
     @Provides
     @Singleton

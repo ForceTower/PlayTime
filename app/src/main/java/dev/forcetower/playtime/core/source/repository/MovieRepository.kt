@@ -1,17 +1,18 @@
 package dev.forcetower.playtime.core.source.repository
 
 import androidx.lifecycle.liveData
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.room.withTransaction
-import dev.forcetower.playtime.core.model.storage.Image
 import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.core.model.storage.MovieGenre
 import dev.forcetower.playtime.core.model.storage.Release
 import dev.forcetower.playtime.core.source.network.TMDbService
 import dev.forcetower.playtime.core.source.local.PlayDB
 import dev.forcetower.playtime.core.source.mediator.MovieRemoteMediator
+import dev.forcetower.playtime.core.source.network.MovieQuerySource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -24,6 +25,7 @@ class MovieRepository @Inject constructor(
     private val database: PlayDB,
     private val service: TMDbService
 ) {
+    @ExperimentalPagingApi
     fun movies(): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(
@@ -31,6 +33,16 @@ class MovieRepository @Inject constructor(
             ),
             pagingSourceFactory = { database.movies().getMovieSource() },
             remoteMediator = MovieRemoteMediator(database, service)
+        ).flow
+    }
+
+    fun search(
+        queryProvider: () -> String
+    ): Flow<PagingData<Movie>> {
+        val factory = { MovieQuerySource(queryProvider, database, service) }
+        return Pager(
+            config = PagingConfig(pageSize = 20),
+            pagingSourceFactory = factory
         ).flow
     }
 

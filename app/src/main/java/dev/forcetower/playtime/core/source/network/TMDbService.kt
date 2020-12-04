@@ -21,4 +21,10 @@ interface TMDbService {
         @Query("append_to_response") append: String = "videos,credits,release_dates,images",
         @Query("include_image_language") imageLang: String = "${Locale.getDefault().language},null"
     ): MovieDetailed
+
+    @GET("search/movie")
+    suspend fun searchMovie(
+        @Query("query") query: String,
+        @Query("page") page: Int = 1
+    ): MoviesResponse
 }

@@ -1,8 +1,8 @@
 package dev.forcetower.playtime.core.model.storage
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import dev.forcetower.playtime.core.model.dto.values.MovieSimple
 import java.time.LocalDate
 
 @Entity
@@ -19,7 +19,24 @@ data class Movie(
     val voteAverage: Double,
     val releaseDate: LocalDate?,
     val tagline: String?,
-    val status: String?,
-    @ColumnInfo(defaultValue = "0")
-    val position: Int
-)
+    val status: String?
+) {
+    companion object {
+        fun fromDTO(dto: MovieSimple): Movie {
+            return Movie(
+                dto.id,
+                dto.title,
+                dto.overview,
+                dto.posterPath,
+                dto.backdropPath,
+                null,
+                dto.video,
+                dto.adult,
+                dto.voteAverage,
+                dto.releaseDate,
+                null,
+                null
+            )
+        }
+    }
+}

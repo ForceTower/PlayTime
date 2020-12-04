@@ -5,12 +5,33 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
+            app:liftOnScroll="true"
+            app:paddingTopSystemWindowInsets="@{true}"
+            app:paddingEndSystemWindowInsets="@{true}"
+            app:paddingStartSystemWindowInsets="@{true}">
+
+            <dev.forcetower.playtime.widget.view.searchview.SearchView
+                android:id="@+id/search_view"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize" />
+        </com.google.android.material.appbar.AppBarLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_movies"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:paddingBottomSystemWindowInsets="@{true}"
+            app:paddingEndSystemWindowInsets="@{true}"
+            app:paddingStartSystemWindowInsets="@{true}"
             tools:listitem="@layout/item_movie_featured"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

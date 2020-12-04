@@ -18,7 +18,7 @@ abstract class MovieDao : BaseDao<Movie>() {
         return getByIdDirect(value.id)
     }
 
-    @Query("SELECT * FROM Movie ORDER BY position")
+    @Query("SELECT M.* FROM Movie M INNER JOIN MovieFeedIndex MFI ON M.id = MFI.movieId ORDER BY MFI.position")
     abstract fun getMovieSource(): PagingSource<Int, Movie>
 
     @Update(entity = Movie::class)

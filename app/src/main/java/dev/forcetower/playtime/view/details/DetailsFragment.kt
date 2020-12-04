@@ -4,18 +4,21 @@ import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.transition.*
+import android.transition.ArcMotion
+import android.transition.ChangeBounds
+import android.transition.ChangeClipBounds
+import android.transition.ChangeImageTransform
+import android.transition.ChangeTransform
+import android.transition.TransitionSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.app.SharedElementCallback
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewCompat
-import androidx.core.view.doOnLayout
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.viewModels
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.palette.graphics.Palette
@@ -26,15 +29,13 @@ import com.bumptech.glide.request.target.Target
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
 import dagger.hilt.android.AndroidEntryPoint
 import dev.forcetower.playtime.R
-import dev.forcetower.playtime.core.model.ui.MovieSimpleUI
 import dev.forcetower.playtime.core.util.PaletteUtils.getFirstNonBright
 import dev.forcetower.playtime.databinding.FragmentMovieDetailsBinding
 import dev.forcetower.playtime.widget.behavior.ScrollingAlphaBehavior
 import dev.forcetower.toolkit.components.BaseFragment
-import timber.log.Timber
+import dev.forcetower.toolkit.extensions.windowInsetsControllerCompat
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
@@ -180,10 +181,6 @@ class DetailsFragment : BaseFragment() {
         viewModel.releaseDate(args.movieId).observe(viewLifecycleOwner) {
             binding.release = it
             binding.executePendingBindings()
-        }
-
-        binding.movieTitle.doOnLayout {
-            Timber.d("topper ${binding.movieTitle.top}")
         }
     }
 

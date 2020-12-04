@@ -14,8 +14,9 @@ import dev.forcetower.toolkit.extensions.inflate
 import timber.log.Timber
 
 class FeaturedAdapter(
-    private val actions: MovieActions
-) : PagingDataAdapter<Movie, FeaturedAdapter.MovieHolder>(DiffCallback) {
+    private val actions: MovieActions,
+    search: Boolean = false
+) : PagingDataAdapter<Movie, FeaturedAdapter.MovieHolder>(DiffCallback(search)) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieHolder {
         return MovieHolder(parent.inflate(R.layout.item_movie_featured), actions)
     }
@@ -34,8 +35,8 @@ class FeaturedAdapter(
         }
     }
 
-    private object DiffCallback : DiffUtil.ItemCallback<Movie>() {
-        override fun areItemsTheSame(oldItem: Movie, newItem: Movie) = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: Movie, newItem: Movie) = oldItem == newItem
+    private class DiffCallback(private val search: Boolean) : DiffUtil.ItemCallback<Movie>() {
+        override fun areItemsTheSame(oldItem: Movie, newItem: Movie) = !search && oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: Movie, newItem: Movie) = !search && oldItem == newItem
     }
 }

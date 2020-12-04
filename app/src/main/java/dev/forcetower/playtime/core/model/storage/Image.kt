@@ -10,7 +10,8 @@ import androidx.room.PrimaryKey
     ForeignKey(entity = Movie::class, parentColumns = ["id"], childColumns = ["movieId"], onDelete = CASCADE, onUpdate = CASCADE)
 ], indices = [
     Index("type"),
-    Index("lang")
+    Index("lang"),
+    Index("movieId")
 ])
 data class Image(
     val movieId: Int,
