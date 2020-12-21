@@ -28,9 +28,7 @@ class MovieRepository @Inject constructor(
     @ExperimentalPagingApi
     fun movies(): Flow<PagingData<Movie>> {
         return Pager(
-            config = PagingConfig(
-                pageSize = 20
-            ),
+            config = PagingConfig(pageSize = 20, enablePlaceholders = false),
             pagingSourceFactory = { database.movies().getMovieSource() },
             remoteMediator = MovieRemoteMediator(database, service)
         ).flow
@@ -84,5 +82,9 @@ class MovieRepository @Inject constructor(
                     else -> null
                 }
             }
+    }
+
+    fun interface What {
+        fun onDone()
     }
 }

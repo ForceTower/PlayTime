@@ -25,6 +25,7 @@ import dev.forcetower.toolkit.extensions.openKeyboardWithActivity
 import dev.forcetower.toolkit.lifecycle.EventObserver
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 
 @AndroidEntryPoint
@@ -96,6 +97,12 @@ class MoviesFeaturedFragment : BaseFragment() {
         }
 
         lifecycleScope.launch {
+            adapter.loadStateFlow.collect {
+                Timber.d("Load state: ${it.mediator}")
+            }
+        }
+
+        lifecycleScope.launch {
             viewModel.searchSource.collect {
                 searchAdapter.submitData(it)
             }
@@ -105,7 +112,7 @@ class MoviesFeaturedFragment : BaseFragment() {
             if (!searching) {
                 binding.recyclerMovies.adapter = adapter
                 binding.searchView.run {
-                    closeSearch()
+                    if (isAttachedToWindow) closeSearch()
                     binding.inputSearch.closeKeyboardWithActivity(requireActivity())
                 }
             } else {
