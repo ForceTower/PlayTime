@@ -97,12 +97,6 @@ class MoviesFeaturedFragment : BaseFragment() {
         }
 
         lifecycleScope.launch {
-            adapter.loadStateFlow.collect {
-                Timber.d("Load state: ${it.mediator}")
-            }
-        }
-
-        lifecycleScope.launch {
             viewModel.searchSource.collect {
                 searchAdapter.submitData(it)
             }

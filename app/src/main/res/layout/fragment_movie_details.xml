@@ -23,6 +23,10 @@
         <variable
             name="posterListener"
             type="com.bumptech.glide.request.RequestListener&lt;android.graphics.drawable.Drawable&gt;" />
+
+        <variable
+            name="actions"
+            type="dev.forcetower.playtime.view.details.DetailsActions" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -134,7 +138,7 @@
                     android:gravity="center">
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_watch_trailer"
+                        android:id="@+id/btn_mark_watched"
                         android:layout_width="wrap_content"
                         android:layout_height="56dp"
                         android:layout_marginHorizontal="8dp"
@@ -143,6 +147,7 @@
                         android:textAllCaps="false"
                         android:textColor="?attr/colorOnMovieFeatured"
                         android:layout_gravity="center"
+                        android:onClick="@{() -> actions.onMarkAsWatched(value.movie)}"
                         app:icon="@drawable/ic_baseline_check_24"
                         app:cornerRadius="28dp"
                         app:elevation="0dp"
@@ -159,6 +164,7 @@
                         android:textAllCaps="false"
                         android:textColor="?attr/colorOnMovieFeatured"
                         android:layout_gravity="center"
+                        android:onClick="@{() -> actions.onAddToWatchlist(value.movie)}"
                         app:buttonReleaseAction="@{release}"
                         app:icon="@drawable/ic_outline_notifications_active_24"
                         app:cornerRadius="28dp"

@@ -15,6 +15,7 @@ import androidx.core.view.doOnLayout
 import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.bumptech.glide.Glide
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
@@ -42,12 +43,13 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
+        binding.root.doOnLayout {
+            NavigationUI.setupWithNavController(binding.bottomNav, navController)
+        }
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
-
         setupObservers()
-        setupProfileOnBottomNav()
-
-        uiViewModel.hideBottomNav()
+//        setupProfileOnBottomNav()
     }
 
     private fun setupObservers() {
@@ -56,7 +58,7 @@ class MainActivity : BaseActivity() {
             val behavior = params.behavior as HideBottomViewOnScrollBehavior
 
             if (it) {
-                binding.bottomNav.doOnLayout { view -> behavior.slideDown(view) }
+                binding.bottomNav.doOnLayout { view -> behavior.slideUp(view) }
             } else {
                 binding.bottomNav.doOnLayout { view -> behavior.slideDown(view) }
             }
@@ -66,13 +68,12 @@ class MainActivity : BaseActivity() {
     private fun setupProfileOnBottomNav() {
         val menuView = binding.bottomNav[0] as BottomNavigationMenuView
         val itemView = menuView[2] as BottomNavigationItemView
-        val profileBind = binding.bottomNav.inflate<MenuBottomProfileBinding>(R.layout.menu_bottom_profile)
-        itemView.addView(profileBind.root, FrameLayout.LayoutParams(getPixelsFromDp(36).toInt(), getPixelsFromDp(36).toInt(), Gravity.CENTER))
+        val icon = itemView.findViewById<ImageView>(R.id.icon)
 
         Glide.with(this)
             .load("https://avatars1.githubusercontent.com/u/9421614?s=460&u=499efd7b66284bd4436bc74dd982c52f9e076740&v=4")
             .circleCrop()
-            .into(profileBind.image)
+            .into(icon)
     }
 
     override fun onSupportNavigateUp() = navController.navigateUp()

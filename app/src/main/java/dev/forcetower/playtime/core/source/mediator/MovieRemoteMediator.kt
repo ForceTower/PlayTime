@@ -23,7 +23,6 @@ class MovieRemoteMediator(
 
     override suspend fun load(loadType: LoadType, state: PagingState<Int, Movie>): MediatorResult {
         val pageSize = state.config.pageSize
-        Timber.d("load() $loadType")
         val page = when(loadType) {
             LoadType.REFRESH -> {
                 val i = getRemoteKeyClosestToCurrentPosition(state)?.position ?: 1
@@ -42,8 +41,6 @@ class MovieRemoteMediator(
                 p + 1
             }
         }
-        
-        Timber.d("Will fetch page: $page")
 
         try {
             val response = service.moviesPopular(page)
@@ -65,7 +62,6 @@ class MovieRemoteMediator(
                 database.feedIndex.insertAllIgnore(indices)
                 Timber.d("Inserted ${response.results.size} movies")
             }
-            Timber.d("End reached? $endReached")
             return MediatorResult.Success(endOfPaginationReached = endReached)
         } catch (error: HttpException) {
             Timber.e(error, "Error during fetch")

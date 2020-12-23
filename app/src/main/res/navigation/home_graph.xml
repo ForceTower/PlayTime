@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/home_graph.xml"
-    app:startDestination="@id/movies_featured">
+    app:startDestination="@id/popular">
 
     <fragment
-        android:id="@+id/movies_featured"
+        android:id="@+id/popular"
         android:name="dev.forcetower.playtime.view.featured.MoviesFeaturedFragment"
         android:label="MoviesFeaturedFragment" >
         <action
@@ -22,5 +22,13 @@
             android:name="lastImage"
             app:argType="string"
             app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/listing"
+        android:name="dev.forcetower.playtime.view.listing.ListingFragment"
+        android:label="ListingFragment" >
+        <action
+            android:id="@+id/action_listing_to_movie_details"
+            app:destination="@id/movie_details" />
     </fragment>
 </navigation>

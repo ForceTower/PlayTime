@@ -37,10 +37,9 @@ class MovieRepository @Inject constructor(
     fun search(
         queryProvider: () -> String
     ): Flow<PagingData<Movie>> {
-        val factory = { MovieQuerySource(queryProvider, database, service) }
         return Pager(
             config = PagingConfig(pageSize = 20),
-            pagingSourceFactory = factory
+            pagingSourceFactory = { MovieQuerySource(queryProvider, database, service) }
         ).flow
     }
 

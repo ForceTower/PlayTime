@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/popular"
-        android:icon="@drawable/ic_film_black_60dp"
+        android:icon="@drawable/ic_outline_movie_24"
         android:title="@string/nav_movies_popular"/>
     <item
         android:id="@+id/listing"
-        android:icon="@drawable/ic_wishlist_black_60dp"
+        android:icon="@drawable/ic_outline_list_alt_24"
         android:title="@string/nav_movies_saved"/>
     <item
         android:id="@+id/profile"
-        android:title=""/>
+        android:icon="@drawable/ic_baseline_account_circle_24"
+        android:title="@string/nav_profile"/>
 </menu>

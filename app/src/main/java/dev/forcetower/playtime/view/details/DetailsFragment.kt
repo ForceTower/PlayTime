@@ -17,6 +17,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.navigation.fragment.findNavController
@@ -33,9 +34,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.forcetower.playtime.R
 import dev.forcetower.playtime.core.util.PaletteUtils.getFirstNonBright
 import dev.forcetower.playtime.databinding.FragmentMovieDetailsBinding
+import dev.forcetower.playtime.view.UIViewModel
 import dev.forcetower.playtime.widget.behavior.ScrollingAlphaBehavior
 import dev.forcetower.toolkit.components.BaseFragment
 import dev.forcetower.toolkit.extensions.windowInsetsControllerCompat
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
@@ -44,6 +47,7 @@ class DetailsFragment : BaseFragment() {
     private lateinit var imagesAdapter: ImagesAdapter
     private val args by navArgs<DetailsFragmentArgs>()
     private val viewModel: DetailsViewModel by viewModels()
+    private val uiViewModel: UIViewModel by activityViewModels()
     private var videoLoaded = false
 
     private val listener = object : RequestListener<Drawable> {
@@ -69,11 +73,11 @@ class DetailsFragment : BaseFragment() {
                 val dominant = palette.getFirstNonBright()
                 val dominantAlpha = ColorUtils.setAlphaComponent(dominant, 0xB2)
                 binding.overlay.setBackgroundColor(dominantAlpha)
-                binding.btnWatchTrailer.setBackgroundColor(dominantAlpha)
+                binding.btnMarkWatched.setBackgroundColor(dominantAlpha)
             } else {
                 val alpha = ColorUtils.setAlphaComponent(Color.BLACK, 0xB2)
                 binding.overlay.setBackgroundColor(alpha)
-                binding.btnWatchTrailer.setBackgroundColor(alpha)
+                binding.btnMarkWatched.setBackgroundColor(alpha)
             }
             return false
         }
@@ -104,7 +108,10 @@ class DetailsFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        uiViewModel.hideBottomNav()
         postponeEnterTransition(500L, TimeUnit.MILLISECONDS)
+
+        Timber.d("Args: $args")
 
         val transition = TransitionSet()
             .addTransition(ChangeBounds().apply {
@@ -129,6 +136,7 @@ class DetailsFragment : BaseFragment() {
             binding.listener = listener
             binding.posterListener = posterListener
             binding.lastImage = args.lastImage
+            binding.actions = viewModel
         }.root
 
         imagesAdapter = ImagesAdapter()
@@ -182,6 +190,11 @@ class DetailsFragment : BaseFragment() {
             binding.release = it
             binding.executePendingBindings()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        uiViewModel.showBottomNav()
     }
 
     private fun dimBackground() {
