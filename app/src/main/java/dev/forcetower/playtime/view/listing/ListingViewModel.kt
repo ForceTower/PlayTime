@@ -31,6 +31,7 @@ class ListingViewModel @ViewModelInject constructor(
             sourceType = value
             next
         } else {
+            Timber.d("return cached.")
             current
         }
     }

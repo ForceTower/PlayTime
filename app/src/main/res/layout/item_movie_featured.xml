@@ -25,6 +25,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginVertical="8dp"
             android:scaleType="center"
+            android:transitionName="@{@string/transition_movie_poster(movie.id)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="H,2:3"
             app:layout_constraintStart_toStartOf="parent"

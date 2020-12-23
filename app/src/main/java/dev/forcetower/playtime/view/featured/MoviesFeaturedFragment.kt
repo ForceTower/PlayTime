@@ -124,7 +124,6 @@ class MoviesFeaturedFragment : BaseFragment() {
     private fun onNavigateToMovieDetails(movie: Movie) {
         val view = findViewForTransition(binding.recyclerMovies, movie.id)
         val directions = MoviesFeaturedFragmentDirections.actionMoviesFeaturedToMovieDetails(movie.id, movie.posterPath ?: movie.backdropPath)
-        view.transitionName = getString(R.string.transition_movie_poster, movie.id)
         val extras = FragmentNavigatorExtras(view to view.transitionName)
         (exitTransition as TransitionSet).excludeTarget(view, true)
         findNavController().navigate(directions, extras)
