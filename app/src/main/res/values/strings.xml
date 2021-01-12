@@ -10,7 +10,8 @@
     <string name="release_date_theater_past_format">Estreou no cinemas em %1$s</string>
     <string name="release_date_digital_future_format">Disponível em %1$s</string>
     <string name="release_date_digital_past_format">Disponível desde %1$s</string>
-    <string name="already_watched">Já assisti</string>
+    <string name="mark_already_watched">Já assisti</string>
+    <string name="remove_already_watched">Assistido</string>
     <string name="navigate_up">Voltar</string>
     <string name="add_to_watchlist">Adicionar à lista</string>
     <string name="movie_rating_format">%1$.1f</string>
@@ -25,4 +26,6 @@
     <string name="listing_my_list">Minha lista</string>
     <string name="listing_watched">Assistidos</string>
     <string name="profile">Perfil</string>
+    <string name="remove_get_notified">Não me avise</string>
+    <string name="remove_from_watchlist">Adicionado à lista</string>
 </resources>

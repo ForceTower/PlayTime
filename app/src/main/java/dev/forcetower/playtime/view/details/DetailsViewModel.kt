@@ -25,13 +25,21 @@ class DetailsViewModel @ViewModelInject constructor(
         return repository.releaseDate(id).asLiveData()
     }
 
+    fun watched(id: Int): LiveData<Boolean> {
+        return listing.watched(id).asLiveData()
+    }
+
+    fun watchlist(id: Int): LiveData<Boolean> {
+        return listing.watchlist(id).asLiveData()
+    }
+
     override fun onMarkAsWatched(movie: Movie?) {
         movie ?: return
-        viewModelScope.launch { listing.markAsWatched(movie.id) }
+        viewModelScope.launch { listing.toggleWatchMark(movie.id) }
     }
 
     override fun onAddToWatchlist(movie: Movie?) {
         movie ?: return
-        viewModelScope.launch { listing.addToWatchlist(movie.id) }
+        viewModelScope.launch { listing.toggleFromWatchlist(movie.id) }
     }
 }

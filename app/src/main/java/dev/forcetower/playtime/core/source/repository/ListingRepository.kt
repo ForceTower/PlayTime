@@ -17,6 +17,7 @@ class ListingRepository @Inject constructor(
     private val database: PlayDB,
     private val service: TMDbService
 ) {
+
     fun getSourceOfType(value: Int): Flow<PagingData<Movie>> {
         return when (value) {
             1 -> getUserWatchList()
@@ -45,11 +46,16 @@ class ListingRepository @Inject constructor(
         ).flow
     }
 
-    suspend fun addToWatchlist(movieId: Int) {
-        database.watchlist.insertIgnore(WatchlistItem(movieId))
+    fun watched(id: Int) = database.watched.isWatched(id)
+
+    fun watchlist(id: Int) = database.watchlist.onWatchlist(id)
+
+    suspend fun toggleFromWatchlist(movieId: Int) {
+        database.watchlist.toggle(movieId)
     }
 
-    suspend fun markAsWatched(movieId: Int) {
-        database.watched.insertIgnore(WatchedItem(movieId))
+    suspend fun toggleWatchMark(movieId: Int) {
+        database.watched.toggle(movieId)
     }
+
 }

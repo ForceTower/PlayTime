@@ -190,6 +190,14 @@ class DetailsFragment : BaseFragment() {
             binding.release = it
             binding.executePendingBindings()
         }
+
+        viewModel.watchlist(args.movieId).observe(viewLifecycleOwner) {
+            binding.onWatchlist = it
+        }
+
+        viewModel.watched(args.movieId).observe(viewLifecycleOwner) {
+            binding.watched = it
+        }
     }
 
     override fun onDestroy() {

@@ -12,6 +12,7 @@ import dev.forcetower.playtime.core.source.repository.ListingRepository
 import dev.forcetower.playtime.view.featured.MovieActions
 import dev.forcetower.toolkit.lifecycle.Event
 import kotlinx.coroutines.flow.Flow
+import okhttp3.OkHttpClient
 import timber.log.Timber
 
 class ListingViewModel @ViewModelInject constructor(

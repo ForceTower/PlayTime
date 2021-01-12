@@ -37,17 +37,36 @@ fun TextView.releaseDateText(release: Release?) {
     }
 }
 
-@BindingAdapter("buttonReleaseAction")
-fun MaterialButton.buttonReleaseAction(release: Release?) {
+@BindingAdapter(value = ["buttonReleaseAction", "onWatchlist"])
+fun MaterialButton.buttonReleaseAction(release: Release?, onWatchlist: Boolean?) {
+    val watchlist = onWatchlist ?: false
     val now = ZonedDateTime.now()
     when {
         release == null || release.releaseDate.isAfter(now) -> {
-            icon = ContextCompat.getDrawable(context, R.drawable.ic_outline_notifications_active_24)
-            text = context.getString(R.string.get_notified)
+//            icon = ContextCompat.getDrawable(context, R.drawable.ic_outline_notifications_active_24)
+            text = if (!watchlist) {
+                context.getString(R.string.get_notified)
+            } else {
+                context.getString(R.string.remove_get_notified)
+            }
         }
         release.releaseDate.isBefore(now) -> {
-            icon = ContextCompat.getDrawable(context, R.drawable.ic_baseline_add_24)
-            text = context.getString(R.string.add_to_watchlist)
+//            icon = ContextCompat.getDrawable(context, R.drawable.ic_baseline_add_24)
+            text = if (!watchlist) {
+                context.getString(R.string.add_to_watchlist)
+            } else {
+                context.getString(R.string.remove_from_watchlist)
+            }
         }
+    }
+}
+
+@BindingAdapter(value = ["watched"])
+fun MaterialButton.buttonWatchedAction(watchedParam: Boolean?) {
+    val watched = watchedParam ?: false
+    text = if (!watched) {
+        context.getString(R.string.mark_already_watched)
+    } else {
+        context.getString(R.string.remove_already_watched)
     }
 }

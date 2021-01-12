@@ -17,14 +17,13 @@ import dev.forcetower.playtime.core.source.local.PlayDB
 import dev.forcetower.playtime.core.util.ObjectConverters
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.ZonedDateTime
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
