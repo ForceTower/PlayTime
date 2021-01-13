@@ -12,6 +12,7 @@
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
             app:liftOnScroll="true"
+            app:liftOnScrollTargetViewId="@id/recycler_movies"
             app:paddingTopSystemWindowInsets="@{true}"
             app:paddingEndSystemWindowInsets="@{true}"
             app:paddingStartSystemWindowInsets="@{true}">
@@ -22,17 +23,23 @@
                 android:layout_height="?attr/actionBarSize" />
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_movies"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingBottom="64dp"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:paddingBottomSystemWindowInsets="@{true}"
-            app:paddingEndSystemWindowInsets="@{true}"
-            app:paddingStartSystemWindowInsets="@{true}"
-            tools:listitem="@layout/item_movie_featured"/>
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_movies"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingBottom="64dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:paddingBottomSystemWindowInsets="@{true}"
+                app:paddingEndSystemWindowInsets="@{true}"
+                app:paddingStartSystemWindowInsets="@{true}"
+                tools:listitem="@layout/item_movie_featured"/>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -54,7 +54,7 @@ abstract class MovieDao : BaseDao<Movie>() {
 
     @Transaction
     @Query("SELECT * FROM Movie WHERE id = :id")
-    abstract fun getByIdWithGenres(id: Int): LiveData<MovieWithRelations>
+    abstract fun getByIdWithRelations(id: Int): LiveData<MovieWithRelations>
 
     @Query("DELETE FROM Movie")
     abstract suspend fun deleteAll()

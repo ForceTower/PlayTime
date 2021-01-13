@@ -1,5 +1,7 @@
 package dev.forcetower.playtime
 
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -10,8 +12,10 @@ import org.junit.Assert.*
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class ExampleUnitTest {
+    private val context = ApplicationProvider.getApplicationContext<Context>()
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun `is ok`() {
+        println(context)
+        println(context.packageName)
     }
 }

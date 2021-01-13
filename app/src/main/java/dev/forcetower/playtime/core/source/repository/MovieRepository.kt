@@ -25,10 +25,10 @@ class MovieRepository @Inject constructor(
     private val database: PlayDB,
     private val service: TMDbService
 ) {
-    @ExperimentalPagingApi
+    @OptIn(ExperimentalPagingApi::class)
     fun movies(): Flow<PagingData<Movie>> {
         return Pager(
-            config = PagingConfig(pageSize = 20, enablePlaceholders = false),
+            config = PagingConfig(pageSize = 20),
             pagingSourceFactory = { database.movies().getMovieSource() },
             remoteMediator = MovieRemoteMediator(database, service)
         ).flow
@@ -44,7 +44,7 @@ class MovieRepository @Inject constructor(
     }
 
     fun movie(id: Int) = liveData(Dispatchers.IO) {
-        emitSource(database.movies().getByIdWithGenres(id))
+        emitSource(database.movies().getByIdWithRelations(id))
         try {
             val response = service.movieDetails(id)
             val associations = response.genres.map { MovieGenre(response.id, it.id) }

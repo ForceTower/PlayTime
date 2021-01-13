@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.Flow
 class FeaturedViewModel @ViewModelInject constructor(
     private val repository: MovieRepository
 ): ViewModel(), MovieActions {
-    private var movies: Flow<PagingData<Movie>>? = null
+//    private var movies: Flow<PagingData<Movie>>? = null
     private val _movieClick = MutableLiveData<Event<Movie>>()
     val movieClick: LiveData<Event<Movie>> = _movieClick
 
@@ -27,17 +27,18 @@ class FeaturedViewModel @ViewModelInject constructor(
     val isSearching: LiveData<Boolean> = _searching
 
     val searchSource = repository.search { query }.cachedIn(viewModelScope)
+    val movies = repository.movies().cachedIn(viewModelScope)
 
     var query: String = ""
 
-    @ExperimentalPagingApi
-    fun movies(): Flow<PagingData<Movie>> {
-        val movies = this.movies
-        if (movies != null) return movies
-        val next = repository.movies().cachedIn(viewModelScope)
-        this.movies = next
-        return next
-    }
+//    @ExperimentalPagingApi
+//    fun movies(): Flow<PagingData<Movie>> {
+//        val movies = this.movies
+//        if (movies != null) return movies
+//        val next = repository.movies().cachedIn(viewModelScope)
+//        this.movies = next
+//        return next
+//    }
 
     override fun onMovieClick(movie: Movie?) {
         movie ?: return

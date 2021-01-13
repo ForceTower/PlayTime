@@ -15,9 +15,9 @@ buildscript {
         view_pager = "1.0.0"
 
         // Architecture
-        room = '2.3.0-alpha03'
+        room = '2.3.0-alpha04'
         lifecycle = '2.2.0'
-        paging = '3.0.0-alpha07'
+        paging = '3.0.0-alpha12'
         navigation = '2.3.2'
 
         // Dependency Injection
@@ -64,13 +64,12 @@ buildscript {
 allprojects {
     repositories {
         mavenLocal()
-//        maven { url "\\\\wsl\$\\Ubuntu-18.04\\home\\forcetower\\development\\androidx-master-dev\\out\\androidx\\build\\support_repo" }
         google()
         jcenter()
         maven { url "https://plugins.gradle.org/m2/" }
         maven { url "http://oss.sonatype.org/content/repositories/snapshots" }
         maven { url "https://jitpack.io" }
-        maven { url 'https://androidx.dev/snapshots/builds/7012032/artifacts/repository' }
+        maven { url 'https://androidx.dev/snapshots/builds/7080225/artifacts/repository' }
     }
 }
 

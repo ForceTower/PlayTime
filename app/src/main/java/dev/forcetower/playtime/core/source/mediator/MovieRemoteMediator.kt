@@ -6,6 +6,7 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import dev.forcetower.playtime.core.model.insertion.MovieBase
+import dev.forcetower.playtime.core.model.storage.Genre
 import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.core.model.storage.MovieFeedIndex
 import dev.forcetower.playtime.core.model.storage.MovieGenre
@@ -46,11 +47,17 @@ class MovieRemoteMediator(
             val response = service.moviesPopular(page)
             val endReached = response.page == response.totalPages
 
+            val genres = mutableListOf<Genre>()
+            if (loadType == LoadType.REFRESH) {
+                genres += service.genres().genres
+            }
+
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     database.feedIndex.deleteIndex()
-                    database.genres().insertOrUpdate(service.genres().genres)
+                    database.genres().insertOrUpdate(genres)
                 }
+
                 database.movies().insertOrUpdateSimple(response.results.map { MovieBase.fromDTO(it) })
                 val associations = response.results.flatMap { simple -> simple.genreIds.map { MovieGenre(simple.id, it) } }
                 database.genres().insertAssociations(associations)
@@ -60,7 +67,7 @@ class MovieRemoteMediator(
                 }
 
                 database.feedIndex.insertAllIgnore(indices)
-                Timber.d("Inserted ${response.results.size} movies")
+                Timber.d("Inserted ${response.results.size} movies. End reached $endReached")
             }
             return MediatorResult.Success(endOfPaginationReached = endReached)
         } catch (error: HttpException) {

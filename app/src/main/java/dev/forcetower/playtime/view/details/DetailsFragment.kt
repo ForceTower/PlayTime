@@ -16,7 +16,6 @@ import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
@@ -37,7 +36,6 @@ import dev.forcetower.playtime.databinding.FragmentMovieDetailsBinding
 import dev.forcetower.playtime.view.UIViewModel
 import dev.forcetower.playtime.widget.behavior.ScrollingAlphaBehavior
 import dev.forcetower.toolkit.components.BaseFragment
-import dev.forcetower.toolkit.extensions.windowInsetsControllerCompat
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -74,10 +72,12 @@ class DetailsFragment : BaseFragment() {
                 val dominantAlpha = ColorUtils.setAlphaComponent(dominant, 0xB2)
                 binding.overlay.setBackgroundColor(dominantAlpha)
                 binding.btnMarkWatched.setBackgroundColor(dominantAlpha)
+                binding.btnWarnMe.setBackgroundColor(dominantAlpha)
             } else {
                 val alpha = ColorUtils.setAlphaComponent(Color.BLACK, 0xB2)
                 binding.overlay.setBackgroundColor(alpha)
                 binding.btnMarkWatched.setBackgroundColor(alpha)
+                binding.btnWarnMe.setBackgroundColor(alpha)
             }
             return false
         }

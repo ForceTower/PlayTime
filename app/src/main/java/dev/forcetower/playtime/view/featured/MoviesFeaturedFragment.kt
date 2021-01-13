@@ -8,6 +8,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.forEach
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
@@ -15,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
+import androidx.paging.LoadState
 import dagger.hilt.android.AndroidEntryPoint
 import dev.forcetower.playtime.R
 import dev.forcetower.playtime.core.model.storage.Movie
@@ -24,12 +26,12 @@ import dev.forcetower.toolkit.extensions.closeKeyboardWithActivity
 import dev.forcetower.toolkit.extensions.openKeyboardWithActivity
 import dev.forcetower.toolkit.lifecycle.EventObserver
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
 @AndroidEntryPoint
-@ExperimentalPagingApi
 class MoviesFeaturedFragment : BaseFragment() {
     private lateinit var binding: FragmentMoviesFeaturedBinding
     private lateinit var adapter: FeaturedAdapter
@@ -90,19 +92,37 @@ class MoviesFeaturedFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launch {
-            viewModel.movies().collect {
+        lifecycleScope.launchWhenCreated {
+            viewModel.movies.collectLatest {
                 adapter.submitData(it)
             }
         }
 
-        lifecycleScope.launch {
-            viewModel.searchSource.collect {
+        lifecycleScope.launchWhenCreated {
+            viewModel.searchSource.collectLatest {
                 searchAdapter.submitData(it)
             }
         }
 
+        lifecycleScope.launchWhenCreated {
+            adapter.loadStateFlow.collectLatest { loadStates ->
+                binding.swipeRefresh.isRefreshing = loadStates.refresh is LoadState.Loading
+            }
+        }
+
+        binding.swipeRefresh.setOnRefreshListener {
+            adapter.refresh()
+        }
+
+        val backHandler = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                viewModel.setSearching(false)
+            }
+        }
+
         viewModel.isSearching.observe(viewLifecycleOwner) { searching ->
+            backHandler.isEnabled = searching
+            binding.swipeRefresh.isEnabled = !searching
             if (!searching) {
                 binding.recyclerMovies.adapter = adapter
                 binding.searchView.run {
@@ -119,6 +139,8 @@ class MoviesFeaturedFragment : BaseFragment() {
             viewLifecycleOwner,
             EventObserver { onNavigateToMovieDetails(it) }
         )
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backHandler)
     }
 
     private fun onNavigateToMovieDetails(movie: Movie) {
