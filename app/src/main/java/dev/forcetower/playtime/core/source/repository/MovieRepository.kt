@@ -82,8 +82,4 @@ class MovieRepository @Inject constructor(
                 }
             }
     }
-
-    fun interface What {
-        fun onDone()
-    }
 }
