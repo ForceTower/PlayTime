@@ -5,6 +5,7 @@ import android.transition.TransitionSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.core.os.bundleOf
 import androidx.core.view.forEach
 import androidx.fragment.app.activityViewModels
@@ -35,6 +36,7 @@ class MovieListFragment : BaseFragment() {
         postponeEnterTransition()
         val view = FragmentTitleListBinding.inflate(inflater, container, false).also {
             binding = it
+            it.lifecycleOwner = viewLifecycleOwner
         }.root
 
         adapter = MovieAdapter(viewModel)
@@ -46,11 +48,16 @@ class MovieListFragment : BaseFragment() {
             }
         }
 
-        binding.recyclerMovies.viewTreeObserver
-            .addOnPreDrawListener {
+
+        val drawListener = object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
                 startPostponedEnterTransition()
-                true
+                binding.recyclerMovies.viewTreeObserver.removeOnPreDrawListener(this)
+                return true
             }
+        }
+
+        binding.recyclerMovies.viewTreeObserver.addOnPreDrawListener(drawListener)
 
         return view
     }

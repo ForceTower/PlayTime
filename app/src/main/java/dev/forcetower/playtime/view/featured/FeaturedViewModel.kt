@@ -1,22 +1,19 @@
 package dev.forcetower.playtime.view.featured
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.ExperimentalPagingApi
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.core.source.repository.MovieRepository
 import dev.forcetower.toolkit.extensions.setValueIfNew
 import dev.forcetower.toolkit.lifecycle.Event
-import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class FeaturedViewModel @ViewModelInject constructor(
+@HiltViewModel
+class FeaturedViewModel @Inject constructor(
     repository: MovieRepository
 ): ViewModel(), MovieActions {
     private val _movieClick = MutableLiveData<Event<Movie>>()

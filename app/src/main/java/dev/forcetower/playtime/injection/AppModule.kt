@@ -60,7 +60,10 @@ object AppModule {
 
             val url = request.url.newBuilder()
                 .addQueryParameter("api_key", Constants.TMDB_API_KEY)
-                .addQueryParameter("language", Locale.getDefault().toLanguageTag())
+                .apply {
+                    if (request.url.queryParameter("language") == null)
+                        addQueryParameter("language", Locale.getDefault().toLanguageTag())
+                }
                 .build()
 
             val renewed = request.newBuilder().url(url).headers(headers).build()

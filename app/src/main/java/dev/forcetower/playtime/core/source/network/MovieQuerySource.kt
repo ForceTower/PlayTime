@@ -1,6 +1,7 @@
 package dev.forcetower.playtime.core.source.network
 
 import androidx.paging.PagingSource
+import androidx.paging.PagingState
 import dev.forcetower.playtime.core.model.insertion.MovieBase
 import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.core.source.local.PlayDB
@@ -27,5 +28,9 @@ class MovieQuerySource(
         } catch (error: Exception) {
             LoadResult.Error(error)
         }
+    }
+
+    override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
+        return state.anchorPosition
     }
 }

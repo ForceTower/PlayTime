@@ -48,10 +48,14 @@ class MovieRepository @Inject constructor(
         try {
             val response = service.movieDetails(id)
             val associations = response.genres.map { MovieGenre(response.id, it.id) }
-            val videos = response.videos.results.map { it.asMovieVideo(response.id) }
+            var videos = response.videos.results.map { it.asMovieVideo(response.id) }
             val cast = response.credits.cast.map { it.asCast(response.id) }
             val releases = response.releaseDates.results.flatMap { it.mapToReleases(response.id) }
             val backdrops = response.images.backdrops.map { it.asBackdrop(response.id) }
+
+            if (videos.isEmpty()) {
+                videos = service.movieVideos(id, "en-US").results.map { it.asMovieVideo(id) }
+            }
 
             database.withTransaction {
                 database.releases().deleteAllFromMovie(response.id)

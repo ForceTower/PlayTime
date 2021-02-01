@@ -8,6 +8,8 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import android.view.ViewTreeObserver.OnPreDrawListener
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.forEach
 import androidx.core.widget.doAfterTextChanged
@@ -63,11 +65,15 @@ class MoviesFeaturedFragment : BaseFragment() {
             binding = it
         }.root
 
-        binding.recyclerMovies.viewTreeObserver
-            .addOnPreDrawListener {
+        val drawListener = object : OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
                 startPostponedEnterTransition()
-                true
+                binding.recyclerMovies.viewTreeObserver.removeOnPreDrawListener(this)
+                return true
             }
+        }
+
+        binding.recyclerMovies.viewTreeObserver.addOnPreDrawListener(drawListener)
 
         binding.searchView.run {
             binding.btnSearch.setOnClickListener {

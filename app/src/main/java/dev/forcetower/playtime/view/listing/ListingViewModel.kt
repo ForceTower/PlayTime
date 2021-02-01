@@ -1,21 +1,22 @@
 package dev.forcetower.playtime.view.listing
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.core.source.repository.ListingRepository
 import dev.forcetower.playtime.view.featured.MovieActions
 import dev.forcetower.toolkit.lifecycle.Event
 import kotlinx.coroutines.flow.Flow
-import okhttp3.OkHttpClient
 import timber.log.Timber
+import javax.inject.Inject
 
-class ListingViewModel @ViewModelInject constructor(
+@HiltViewModel
+class ListingViewModel @Inject constructor(
     private val repository: ListingRepository
 ) : ViewModel(), MovieActions {
     private var sourceType = 0

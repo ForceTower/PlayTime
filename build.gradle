@@ -17,11 +17,11 @@ buildscript {
         // Architecture
         room = '2.3.0-alpha04'
         lifecycle = '2.2.0'
-        paging = '3.0.0-alpha12'
-        navigation = '2.3.2'
+        paging = '3.0.0-alpha13'
+        navigation = '2.3.3'
 
         // Dependency Injection
-        dagger = '2.29.1'
+        dagger = '2.31.1'
 
         // Logs
         timber = "4.7.1"
@@ -38,13 +38,12 @@ buildscript {
         gson = '2.8.6'
 
         // Build Versions
-        android_gradle_plugin = '4.1.1'
-        kotlinter = "1.26.0"
-        hilt_dagger = '2.31-alpha'
+        android_gradle_plugin = '4.1.2'
+        kotlinter = "3.3.0"
+        hilt_dagger = '2.31.2-alpha'
         play_publisher = "2.7.1"
     }
     repositories {
-        //maven { url '\\\\wsl\$\\Ubuntu-18.04\\home\\forcetower\\development\\androidx-master-dev\\out\\androidx\\build\\support_repo' }
         google()
         jcenter()
         maven { url "https://plugins.gradle.org/m2/" }
@@ -52,12 +51,10 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.1'
+        classpath "com.android.tools.build:gradle:$android_gradle_plugin"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigation"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_dagger"
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
     }
 }
 
@@ -69,7 +66,6 @@ allprojects {
         maven { url "https://plugins.gradle.org/m2/" }
         maven { url "http://oss.sonatype.org/content/repositories/snapshots" }
         maven { url "https://jitpack.io" }
-//        maven { url 'https://androidx.dev/snapshots/builds/7080225/artifacts/repository' }
     }
 }
 

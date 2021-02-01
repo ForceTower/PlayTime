@@ -36,7 +36,7 @@ import dev.forcetower.playtime.databinding.FragmentMovieDetailsBinding
 import dev.forcetower.playtime.view.UIViewModel
 import dev.forcetower.playtime.widget.behavior.ScrollingAlphaBehavior
 import dev.forcetower.toolkit.components.BaseFragment
-import timber.log.Timber
+import dev.forcetower.toolkit.extensions.windowInsetsControllerCompat
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
@@ -73,6 +73,9 @@ class DetailsFragment : BaseFragment() {
                 binding.overlay.setBackgroundColor(dominantAlpha)
                 binding.btnMarkWatched.setBackgroundColor(dominantAlpha)
                 binding.btnWarnMe.setBackgroundColor(dominantAlpha)
+
+
+                binding.root.windowInsetsControllerCompat?.isAppearanceLightStatusBars = ColorUtils.calculateLuminance(dominant) > 0.1
             } else {
                 val alpha = ColorUtils.setAlphaComponent(Color.BLACK, 0xB2)
                 binding.overlay.setBackgroundColor(alpha)
@@ -110,8 +113,6 @@ class DetailsFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
         uiViewModel.hideBottomNav()
         postponeEnterTransition(500L, TimeUnit.MILLISECONDS)
-
-        Timber.d("Args: $args")
 
         val transition = TransitionSet()
             .addTransition(ChangeBounds().apply {
@@ -203,6 +204,7 @@ class DetailsFragment : BaseFragment() {
     override fun onDestroy() {
         super.onDestroy()
         uiViewModel.showBottomNav()
+        binding.root.windowInsetsControllerCompat?.isAppearanceLightStatusBars = true
     }
 
     private fun dimBackground() {

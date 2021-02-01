@@ -1,18 +1,20 @@
 package dev.forcetower.playtime.view.details
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.core.model.storage.Release
 import dev.forcetower.playtime.core.model.ui.MovieWithRelations
 import dev.forcetower.playtime.core.source.repository.ListingRepository
 import dev.forcetower.playtime.core.source.repository.MovieRepository
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DetailsViewModel @ViewModelInject constructor(
+@HiltViewModel
+class DetailsViewModel @Inject constructor(
     private val repository: MovieRepository,
     private val listing: ListingRepository
 ) : ViewModel(), DetailsActions {
