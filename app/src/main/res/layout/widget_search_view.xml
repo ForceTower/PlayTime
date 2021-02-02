@@ -7,7 +7,10 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/top_bar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:paddingTopSystemWindowInsets="@{true}"
+            app:paddingEndSystemWindowInsets="@{true}"
+            app:paddingStartSystemWindowInsets="@{true}">
 
             <TextView
                 android:id="@+id/label_logo_name_start"
@@ -53,8 +56,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="invisible"
-            tools:visibility="visible"
-            android:background="?attr/colorSurface">
+            tools:visibility="invisible"
+            android:background="?attr/colorPrimary"
+            app:paddingTopSystemWindowInsets="@{true}"
+            app:paddingEndSystemWindowInsets="@{true}"
+            app:paddingStartSystemWindowInsets="@{true}">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"
@@ -75,7 +81,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/search_app_bar"
+                    android:textColorHint="@color/on_primary_80"
                     android:textCursorDrawable="@null"
+                    android:textColor="?attr/colorOnPrimary"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:background="@null"/>
@@ -88,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:src="@drawable/ic_baseline_close_24"
-                android:tint="?attr/colorOnSurface"
+                android:tint="?attr/colorOnPrimary"
                 android:contentDescription="@string/nav_search"
                 style="@style/Widget.AppCompat.ButtonBar.AlertDialog"
                 app:layout_constraintEnd_toEndOf="parent"
