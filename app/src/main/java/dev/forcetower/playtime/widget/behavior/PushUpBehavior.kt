@@ -39,7 +39,7 @@ class PushUpBehavior @JvmOverloads constructor(
         dependency: View
     ): Boolean {
         if (!::target.isInitialized) {
-            target = dependency.findViewById(R.id.movie_title)
+            target = dependency.findViewById(R.id.details_anim_group)
             targetPosition = target.top
         }
         return super.onDependentViewChanged(parent, child, dependency)
