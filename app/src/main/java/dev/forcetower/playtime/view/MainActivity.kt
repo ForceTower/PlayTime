@@ -48,6 +48,7 @@ class MainActivity : BaseActivity() {
         }
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowCompat.getInsetsController(window, binding.root)?.isAppearanceLightStatusBars = true
         setupObservers()
 //        setupProfileOnBottomNav()
     }

@@ -1,6 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext.kotlin_version = "1.4.21"
+    ext.kotlin_version = "1.4.21-2"
     ext {
         ktx = '1.5.0-beta01'
         app_compat = '1.2.0'
@@ -15,7 +15,7 @@ buildscript {
         view_pager = "1.0.0"
 
         // Architecture
-        room = '2.3.0-alpha04'
+        room = '2.3.0-beta01'
         lifecycle = '2.2.0'
         paging = '3.0.0-alpha13'
         navigation = '2.3.3'
