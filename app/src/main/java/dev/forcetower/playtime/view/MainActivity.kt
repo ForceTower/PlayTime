@@ -1,12 +1,6 @@
 package dev.forcetower.playtime.view
 
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -24,10 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import dev.forcetower.playtime.R
 import dev.forcetower.playtime.databinding.ActivityMainBinding
-import dev.forcetower.playtime.databinding.MenuBottomProfileBinding
 import dev.forcetower.toolkit.components.BaseActivity
-import dev.forcetower.toolkit.extensions.getPixelsFromDp
-import dev.forcetower.toolkit.extensions.inflate
 import dev.forcetower.toolkit.lifecycle.EventObserver
 
 
@@ -49,6 +40,7 @@ class MainActivity : BaseActivity() {
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
         WindowCompat.getInsetsController(window, binding.root)?.isAppearanceLightStatusBars = true
+
         setupObservers()
 //        setupProfileOnBottomNav()
     }

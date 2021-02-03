@@ -16,7 +16,8 @@ import dev.forcetower.playtime.core.source.local.dao.*
     Image::class,
     MovieFeedIndex::class,
     WatchedItem::class,
-    WatchlistItem::class
+    WatchlistItem::class,
+    MovieReleaseFeedIndex::class
 ], version = 1, exportSchema = true)
 @TypeConverters(value = [DateConverters::class])
 abstract class PlayDB : RoomDatabase() {
@@ -27,6 +28,7 @@ abstract class PlayDB : RoomDatabase() {
     abstract fun releases(): ReleaseDao
     abstract val images: ImageDao
     abstract val feedIndex: FeedIndexDao
+    abstract val releaseFeedIndex: ReleaseIndexDao
     abstract val watchlist: WatchlistItemDao
     abstract val watched: WatchedItemDao
 }

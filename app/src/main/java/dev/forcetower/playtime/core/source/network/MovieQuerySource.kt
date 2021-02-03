@@ -31,6 +31,6 @@ class MovieQuerySource(
     }
 
     override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
-        return state.anchorPosition
+        return null
     }
 }

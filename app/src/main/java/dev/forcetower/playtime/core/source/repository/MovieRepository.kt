@@ -11,12 +11,14 @@ import dev.forcetower.playtime.core.model.storage.MovieGenre
 import dev.forcetower.playtime.core.model.storage.Release
 import dev.forcetower.playtime.core.source.network.TMDbService
 import dev.forcetower.playtime.core.source.local.PlayDB
-import dev.forcetower.playtime.core.source.mediator.MovieRemoteMediator
+import dev.forcetower.playtime.core.source.mediator.MovieReleaseRemoteMediator
+import dev.forcetower.playtime.core.source.mediator.MoviePopularRemoteMediator
 import dev.forcetower.playtime.core.source.network.MovieQuerySource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
+import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -30,7 +32,16 @@ class MovieRepository @Inject constructor(
         return Pager(
             config = PagingConfig(pageSize = 20),
             pagingSourceFactory = { database.movies().getMovieSource() },
-            remoteMediator = MovieRemoteMediator(database, service)
+            remoteMediator = MoviePopularRemoteMediator(database, service)
+        ).flow
+    }
+
+    @OptIn(ExperimentalPagingApi::class)
+    fun releases(): Flow<PagingData<Movie>> {
+        return Pager(
+            config = PagingConfig(pageSize = 20),
+            pagingSourceFactory = { database.movies().getMovieReleaseSource() },
+            remoteMediator = MovieReleaseRemoteMediator(database, service)
         ).flow
     }
 

@@ -17,7 +17,7 @@ import timber.log.Timber
 import java.io.IOException
 
 @OptIn(ExperimentalPagingApi::class)
-class MovieRemoteMediator(
+class MoviePopularRemoteMediator(
     private val database: PlayDB,
     private val service: TMDbService
 ) : RemoteMediator<Int, Movie>() {
@@ -52,19 +52,20 @@ class MovieRemoteMediator(
                 genres += service.genres().genres
             }
 
+            val movies = response.results.map { MovieBase.fromDTO(it) }
+            val associations = response.results.flatMap { simple -> simple.genreIds.map { MovieGenre(simple.id, it) } }
+            val indices = response.results.mapIndexed { index, it ->
+                MovieFeedIndex(it.id, (response.page - 1) * pageSize + index)
+            }
+
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     database.feedIndex.deleteIndex()
                     database.genres().insertOrUpdate(genres)
                 }
 
-                database.movies().insertOrUpdateSimple(response.results.map { MovieBase.fromDTO(it) })
-                val associations = response.results.flatMap { simple -> simple.genreIds.map { MovieGenre(simple.id, it) } }
+                database.movies().insertOrUpdateSimple(movies)
                 database.genres().insertAssociations(associations)
-
-                val indices = response.results.mapIndexed { index, it ->
-                    MovieFeedIndex(it.id, (response.page - 1) * pageSize + index)
-                }
 
                 database.feedIndex.insertAllIgnore(indices)
                 Timber.d("Inserted ${response.results.size} movies. End reached $endReached")

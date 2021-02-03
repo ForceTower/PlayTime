@@ -21,6 +21,9 @@ abstract class MovieDao : BaseDao<Movie>() {
     @Query("SELECT M.* FROM Movie M INNER JOIN MovieFeedIndex MFI ON M.id = MFI.movieId ORDER BY MFI.position")
     abstract fun getMovieSource(): PagingSource<Int, Movie>
 
+    @Query("SELECT M.* FROM Movie M INNER JOIN MovieReleaseFeedIndex MRFI ON M.id = MRFI.movieId ORDER BY MRFI.startReleaseDate")
+    abstract fun getMovieReleaseSource(): PagingSource<Int, Movie>
+
     @Update(entity = Movie::class)
     abstract suspend fun updateWithBase(value: MovieBase)
 

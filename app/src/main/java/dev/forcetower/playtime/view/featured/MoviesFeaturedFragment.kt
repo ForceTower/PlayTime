@@ -8,7 +8,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.view.ViewTreeObserver.OnPreDrawListener
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.forEach
@@ -17,7 +16,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
 import dagger.hilt.android.AndroidEntryPoint
 import dev.forcetower.playtime.R
@@ -27,10 +25,7 @@ import dev.forcetower.toolkit.components.BaseFragment
 import dev.forcetower.toolkit.extensions.closeKeyboardWithActivity
 import dev.forcetower.toolkit.extensions.openKeyboardWithActivity
 import dev.forcetower.toolkit.lifecycle.EventObserver
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import timber.log.Timber
 
 
 @AndroidEntryPoint
