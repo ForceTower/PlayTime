@@ -24,7 +24,7 @@ jobs:
         run: ./gradlew dependencies
 
       - name: Publish Release App
-        run: ./gradlew publishReleaseBundle
+        run: ./gradlew assembleRelease
         if: "!contains(github.event.head_commit.message, '[publish skip]')"
 
       - name: Upload result for job
