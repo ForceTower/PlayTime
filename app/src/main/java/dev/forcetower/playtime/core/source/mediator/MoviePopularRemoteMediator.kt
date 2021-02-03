@@ -49,7 +49,7 @@ class MoviePopularRemoteMediator(
 
             val genres = mutableListOf<Genre>()
             if (loadType == LoadType.REFRESH) {
-                genres += service.genres().genres
+                genres += service.genres().genres.map { it.asGenre() }
             }
 
             val movies = response.results.map { MovieBase.fromDTO(it) }

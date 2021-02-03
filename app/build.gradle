@@ -29,9 +29,36 @@ android {
         ndkVersion "21.3.6528147"
     }
 
+    signingConfigs {
+        release {
+            def password = System.getenv("APP_KEYSTORE_PASSWORD")
+            if (password == null)
+                password = "android"
+
+            def alias = System.getenv("APP_KEYSTORE_ALIAS")
+            if (alias == null)
+                alias = "androiddebugkey"
+
+            def keyPass = System.getenv("APP_KEYSTORE_PRIVATE_KEY_PASSWORD")
+            if (keyPass == null)
+                keyPass = "android"
+
+            def signFile = rootProject.file("sign.jks")
+            if (!signFile.exists())
+                signFile = rootProject.file("debug.keystore")
+
+            storeFile signFile
+            storePassword password
+            keyAlias alias
+            keyPassword keyPass
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

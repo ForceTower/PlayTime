@@ -2,7 +2,6 @@ package dev.forcetower.playtime.core.model.dto.values
 
 import dev.forcetower.playtime.core.model.dto.response.Results
 import dev.forcetower.playtime.core.model.insertion.MovieComplete
-import dev.forcetower.playtime.core.model.storage.Genre
 import java.time.LocalDate
 
 data class MovieDetailed(
@@ -18,7 +17,7 @@ data class MovieDetailed(
     val adult: Boolean,
     val backdropPath: String?,
     val voteAverage: Double,
-    val genres: List<Genre>,
+    val genres: List<GenreDTO>,
     val releaseDate: LocalDate,
     val status: String?,
     val tagline: String,

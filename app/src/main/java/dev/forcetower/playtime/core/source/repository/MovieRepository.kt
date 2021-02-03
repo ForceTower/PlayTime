@@ -58,21 +58,22 @@ class MovieRepository @Inject constructor(
         emitSource(database.movies().getByIdWithRelations(id))
         try {
             val response = service.movieDetails(id)
+            val genres = response.genres.map { it.asGenre() }
             val associations = response.genres.map { MovieGenre(response.id, it.id) }
-            var videos = response.videos.results.map { it.asMovieVideo(response.id) }
+            val videos = response.videos.results.map { it.asMovieVideo(response.id) }.toMutableList()
             val cast = response.credits.cast.map { it.asCast(response.id) }
             val releases = response.releaseDates.results.flatMap { it.mapToReleases(response.id) }
             val backdrops = response.images.backdrops.map { it.asBackdrop(response.id) }
 
-            if (videos.isEmpty()) {
-                videos = service.movieVideos(id, "en-US").results.map { it.asMovieVideo(id) }
+            if (!videos.any { it.site.equals("YouTube", true) }) {
+                videos += service.movieVideos(id, "en-US").results.map { it.asMovieVideo(id) }
             }
 
             database.withTransaction {
                 database.releases().deleteAllFromMovie(response.id)
                 database.images.deleteAllFromMovie(response.id)
 
-                database.genres().insertOrUpdate(response.genres)
+                database.genres().insertOrUpdate(genres)
                 database.movies().insertOrUpdateComplete(response.asMovieComplete())
                 database.genres().insertAssociations(associations)
                 database.videos().insertOrUpdate(videos)
