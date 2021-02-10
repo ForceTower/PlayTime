@@ -115,13 +115,15 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$navigation"
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation"
 
+    implementation "androidx.work:work-runtime-ktx:$work_manager"
+
     // Paging
     implementation "androidx.paging:paging-runtime-ktx:$paging"
 
     // Dependency injection
     implementation "com.google.dagger:hilt-android:$hilt_dagger"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_dagger"
-
+    implementation 'androidx.hilt:hilt-work:1.0.0-alpha03'
 
     // Room
     implementation "androidx.room:room-runtime:$room"
