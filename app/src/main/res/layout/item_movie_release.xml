@@ -94,6 +94,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="8dp"
             android:orientation="horizontal"
+            app:goneIf="@{movie.voteAverage == 0}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cover"
             app:layout_constraintTop_toBottomOf="@+id/release_date">

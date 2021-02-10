@@ -63,6 +63,6 @@ abstract class MovieDao : BaseDao<Movie>() {
     @Query("DELETE FROM Movie")
     abstract suspend fun deleteAll()
 
-    @Query("SELECT * FROM Movie WHERE releaseDate IS NOT NULL AND releaseDate >= :start AND releaseDate <= :end AND posterPath IS NOT NULL AND popularity > 0.3 ORDER BY releaseDate")
+    @Query("SELECT * FROM Movie WHERE releaseDate IS NOT NULL AND releaseDate >= :start AND releaseDate <= :end AND posterPath IS NOT NULL AND popularity > 0.3 AND overview IS NOT NULL AND LENGTH(overview) > 0 ORDER BY releaseDate")
     abstract fun getReleasesBetween(start: Long, end: Long): Flow<List<Movie>>
 }
