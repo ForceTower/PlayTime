@@ -36,4 +36,7 @@
     <string name="list_waiting_launch">Aguardando lançamento</string>
     <string name="list_currently_added">Minha lista</string>
     <string name="list_watched">Assistidos</string>
+    <string name="list_wait_no_elements">Nenhum item nesta lista</string>
+    <string name="list_released_no_elements">Nenhum item nesta lista</string>
+    <string name="list_watched_no_elements">Nenhum item nesta lista</string>
 </resources>

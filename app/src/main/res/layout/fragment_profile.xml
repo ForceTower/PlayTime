@@ -74,19 +74,19 @@
                 android:paddingBottom="96dp"
                 android:clipToPadding="false">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:paddingHorizontal="16dp"
-                    android:text="Olá! Você tem 10 filmes na lista e 2350 horas assistidas"
-                    android:textSize="18sp"
-                    android:textColor="?android:textColorPrimary"/>
+<!--                <com.google.android.material.textview.MaterialTextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="16dp"-->
+<!--                    android:paddingHorizontal="16dp"-->
+<!--                    android:text="Olá! Você tem 10 filmes na lista e 2350 horas assistidas"-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:textColor="?android:textColorPrimary"/>-->
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="16dp"
                     android:paddingHorizontal="16dp"
                     android:text="@string/list_waiting_launch"
                     android:textSize="18sp"
@@ -109,7 +109,7 @@
                     android:layout_height="158dp"
                     android:layout_marginTop="4dp"
                     android:paddingHorizontal="12dp"
-                    android:text="Nenhum item nesta lista"
+                    android:text="@string/list_wait_no_elements"
                     android:visibility="gone"
                     android:textColor="?attr/colorAccent"
                     android:textAlignment="gravity"
@@ -143,7 +143,7 @@
                     android:layout_marginTop="4dp"
                     android:paddingHorizontal="12dp"
                     android:visibility="gone"
-                    android:text="Nenhum item nesta lista"
+                    android:text="@string/list_released_no_elements"
                     android:textColor="?attr/colorAccent"
                     android:textAlignment="gravity"
                     android:gravity="center"
@@ -175,7 +175,7 @@
                     android:layout_height="158dp"
                     android:layout_marginTop="4dp"
                     android:paddingHorizontal="12dp"
-                    android:text="Nenhum item nesta lista"
+                    android:text="@string/list_watched_no_elements"
                     android:visibility="gone"
                     android:textColor="?attr/colorAccent"
                     android:textAlignment="gravity"
