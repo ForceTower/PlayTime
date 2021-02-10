@@ -17,10 +17,11 @@ interface TMDbService {
     @GET("discover/movie")
     suspend fun moviesByRelease(
         @Query("page") page: Int = 1,
-        @Query("release_date.gte") start: String,
-        @Query("release_date.lte") end: String = start,
+        @Query("primary_release_date.gte") start: String,
+        @Query("primary_release_date.lte") end: String = start,
         @Query("with_release_type") releaseType: Int = 4,
         @Query("sort_by") sorted: String = "release_date.asc",
+        @Query("region") region: String = "US"
     ): MoviesResponse
 
     @GET("movie/popular")

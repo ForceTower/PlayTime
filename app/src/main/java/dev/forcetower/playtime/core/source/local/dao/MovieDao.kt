@@ -8,6 +8,7 @@ import dev.forcetower.playtime.core.model.insertion.MovieComplete
 import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.core.model.ui.MovieWithRelations
 import dev.forcetower.toolkit.database.dao.BaseDao
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class MovieDao : BaseDao<Movie>() {
@@ -61,4 +62,7 @@ abstract class MovieDao : BaseDao<Movie>() {
 
     @Query("DELETE FROM Movie")
     abstract suspend fun deleteAll()
+
+    @Query("SELECT * FROM Movie WHERE releaseDate IS NOT NULL AND releaseDate >= :start AND releaseDate <= :end AND posterPath IS NOT NULL AND popularity > 0.3 ORDER BY releaseDate")
+    abstract fun getReleasesBetween(start: Long, end: Long): Flow<List<Movie>>
 }

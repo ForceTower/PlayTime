@@ -103,6 +103,7 @@ dependencies {
     implementation "androidx.palette:palette-ktx:$pallete"
     implementation "androidx.fragment:fragment-ktx:$fragment"
     implementation "androidx.viewpager2:viewpager2:$view_pager"
+    implementation "androidx.preference:preference-ktx:$preference"
 
     // Architecture
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle"

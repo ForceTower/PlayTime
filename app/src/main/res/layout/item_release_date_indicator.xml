@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="indicator"
+            type="dev.forcetower.playtime.core.model.ui.DayIndicator" />
+
+        <variable
+            name="actions"
+            type="dev.forcetower.playtime.view.releases.ReleasesActions" />
+    </data>
+    <CheckedTextView
+        android:id="@android:id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:minWidth="48dp"
+        android:background="?selectableItemBackgroundBorderless"
+        android:checked="@{indicator.checked}"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textAppearance="?textAppearanceBody1"
+        android:textColor="@color/release_day_indicator_text"
+        android:onClick="@{() -> actions.scrollToStartOfDay(indicator.date)}"
+        app:indicatorText="@{indicator}"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        tools:text="@tools:sample/date/day_of_week"/>
+</layout>

@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/releases"
+        android:icon="@drawable/ic_outline_list_alt_24"
+        android:title="@string/nav_movies_releases"/>
+    <item
         android:id="@+id/popular"
         android:icon="@drawable/ic_outline_movie_24"
         android:title="@string/nav_movies_popular"/>
-    <item
-        android:id="@+id/listing"
-        android:icon="@drawable/ic_outline_list_alt_24"
-        android:title="@string/nav_movies_saved"/>
     <item
         android:id="@+id/profile"
         android:icon="@drawable/ic_baseline_account_circle_24"

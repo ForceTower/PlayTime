@@ -1,31 +1,38 @@
 package dev.forcetower.playtime.core.source.repository
 
+import android.content.SharedPreferences
 import androidx.lifecycle.liveData
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.room.withTransaction
+import dev.forcetower.playtime.core.model.insertion.MovieBase
 import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.core.model.storage.MovieGenre
 import dev.forcetower.playtime.core.model.storage.Release
+import dev.forcetower.playtime.core.model.ui.ReleaseDayIndexed
+import dev.forcetower.playtime.core.model.ui.ReleasesUI
 import dev.forcetower.playtime.core.source.network.TMDbService
 import dev.forcetower.playtime.core.source.local.PlayDB
-import dev.forcetower.playtime.core.source.mediator.MovieReleaseRemoteMediator
 import dev.forcetower.playtime.core.source.mediator.MoviePopularRemoteMediator
+import dev.forcetower.playtime.core.source.network.LoadCurrentReleases
 import dev.forcetower.playtime.core.source.network.MovieQuerySource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.math.abs
 
 @Singleton
 class MovieRepository @Inject constructor(
     private val database: PlayDB,
-    private val service: TMDbService
+    private val service: TMDbService,
+    private val preferences: SharedPreferences
 ) {
     @OptIn(ExperimentalPagingApi::class)
     fun movies(): Flow<PagingData<Movie>> {
@@ -36,13 +43,17 @@ class MovieRepository @Inject constructor(
         ).flow
     }
 
-    @OptIn(ExperimentalPagingApi::class)
-    fun releases(): Flow<PagingData<Movie>> {
-        return Pager(
-            config = PagingConfig(pageSize = 20),
-            pagingSourceFactory = { database.movies().getMovieReleaseSource() },
-            remoteMediator = MovieReleaseRemoteMediator(database, service)
-        ).flow
+    fun releases(): Flow<ReleasesUI> {
+        val current = LocalDate.now().withDayOfMonth(1)
+        val start = current.minusMonths(1).withDayOfMonth(1).toEpochDay()
+        val end = current.plusMonths(2).withDayOfMonth(1).minusDays(1).toEpochDay()
+
+        return database.movies().getReleasesBetween(start, end).map { movies ->
+            ReleasesUI(
+                movies = movies,
+                indexer = ReleaseDayIndexed.from(movies)
+            )
+        }
     }
 
     fun search(
@@ -97,5 +108,29 @@ class MovieRepository @Inject constructor(
                     else -> null
                 }
             }
+    }
+
+    suspend fun loadCurrentReleasesIfNeeded() = withContext(Dispatchers.IO) {
+        val now = LocalDate.now()
+        val cached = preferences.getLong("last_loaded_releases", 0L)
+        val date = LocalDate.ofEpochDay(cached)
+        if (abs(date.until(now).days) > 2 || date.monthValue != now.monthValue) {
+            loadCurrentReleases()
+            preferences.edit().putLong("last_loaded_releases", now.toEpochDay()).apply()
+        }
+    }
+
+    suspend fun loadCurrentReleases() = withContext(Dispatchers.IO) {
+        val results = LoadCurrentReleases.execute(service)
+        val movies = results.map { MovieBase.fromDTO(it) }
+        val associations = results.flatMap { simple -> simple.genreIds.map { MovieGenre(simple.id, it) } }
+
+        val genres = service.genres().genres.map { it.asGenre() }
+
+        database.withTransaction {
+            database.genres().insertAll(genres)
+            database.movies().insertOrUpdateSimple(movies)
+            database.genres().insertAssociations(associations)
+        }
     }
 }

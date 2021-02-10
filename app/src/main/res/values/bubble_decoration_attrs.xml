@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DayIndicatorDecoration">
+        <attr name="android:color" />
+        <attr name="insetHorizontal" format="dimension" />
+        <attr name="insetVertical" format="dimension" />
+    </declare-styleable>
+</resources>

@@ -1,6 +1,8 @@
 package dev.forcetower.playtime.injection
 
 import android.content.Context
+import android.content.SharedPreferences
+import androidx.preference.PreferenceManager
 import androidx.room.Room
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
@@ -103,4 +105,9 @@ object AppModule {
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .serializeNulls()
             .create()
+
+    @Provides
+    @Singleton
+    fun preferences(@ApplicationContext context: Context): SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(context)
 }

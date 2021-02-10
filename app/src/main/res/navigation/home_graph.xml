@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/home_graph.xml"
-    app:startDestination="@id/popular">
+    app:startDestination="@id/releases">
 
     <fragment
         android:id="@+id/popular"
@@ -24,11 +24,11 @@
             app:nullable="true" />
     </fragment>
     <fragment
-        android:id="@+id/listing"
-        android:name="dev.forcetower.playtime.view.listing.ListingFragment"
-        android:label="ListingFragment" >
+        android:id="@+id/releases"
+        android:name="dev.forcetower.playtime.view.releases.ReleasesFragment"
+        android:label="ReleasesFragment" >
         <action
-            android:id="@+id/action_listing_to_movie_details"
+            android:id="@+id/action_releases_to_movie_details"
             app:destination="@id/movie_details" />
     </fragment>
 </navigation>

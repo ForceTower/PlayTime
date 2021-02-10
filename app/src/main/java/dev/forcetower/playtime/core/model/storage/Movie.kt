@@ -19,7 +19,8 @@ data class Movie(
     val voteAverage: Double,
     val releaseDate: LocalDate?,
     val tagline: String?,
-    val status: String?
+    val status: String?,
+    val popularity: Double
 ) {
     companion object {
         fun fromDTO(dto: MovieSimple): Movie {
@@ -35,7 +36,8 @@ data class Movie(
                 dto.voteAverage,
                 dto.releaseDate,
                 null,
-                null
+                null,
+                dto.popularity
             )
         }
     }

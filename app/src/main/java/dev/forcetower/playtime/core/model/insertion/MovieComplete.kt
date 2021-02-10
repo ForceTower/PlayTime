@@ -14,5 +14,6 @@ data class MovieComplete(
     val voteAverage: Double,
     val releaseDate: LocalDate?,
     val tagline: String?,
-    val status: String?
+    val status: String?,
+    val popularity: Double
 )

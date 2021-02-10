@@ -12,7 +12,8 @@ data class MovieBase(
     val video: Boolean,
     val adult: Boolean,
     val voteAverage: Double,
-    val releaseDate: LocalDate?
+    val releaseDate: LocalDate?,
+    val popularity: Double
 ) {
     companion object {
         fun fromDTO(dto: MovieSimple): MovieBase {
@@ -25,7 +26,8 @@ data class MovieBase(
                 dto.video,
                 dto.adult,
                 dto.voteAverage,
-                dto.releaseDate
+                dto.releaseDate,
+                dto.popularity
             )
         }
     }

@@ -77,11 +77,11 @@ class MovieListFragment : BaseFragment() {
     }
 
     private fun navigateToDetails(movie: Movie) {
-        val view = findViewForTransition(binding.recyclerMovies, movie.id)
-        val directions = ListingFragmentDirections.actionListingToMovieDetails(movie.id, movie.posterPath ?: movie.backdropPath)
-        val extras = FragmentNavigatorExtras(view to view.transitionName)
-        (exitTransition as? TransitionSet)?.excludeTarget(view, true)
-        findNavController().navigate(directions, extras)
+//        val view = findViewForTransition(binding.recyclerMovies, movie.id)
+//        val directions = ListingFragmentDirections.actionListingToMovieDetails(movie.id, movie.posterPath ?: movie.backdropPath)
+//        val extras = FragmentNavigatorExtras(view to view.transitionName)
+//        (exitTransition as? TransitionSet)?.excludeTarget(view, true)
+//        findNavController().navigate(directions, extras)
     }
 
     private fun findViewForTransition(group: ViewGroup, id: Int): View {

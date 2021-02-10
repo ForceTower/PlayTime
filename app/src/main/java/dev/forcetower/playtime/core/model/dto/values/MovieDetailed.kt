@@ -39,7 +39,8 @@ data class MovieDetailed(
             voteAverage,
             releaseDate,
             tagline,
-            status
+            status,
+            popularity
         )
     }
 }
