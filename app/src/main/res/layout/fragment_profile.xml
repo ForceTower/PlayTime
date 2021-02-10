@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="hasWaitingItems"
+            type="Boolean" />
+        <variable
+            name="hasReleasedItems"
+            type="Boolean" />
+        <variable
+            name="hasWatchedItems"
+            type="Boolean" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
+            app:paddingTopSystemWindowInsets="@{true}"
+            app:liftOnScrollTargetViewId="@id/profile_content"
+            app:liftOnScroll="true">
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                app:paddingEndSystemWindowInsets="@{true}"
+                app:paddingStartSystemWindowInsets="@{true}">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/label_logo_name_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/logo_name_start"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="22sp"
+                    android:textFontWeight="600"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/label_logo_name_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/logo_name_end"
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="22sp"
+                    android:textFontWeight="600"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/label_logo_name_start"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/profile_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="96dp"
+                android:clipToPadding="false">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:paddingHorizontal="16dp"
+                    android:text="Olá! Você tem 10 filmes na lista e 2350 horas assistidas"
+                    android:textSize="18sp"
+                    android:textColor="?android:textColorPrimary"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:paddingHorizontal="16dp"
+                    android:text="@string/list_waiting_launch"
+                    android:textSize="18sp"
+                    android:textColor="?attr/colorPrimary"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_waiting_launch"
+                    android:layout_width="match_parent"
+                    android:layout_height="158dp"
+                    android:layout_marginTop="4dp"
+                    android:paddingHorizontal="12dp"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    app:goneIf="@{!hasWaitingItems}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_user_profile_listing"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="158dp"
+                    android:layout_marginTop="4dp"
+                    android:paddingHorizontal="12dp"
+                    android:text="Nenhum item nesta lista"
+                    android:visibility="gone"
+                    android:textColor="?attr/colorAccent"
+                    android:textAlignment="gravity"
+                    android:gravity="center"
+                    app:goneUnless="@{!hasWaitingItems}"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:paddingHorizontal="16dp"
+                    android:text="@string/list_currently_added"
+                    android:textSize="18sp"
+                    android:textColor="?attr/colorPrimary"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_user_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="158dp"
+                    android:layout_marginTop="4dp"
+                    android:paddingHorizontal="12dp"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    app:goneIf="@{!hasReleasedItems}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_user_profile_listing"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="158dp"
+                    android:layout_marginTop="4dp"
+                    android:paddingHorizontal="12dp"
+                    android:visibility="gone"
+                    android:text="Nenhum item nesta lista"
+                    android:textColor="?attr/colorAccent"
+                    android:textAlignment="gravity"
+                    android:gravity="center"
+                    app:goneUnless="@{!hasReleasedItems}"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:paddingHorizontal="16dp"
+                    android:text="@string/list_watched"
+                    android:textSize="18sp"
+                    android:textColor="?attr/colorPrimary"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_watched"
+                    android:layout_width="match_parent"
+                    android:layout_height="158dp"
+                    android:layout_marginTop="4dp"
+                    android:paddingHorizontal="12dp"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    app:goneIf="@{!hasWatchedItems}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_user_profile_listing"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="158dp"
+                    android:layout_marginTop="4dp"
+                    android:paddingHorizontal="12dp"
+                    android:text="Nenhum item nesta lista"
+                    android:visibility="gone"
+                    android:textColor="?attr/colorAccent"
+                    android:textAlignment="gravity"
+                    android:gravity="center"
+                    app:goneUnless="@{!hasWatchedItems}"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

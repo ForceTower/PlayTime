@@ -22,6 +22,9 @@ abstract class WatchedItemDao : BaseDao<WatchedItem>() {
     @Query("SELECT M.* FROM WatchedItem WLI INNER JOIN Movie M ON WLI.movieId = M.id ORDER BY WLI.addedAt")
     abstract fun getWatchedList(): PagingSource<Int, Movie>
 
+    @Query("SELECT COUNT(M.id) FROM WatchedItem WLI INNER JOIN Movie M ON WLI.movieId = M.id")
+    abstract fun getCountWatchedList(): Flow<Int>
+
     @Query("SELECT COUNT(movieId) FROM WatchedItem WHERE movieId = :movieId")
     abstract fun isWatched(movieId: Int): Flow<Boolean>
 

@@ -8,6 +8,7 @@ import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.core.model.storage.WatchlistItem
 import dev.forcetower.toolkit.database.dao.BaseDao
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 
 @Dao
 abstract class WatchlistItemDao : BaseDao<WatchlistItem>() {
@@ -18,8 +19,17 @@ abstract class WatchlistItemDao : BaseDao<WatchlistItem>() {
         return getItemByIDDirect(value.movieId)
     }
 
-    @Query("SELECT M.* FROM WatchlistItem WLI INNER JOIN Movie M ON WLI.movieId = M.id ORDER BY WLI.addedAt")
-    abstract fun getWatchList(): PagingSource<Int, Movie>
+    @Query("SELECT M.* FROM WatchlistItem WLI INNER JOIN Movie M ON WLI.movieId = M.id WHERE M.releaseDate > :today ORDER BY M.releaseDate")
+    abstract fun getWatchlistUnreleased(today: LocalDate = LocalDate.now()): PagingSource<Int, Movie>
+
+    @Query("SELECT COUNT(M.id) FROM WatchlistItem WLI INNER JOIN Movie M ON WLI.movieId = M.id WHERE M.releaseDate > :today")
+    abstract fun getCountWatchlistUnreleased(today: LocalDate = LocalDate.now()): Flow<Int>
+
+    @Query("SELECT M.* FROM WatchlistItem WLI INNER JOIN Movie M ON WLI.movieId = M.id WHERE M.releaseDate <= :today ORDER BY WLI.addedAt")
+    abstract fun getWatchListReleased(today: LocalDate = LocalDate.now()): PagingSource<Int, Movie>
+
+    @Query("SELECT COUNT(M.id) FROM WatchlistItem WLI INNER JOIN Movie M ON WLI.movieId = M.id WHERE M.releaseDate <= :today")
+    abstract fun getCountWatchListReleased(today: LocalDate = LocalDate.now()): Flow<Int>
 
     @Query("SELECT COUNT(movieId) FROM WatchlistItem WHERE movieId = :movieId")
     abstract fun onWatchlist(movieId: Int): Flow<Boolean>

@@ -4,8 +4,6 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import dev.forcetower.playtime.core.model.storage.Movie
-import dev.forcetower.playtime.core.model.storage.WatchedItem
-import dev.forcetower.playtime.core.model.storage.WatchlistItem
 import dev.forcetower.playtime.core.source.local.PlayDB
 import dev.forcetower.playtime.core.source.network.TMDbService
 import kotlinx.coroutines.flow.Flow
@@ -20,23 +18,33 @@ class ListingRepository @Inject constructor(
 
     fun getSourceOfType(value: Int): Flow<PagingData<Movie>> {
         return when (value) {
-            1 -> getUserWatchList()
+            1 -> getUserWatchlistReleased()
             2 -> getWatched()
             else -> throw IllegalStateException("source type $value is not defined")
         }
     }
 
-    private fun getUserWatchList(): Flow<PagingData<Movie>> {
+    fun getUserWatchlistUnreleased(): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 20,
                 enablePlaceholders = true
             ),
-            pagingSourceFactory = { database.watchlist.getWatchList() }
+            pagingSourceFactory = { database.watchlist.getWatchlistUnreleased() }
         ).flow
     }
 
-    private fun getWatched(): Flow<PagingData<Movie>> {
+    fun getUserWatchlistReleased(): Flow<PagingData<Movie>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                enablePlaceholders = true
+            ),
+            pagingSourceFactory = { database.watchlist.getWatchListReleased() }
+        ).flow
+    }
+
+    fun getWatched(): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 20,
@@ -45,6 +53,10 @@ class ListingRepository @Inject constructor(
             pagingSourceFactory = { database.watched.getWatchedList() }
         ).flow
     }
+
+    fun countListUnreleased() = database.watchlist.getCountWatchlistUnreleased()
+    fun countListReleased() = database.watchlist.getCountWatchListReleased()
+    fun countListWatched() = database.watched.getCountWatchedList()
 
     fun watched(id: Int) = database.watched.isWatched(id)
 

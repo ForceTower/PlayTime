@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="adapter"
+            type="Integer" />
+        <variable
+            name="movie"
+            type="dev.forcetower.playtime.core.model.storage.Movie" />
+
+        <variable
+            name="actions"
+            type="dev.forcetower.playtime.view.profile.ProfileActions" />
+    </data>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        android:scaleType="centerCrop"
+        android:layout_margin="4dp"
+        android:transitionName="@{@string/transition_movie_poster(movie.id)}"
+        android:onClick="@{() -> actions.onMovieClick(movie, adapter)}"
+        app:tmdbUrl="@{movie.posterPath != null ? movie.posterPath : movie.backdropPath}"
+        app:roundedViewRadius="@{12}"
+        app:elevationAfterLoad="@{3}"
+        app:configWidthDivider="@{3}"
+        tools:src="@tools:sample/backgrounds/scenic"/>
+</layout>

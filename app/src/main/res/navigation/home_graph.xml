@@ -31,4 +31,12 @@
             android:id="@+id/action_releases_to_movie_details"
             app:destination="@id/movie_details" />
     </fragment>
+    <fragment
+        android:id="@+id/profile"
+        android:name="dev.forcetower.playtime.view.profile.ProfileFragment"
+        android:label="ProfileFragment" >
+        <action
+            android:id="@+id/action_releases_to_movie_details"
+            app:destination="@id/movie_details" />
+    </fragment>
 </navigation>

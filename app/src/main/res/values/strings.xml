@@ -33,4 +33,7 @@
     <string name="last_month">Mês passado</string>
     <string name="this_month">Este mês</string>
     <string name="next_month">Próximo mês</string>
+    <string name="list_waiting_launch">Aguardando lançamento</string>
+    <string name="list_currently_added">Minha lista</string>
+    <string name="list_watched">Assistidos</string>
 </resources>
