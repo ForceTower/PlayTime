@@ -72,10 +72,10 @@ class MoviePopularRemoteMediator(
             }
             return MediatorResult.Success(endOfPaginationReached = endReached)
         } catch (error: HttpException) {
-            Timber.e(error, "Error during fetch")
+            Timber.d(error, "Error during fetch")
             return MediatorResult.Error(error)
         } catch (error: IOException) {
-            Timber.e(error, "Error during fetch")
+            Timber.d(error, "Error during fetch")
             return MediatorResult.Error(error)
         }
     }

@@ -4,5 +4,6 @@ import dev.forcetower.playtime.core.model.storage.Movie
 
 data class ReleasesUI(
     val movies: List<Movie>,
-    val indexer: ReleaseDayIndexed
+    val indexer: ReleaseDayIndexed,
+    val currentMovieReleaseIndex: Int
 )

@@ -36,6 +36,7 @@ class ReleasesViewModel @Inject constructor(
     private lateinit var indexer: ReleaseDayIndexed
 
     private var _releases: LiveData<ReleasesUI>? = null
+    private var firstReleasesLoad = false
 
     val releases: LiveData<ReleasesUI>
         get() = releases()
@@ -45,10 +46,20 @@ class ReleasesViewModel @Inject constructor(
         if (value != null) return value
         val result = repository.releases().map {
             indexer = it.indexer
+            if (!firstReleasesLoad && it.movies.isNotEmpty()) {
+                firstReleasesLoad = true
+                scrollToIndex(it.currentMovieReleaseIndex)
+            }
             it
         }.asLiveData()
         _releases = result
         return result
+    }
+
+    private fun scrollToIndex(index: Int) {
+        if (index != -1) {
+            _scrollToEvent.value = Event(ReleaseScrollEvent(index))
+        }
     }
 
     override fun onMovieClick(movie: Movie?) {

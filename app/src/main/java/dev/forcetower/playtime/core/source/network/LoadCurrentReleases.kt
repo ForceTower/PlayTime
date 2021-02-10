@@ -1,7 +1,9 @@
 package dev.forcetower.playtime.core.source.network
 
 import dev.forcetower.playtime.core.model.dto.values.MovieSimple
+import retrofit2.HttpException
 import timber.log.Timber
+import java.io.IOException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -23,8 +25,11 @@ object LoadCurrentReleases {
                 results += response.results
                 completed = page >= response.totalPages
                 page++
-            } catch (error: Throwable) {
-                Timber.e(error, "Error during fetch")
+            } catch (error: IOException) {
+                Timber.d(error, "Error during fetch")
+                completed = true
+            } catch (error: HttpException) {
+                Timber.d(error, "Error during fetch")
                 completed = true
             }
         } while (!completed)

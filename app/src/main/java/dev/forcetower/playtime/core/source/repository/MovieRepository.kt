@@ -10,6 +10,7 @@ import androidx.room.withTransaction
 import dev.forcetower.playtime.core.model.insertion.MovieBase
 import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.core.model.storage.MovieGenre
+import dev.forcetower.playtime.core.model.storage.MovieReleaseFeedIndex
 import dev.forcetower.playtime.core.model.storage.Release
 import dev.forcetower.playtime.core.model.ui.ReleaseDayIndexed
 import dev.forcetower.playtime.core.model.ui.ReleasesUI
@@ -22,7 +23,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import timber.log.Timber
+import java.io.IOException
 import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -51,9 +54,15 @@ class MovieRepository @Inject constructor(
         return database.movies().getReleasesBetween(start, end).map { movies ->
             ReleasesUI(
                 movies = movies,
-                indexer = ReleaseDayIndexed.from(movies)
+                indexer = ReleaseDayIndexed.from(movies),
+                currentMovieReleaseIndex = findCurrentReleaseIndex(movies)
             )
         }
+    }
+
+    private fun findCurrentReleaseIndex(movies: List<Movie>): Int {
+        val today = LocalDate.now()
+        return movies.indexOfFirst { today.isEqual(it.releaseDate) || today.isBefore(it.releaseDate) }
     }
 
     fun search(
@@ -92,8 +101,10 @@ class MovieRepository @Inject constructor(
                 database.releases().insertOrUpdate(releases)
                 database.images.insertOrUpdate(backdrops)
             }
-        } catch (error: Throwable) {
-            Timber.e(error, "Error during details")
+        } catch (error: HttpException) {
+            Timber.d(error, "Error during details")
+        } catch (error: IOException) {
+            Timber.d(error, "Error during details")
         }
     }
 
@@ -124,13 +135,18 @@ class MovieRepository @Inject constructor(
         val results = LoadCurrentReleases.execute(service)
         val movies = results.map { MovieBase.fromDTO(it) }
         val associations = results.flatMap { simple -> simple.genreIds.map { MovieGenre(simple.id, it) } }
+        val indices = results.mapIndexed { index, it ->
+            MovieReleaseFeedIndex(it.id, index, it.releaseDate ?: LocalDate.now())
+        }
 
         val genres = service.genres().genres.map { it.asGenre() }
 
         database.withTransaction {
+            database.releaseFeedIndex.deleteIndex()
             database.genres().insertAll(genres)
             database.movies().insertOrUpdateSimple(movies)
             database.genres().insertAssociations(associations)
+            database.releaseFeedIndex.insertAll(indices)
         }
     }
 }

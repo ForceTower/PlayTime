@@ -85,7 +85,8 @@
             app:movieReleaseDate="@{movie.releaseDate}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cover"
-            app:layout_constraintTop_toBottomOf="@+id/overview"/>
+            app:layout_constraintTop_toBottomOf="@+id/overview"
+            tools:text="18 september 2018"/>
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/rating"

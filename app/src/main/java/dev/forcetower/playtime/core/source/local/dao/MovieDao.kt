@@ -43,7 +43,13 @@ abstract class MovieDao : BaseDao<Movie>() {
     @Transaction
     open suspend fun insertOrUpdateComplete(value: MovieComplete) {
         val current = getByIdDirect(value.id)
-        if (current != null) updateWithComplete(value)
+        if (current != null) {
+            if (current.releaseDate != null && value.releaseDate == null) {
+                updateWithComplete(value.copy(releaseDate = current.releaseDate))
+            } else {
+                updateWithComplete(value)
+            }
+        }
         else insertWithComplete(value)
     }
 
