@@ -4,11 +4,14 @@ import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
+import dev.forcetower.playtime.core.model.internal.MovieWithReleases
+import dev.forcetower.playtime.core.model.internal.MovieWithWatchlist
 import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.core.model.storage.WatchlistItem
 import dev.forcetower.toolkit.database.dao.BaseDao
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Dao
 abstract class WatchlistItemDao : BaseDao<WatchlistItem>() {
@@ -40,12 +43,27 @@ abstract class WatchlistItemDao : BaseDao<WatchlistItem>() {
     @Query("DELETE FROM WatchlistItem WHERE movieId = :movieId")
     abstract fun removeFromWatchList(movieId: Int)
 
+    @Query("SELECT M.id FROM Movie M INNER JOIN WatchlistItem WI ON WI.movieId = M.id WHERE WI.notifiedAt IS NULL")
+    abstract suspend fun getPendingMovieIdNotifications(): List<Int>
+
+    @Query("SELECT M.* FROM Movie M INNER JOIN WatchlistItem WI ON WI.movieId = M.id WHERE WI.notifiedAt IS NULL")
+    abstract suspend fun getPendingMovieNotifications(): List<MovieWithReleases>
+
+    @Query("SELECT M.* FROM Movie M INNER JOIN WatchlistItem WI ON WI.movieId = M.id WHERE WI.notifiedAt IS NULL AND WI.targetDate IS NOT NULL AND WI.targetDate <= :date")
+    abstract suspend fun getCurrentPendingNotifications(date: LocalDate): List<MovieWithWatchlist>
+
+    @Query("UPDATE WatchlistItem SET targetDate = :date WHERE movieId = :movieId")
+    abstract suspend fun updateTargetDate(movieId: Int, date: LocalDate)
+
+    @Query("UPDATE WatchlistItem SET notifiedAt = :date WHERE movieId IN (:ids)")
+    abstract suspend fun markNotified(ids: List<Int>, date: LocalDate)
+
     @Transaction
     open suspend fun toggle(movieId: Int) {
         if (onWatchlistDirect(movieId)) {
             removeFromWatchList(movieId)
         } else {
-            insertIgnore(WatchlistItem(movieId))
+            insertIgnore(WatchlistItem(movieId, null))
         }
     }
 }

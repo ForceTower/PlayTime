@@ -1,4 +1,5 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:locale="pt_BR">
     <string name="app_name">PlayTime</string>
     <string name="movie_overview">Sinopse</string>
     <string name="watch_trailer">Assistir Trailer</string>
@@ -39,4 +40,9 @@
     <string name="list_wait_no_elements">Nenhum item nesta lista</string>
     <string name="list_released_no_elements">Nenhum item nesta lista</string>
     <string name="list_watched_no_elements">Nenhum item nesta lista</string>
+    <string name="movie_release_notification_channel">Filmes lançados</string>
+    <string name="movie_release_notification_channel_description">Atualização quando um filme lançar em canais digitais</string>
+    <string name="movie_release_notification_title">O filme que você esperava lançou!</string>
+    <string name="movie_release_notification_description_single">%1$s foi lançado!</string>
+    <string name="movie_release_notification_description_multiple">%1$s e outros %2$d filmes foram lançados!</string>
 </resources>

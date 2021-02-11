@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import dagger.hilt.android.HiltAndroidApp
+import dev.forcetower.playtime.core.notification.LocalNotifications
 import dev.forcetower.playtime.work.ReleasesWorker
 import timber.log.Timber
 import javax.inject.Inject
@@ -19,11 +20,13 @@ class PlayTime : Application(), Configuration.Provider {
             Timber.plant(Timber.DebugTree())
         }
 
+        LocalNotifications.createChannel(this)
         ReleasesWorker.createWorker(this)
     }
 
-    override fun getWorkManagerConfiguration() =
-        Configuration.Builder()
+    override fun getWorkManagerConfiguration(): Configuration {
+        return Configuration.Builder()
             .setWorkerFactory(workerFactory)
             .build()
+    }
 }

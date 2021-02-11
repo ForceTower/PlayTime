@@ -7,6 +7,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.room.withTransaction
+import dev.forcetower.playtime.core.model.dto.values.MovieDetailed
 import dev.forcetower.playtime.core.model.insertion.MovieBase
 import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.core.model.storage.MovieGenre
@@ -78,29 +79,7 @@ class MovieRepository @Inject constructor(
         emitSource(database.movies().getByIdWithRelations(id))
         try {
             val response = service.movieDetails(id)
-            val genres = response.genres.map { it.asGenre() }
-            val associations = response.genres.map { MovieGenre(response.id, it.id) }
-            val videos = response.videos.results.map { it.asMovieVideo(response.id) }.toMutableList()
-            val cast = response.credits.cast.map { it.asCast(response.id) }
-            val releases = response.releaseDates.results.flatMap { it.mapToReleases(response.id) }
-            val backdrops = response.images.backdrops.map { it.asBackdrop(response.id) }
-
-            if (!videos.any { it.site.equals("YouTube", true) }) {
-                videos += service.movieVideos(id, "en-US").results.map { it.asMovieVideo(id) }
-            }
-
-            database.withTransaction {
-                database.releases().deleteAllFromMovie(response.id)
-                database.images.deleteAllFromMovie(response.id)
-
-                database.genres().insertOrUpdate(genres)
-                database.movies().insertOrUpdateComplete(response.asMovieComplete())
-                database.genres().insertAssociations(associations)
-                database.videos().insertOrUpdate(videos)
-                database.cast().insertOrUpdate(cast)
-                database.releases().insertOrUpdate(releases)
-                database.images.insertOrUpdate(backdrops)
-            }
+            saveMovieDetails(response, database, service)
         } catch (error: HttpException) {
             Timber.d(error, "Error during details")
         } catch (error: IOException) {
@@ -132,21 +111,60 @@ class MovieRepository @Inject constructor(
     }
 
     suspend fun loadCurrentReleases() = withContext(Dispatchers.IO) {
-        val results = LoadCurrentReleases.execute(service)
-        val movies = results.map { MovieBase.fromDTO(it) }
-        val associations = results.flatMap { simple -> simple.genreIds.map { MovieGenre(simple.id, it) } }
-        val indices = results.mapIndexed { index, it ->
-            MovieReleaseFeedIndex(it.id, index, it.releaseDate ?: LocalDate.now())
+        try {
+            val results = LoadCurrentReleases.execute(service)
+            val movies = results.map { MovieBase.fromDTO(it) }
+            val associations =
+                results.flatMap { simple -> simple.genreIds.map { MovieGenre(simple.id, it) } }
+            val indices = results.mapIndexed { index, it ->
+                MovieReleaseFeedIndex(it.id, index, it.releaseDate ?: LocalDate.now())
+            }
+
+            val genres = service.genres().genres.map { it.asGenre() }
+
+            database.withTransaction {
+                database.releaseFeedIndex.deleteIndex()
+                database.genres().insertAll(genres)
+                database.movies().insertOrUpdateSimple(movies)
+                database.genres().insertAssociations(associations)
+                database.releaseFeedIndex.insertAll(indices)
+            }
+        } catch (error: IOException) {
+           Timber.d(error, "Error during load releases")
+        } catch (error: HttpException) {
+           Timber.d(error, "Error during load releases")
         }
+    }
 
-        val genres = service.genres().genres.map { it.asGenre() }
+    companion object {
+        suspend fun saveMovieDetails(
+            response: MovieDetailed,
+            database: PlayDB,
+            service: TMDbService
+        ) {
+            val genres = response.genres.map { it.asGenre() }
+            val associations = response.genres.map { MovieGenre(response.id, it.id) }
+            val videos = response.videos.results.map { it.asMovieVideo(response.id) }.toMutableList()
+            val cast = response.credits.cast.map { it.asCast(response.id) }
+            val releases = response.releaseDates.results.flatMap { it.mapToReleases(response.id) }
+            val backdrops = response.images.backdrops.map { it.asBackdrop(response.id) }
 
-        database.withTransaction {
-            database.releaseFeedIndex.deleteIndex()
-            database.genres().insertAll(genres)
-            database.movies().insertOrUpdateSimple(movies)
-            database.genres().insertAssociations(associations)
-            database.releaseFeedIndex.insertAll(indices)
+            if (!videos.any { it.site.equals("YouTube", true) }) {
+                videos += service.movieVideos(response.id, "en-US").results.map { it.asMovieVideo(response.id) }
+            }
+
+            database.withTransaction {
+                database.releases().deleteAllFromMovie(response.id)
+                database.images.deleteAllFromMovie(response.id)
+
+                database.genres().insertOrUpdate(genres)
+                database.movies().insertOrUpdateComplete(response.asMovieComplete())
+                database.genres().insertAssociations(associations)
+                database.videos().insertOrUpdate(videos)
+                database.cast().insertOrUpdate(cast)
+                database.releases().insertOrUpdate(releases)
+                database.images.insertOrUpdate(backdrops)
+            }
         }
     }
 }

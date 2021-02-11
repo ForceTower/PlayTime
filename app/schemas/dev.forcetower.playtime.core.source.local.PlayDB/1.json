@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "e726a1a44bc9e31a70e97c944bd76d73",
+    "identityHash": "5e4c08d9e726ee4d8f6771a72f81b777",
     "entities": [
       {
         "tableName": "Genre",
@@ -582,13 +582,25 @@
       },
       {
         "tableName": "WatchlistItem",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`movieId` INTEGER NOT NULL, `addedAt` INTEGER NOT NULL, PRIMARY KEY(`movieId`), FOREIGN KEY(`movieId`) REFERENCES `Movie`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`movieId` INTEGER NOT NULL, `targetDate` INTEGER, `notifiedAt` INTEGER, `addedAt` INTEGER NOT NULL, PRIMARY KEY(`movieId`), FOREIGN KEY(`movieId`) REFERENCES `Movie`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "movieId",
             "columnName": "movieId",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "targetDate",
+            "columnName": "targetDate",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "notifiedAt",
+            "columnName": "notifiedAt",
+            "affinity": "INTEGER",
+            "notNull": false
           },
           {
             "fieldPath": "addedAt",
@@ -603,7 +615,32 @@
           ],
           "autoGenerate": false
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_WatchlistItem_targetDate",
+            "unique": false,
+            "columnNames": [
+              "targetDate"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WatchlistItem_targetDate` ON `${TABLE_NAME}` (`targetDate`)"
+          },
+          {
+            "name": "index_WatchlistItem_addedAt",
+            "unique": false,
+            "columnNames": [
+              "addedAt"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WatchlistItem_addedAt` ON `${TABLE_NAME}` (`addedAt`)"
+          },
+          {
+            "name": "index_WatchlistItem_notifiedAt",
+            "unique": false,
+            "columnNames": [
+              "notifiedAt"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WatchlistItem_notifiedAt` ON `${TABLE_NAME}` (`notifiedAt`)"
+          }
+        ],
         "foreignKeys": [
           {
             "table": "Movie",
@@ -675,7 +712,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e726a1a44bc9e31a70e97c944bd76d73')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5e4c08d9e726ee4d8f6771a72f81b777')"
     ]
   }
 }
