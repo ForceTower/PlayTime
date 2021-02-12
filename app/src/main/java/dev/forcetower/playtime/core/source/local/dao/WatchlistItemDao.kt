@@ -11,7 +11,6 @@ import dev.forcetower.playtime.core.model.storage.WatchlistItem
 import dev.forcetower.toolkit.database.dao.BaseDao
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 @Dao
 abstract class WatchlistItemDao : BaseDao<WatchlistItem>() {
@@ -46,9 +45,11 @@ abstract class WatchlistItemDao : BaseDao<WatchlistItem>() {
     @Query("SELECT M.id FROM Movie M INNER JOIN WatchlistItem WI ON WI.movieId = M.id WHERE WI.notifiedAt IS NULL")
     abstract suspend fun getPendingMovieIdNotifications(): List<Int>
 
+    @Transaction
     @Query("SELECT M.* FROM Movie M INNER JOIN WatchlistItem WI ON WI.movieId = M.id WHERE WI.notifiedAt IS NULL")
     abstract suspend fun getPendingMovieNotifications(): List<MovieWithReleases>
 
+    @Transaction
     @Query("SELECT M.* FROM Movie M INNER JOIN WatchlistItem WI ON WI.movieId = M.id WHERE WI.notifiedAt IS NULL AND WI.targetDate IS NOT NULL AND WI.targetDate <= :date")
     abstract suspend fun getCurrentPendingNotifications(date: LocalDate): List<MovieWithWatchlist>
 
