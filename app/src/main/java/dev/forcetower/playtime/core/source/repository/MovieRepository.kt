@@ -130,9 +130,9 @@ class MovieRepository @Inject constructor(
                 database.releaseFeedIndex.insertAll(indices)
             }
         } catch (error: IOException) {
-           Timber.d(error, "Error during load releases")
+            Timber.d(error, "Error during load releases")
         } catch (error: HttpException) {
-           Timber.d(error, "Error during load releases")
+            Timber.d(error, "Error during load releases")
         }
     }
 
