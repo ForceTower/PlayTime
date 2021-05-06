@@ -64,7 +64,7 @@
             android:id="@+id/overlay_dark"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior=".widget.behavior.ScrollingAlphaBehavior"
+            app:layout_behavior="dev.forcetower.playtime.widget.behavior.ScrollingAlphaBehavior"
             android:alpha="0.0"
             android:background="#000000"/>
 
@@ -294,7 +294,7 @@
             android:layout_gravity="start|top"
             android:background="?selectableItemBackgroundBorderless"
             android:contentDescription="@string/navigate_up"
-            app:layout_behavior=".widget.behavior.PushUpBehavior"
+            app:layout_behavior="dev.forcetower.playtime.widget.behavior.PushUpBehavior"
             app:tint="?attr/colorOnMovieFeatured"
             app:srcCompat="@drawable/ic_arrow_back_black_24dp"
             app:marginTopSystemWindowInsets="@{true}"

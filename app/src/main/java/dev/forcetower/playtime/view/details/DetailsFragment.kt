@@ -138,7 +138,7 @@ class DetailsFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view =  FragmentMovieDetailsBinding.inflate(inflater, container, false).also {
+        val view = FragmentMovieDetailsBinding.inflate(inflater, container, false).also {
             binding = it
             binding.listener = listener
             binding.posterListener = posterListener

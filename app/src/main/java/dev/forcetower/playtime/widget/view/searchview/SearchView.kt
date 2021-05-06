@@ -19,22 +19,24 @@ class SearchView(context: Context, attrs: AttributeSet) : FrameLayout(context, a
 
     fun openSearch() {
         binding.searchBar.visibility = View.VISIBLE
-        val reveal = ViewAnimationUtils.createCircularReveal(
-            binding.searchBar,
-            (binding.btnSearch.right + binding.btnSearch.left) / 2,
-            (binding.btnSearch.top + binding.btnSearch.bottom) / 2,
-            0f, width.toFloat()
-        )
-        reveal.duration = 300
-        reveal.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(animation: Animator?) = Unit
-            override fun onAnimationCancel(animation: Animator?) = Unit
-            override fun onAnimationStart(animation: Animator?) = Unit
-            override fun onAnimationEnd(animation: Animator?) {
-                binding.inputSearch.requestFocus()
-            }
-        })
-        reveal.start()
+        if (isAttachedToWindow) {
+            val reveal = ViewAnimationUtils.createCircularReveal(
+                binding.searchBar,
+                (binding.btnSearch.right + binding.btnSearch.left) / 2,
+                (binding.btnSearch.top + binding.btnSearch.bottom) / 2,
+                0f, width.toFloat()
+            )
+            reveal.duration = 300
+            reveal.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(animation: Animator?) = Unit
+                override fun onAnimationCancel(animation: Animator?) = Unit
+                override fun onAnimationStart(animation: Animator?) = Unit
+                override fun onAnimationEnd(animation: Animator?) {
+                    binding.inputSearch.requestFocus()
+                }
+            })
+            reveal.start()
+        }
     }
 
     fun closeSearch() {

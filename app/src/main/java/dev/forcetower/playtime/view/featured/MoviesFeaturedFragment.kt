@@ -22,11 +22,10 @@ import dev.forcetower.playtime.R
 import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.databinding.FragmentMoviesFeaturedBinding
 import dev.forcetower.toolkit.components.BaseFragment
-import dev.forcetower.toolkit.extensions.closeKeyboardWithActivity
-import dev.forcetower.toolkit.extensions.openKeyboardWithActivity
+import dev.forcetower.toolkit.extensions.closeKeyboard
+import dev.forcetower.toolkit.extensions.openKeyboard
 import dev.forcetower.toolkit.lifecycle.EventObserver
 import kotlinx.coroutines.flow.collectLatest
-
 
 @AndroidEntryPoint
 class MoviesFeaturedFragment : BaseFragment() {
@@ -73,7 +72,7 @@ class MoviesFeaturedFragment : BaseFragment() {
         binding.searchView.run {
             binding.btnSearch.setOnClickListener {
                 viewModel.setSearching(true)
-                binding.inputSearch.openKeyboardWithActivity(requireActivity())
+                binding.inputSearch.openKeyboard()
             }
             binding.btnCancelSearch.setOnClickListener {
                 viewModel.setSearching(false)
@@ -128,7 +127,7 @@ class MoviesFeaturedFragment : BaseFragment() {
                 binding.recyclerMovies.adapter = adapter
                 binding.searchView.run {
                     if (isAttachedToWindow) closeSearch()
-                    binding.inputSearch.closeKeyboardWithActivity(requireActivity())
+                    binding.inputSearch.closeKeyboard()
                 }
             } else {
                 binding.recyclerMovies.adapter = searchAdapter
