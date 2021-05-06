@@ -76,7 +76,7 @@ class ReleaseMonthSeparatorItemDecoration(
         val sparseArray = SparseArray<StaticLayout>()
         for (day in indexer.days) {
             val position = indexer.positionForDay(day)
-            val text = DateTimeFormatter.ofPattern("MMMM", Locale.getDefault()).format(day).capitalize()
+            val text = DateTimeFormatter.ofPattern("MMMM", Locale.getDefault()).format(day).replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
             val label = newStaticLayout(text, paint, textWidth, Layout.Alignment.ALIGN_CENTER, 1f, 0f, false)
             sparseArray.put(position, label)
         }
