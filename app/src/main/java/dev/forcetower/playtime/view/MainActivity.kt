@@ -1,5 +1,6 @@
 package dev.forcetower.playtime.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.activity.viewModels
@@ -8,6 +9,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.doOnLayout
 import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.bumptech.glide.Glide
@@ -16,13 +18,20 @@ import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import dev.forcetower.core.BasedObject
+import dev.forcetower.impressive.BasedActivity
 import dev.forcetower.playtime.R
 import dev.forcetower.playtime.databinding.ActivityMainBinding
 import dev.forcetower.toolkit.components.BaseActivity
 import dev.forcetower.toolkit.lifecycle.EventObserver
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
+    @Inject lateinit var base: BasedObject
     private lateinit var binding: ActivityMainBinding
     private val uiViewModel by viewModels<UIViewModel>()
 
@@ -41,6 +50,12 @@ class MainActivity : BaseActivity() {
         WindowCompat.getInsetsController(window, binding.root)?.isAppearanceLightStatusBars = true
 
         setupObservers()
+
+        Timber.d("Based AF ${base.based} ${base.value}")
+        lifecycleScope.launch {
+            delay(5000L)
+            startActivity(Intent(this@MainActivity, BasedActivity::class.java))
+        }
     }
 
 

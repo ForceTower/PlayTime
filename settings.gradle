@@ -1,3 +1,6 @@
 include ':app', ':toolkit'
 project(':toolkit').projectDir = new File(rootDir, 'android-toolkit')
 rootProject.name = "PlayTime"
+include ':impressive'
+include ':core'
+include ':relatable'
