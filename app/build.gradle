@@ -80,10 +80,6 @@ android {
     compileOptions {
         coreLibraryDesugaringEnabled true
     }
-
-    kotlinOptions {
-        freeCompilerArgs += ["-Xopt-in=kotlin.RequiresOptIn"]
-    }
 }
 
 dependencies {
