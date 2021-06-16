@@ -6,7 +6,6 @@ import androidx.room.Query
 import androidx.room.Transaction
 import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.core.model.storage.WatchedItem
-import dev.forcetower.playtime.core.model.storage.WatchlistItem
 import dev.forcetower.toolkit.database.dao.BaseDao
 import kotlinx.coroutines.flow.Flow
 

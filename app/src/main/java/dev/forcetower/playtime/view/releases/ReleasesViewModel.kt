@@ -5,13 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.core.model.ui.ReleaseDayIndexed
 import dev.forcetower.playtime.core.model.ui.ReleasesUI
 import dev.forcetower.playtime.core.source.repository.MovieRepository
-import dev.forcetower.playtime.view.featured.MovieActions
 import dev.forcetower.toolkit.lifecycle.Event
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch

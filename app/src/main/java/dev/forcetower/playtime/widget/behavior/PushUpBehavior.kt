@@ -91,6 +91,5 @@ class PushUpBehavior @JvmOverloads constructor(
         } else {
             child.translationY = 0f
         }
-
     }
 }

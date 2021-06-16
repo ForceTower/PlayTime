@@ -2,8 +2,6 @@ package dev.forcetower.playtime.core.source.local.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import dev.forcetower.playtime.core.model.storage.Image
-import dev.forcetower.playtime.core.model.storage.MovieFeedIndex
 import dev.forcetower.playtime.core.model.storage.MovieReleaseFeedIndex
 import dev.forcetower.toolkit.database.dao.BaseDao
 

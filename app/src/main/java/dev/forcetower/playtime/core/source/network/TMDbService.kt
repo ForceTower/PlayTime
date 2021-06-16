@@ -1,14 +1,14 @@
 package dev.forcetower.playtime.core.source.network
 
 import dev.forcetower.playtime.core.model.dto.response.GenresResponse
-import dev.forcetower.playtime.core.model.dto.values.MovieDetailed
 import dev.forcetower.playtime.core.model.dto.response.MoviesResponse
 import dev.forcetower.playtime.core.model.dto.response.Results
+import dev.forcetower.playtime.core.model.dto.values.MovieDetailed
 import dev.forcetower.playtime.core.model.dto.values.MovieVideo
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import java.util.*
+import java.util.Locale
 
 interface TMDbService {
     @GET("genre/movie/list")

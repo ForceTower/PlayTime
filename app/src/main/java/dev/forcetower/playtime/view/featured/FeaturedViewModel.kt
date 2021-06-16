@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FeaturedViewModel @Inject constructor(
     repository: MovieRepository
-): ViewModel(), MovieActions {
+) : ViewModel(), MovieActions {
     private val _movieClick = MutableLiveData<Event<Movie>>()
     val movieClick: LiveData<Event<Movie>> = _movieClick
 

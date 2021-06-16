@@ -24,7 +24,7 @@ class MoviePopularRemoteMediator(
 
     override suspend fun load(loadType: LoadType, state: PagingState<Int, Movie>): MediatorResult {
         val pageSize = state.config.pageSize
-        val page = when(loadType) {
+        val page = when (loadType) {
             LoadType.REFRESH -> {
                 val i = getRemoteKeyClosestToCurrentPosition(state)?.position ?: 1
                 indexToPage(i, pageSize)

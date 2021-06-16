@@ -3,7 +3,6 @@ package dev.forcetower.playtime.view.releases
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import dev.forcetower.playtime.core.model.ui.DayIndicator
-import timber.log.Timber
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle

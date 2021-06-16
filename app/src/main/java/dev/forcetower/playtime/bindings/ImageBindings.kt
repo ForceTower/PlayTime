@@ -5,22 +5,24 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.request.RequestListener
 import dev.forcetower.toolkit.bindings.imageUrl
-import timber.log.Timber
 
-@BindingAdapter(value = [
-    "tmdbUrl",
-    "clipCircle",
-    "listener",
-    "dontTransform",
-    "blurImage",
-    "useBlurSupport",
-    "blurRadius",
-    "blurSampling",
-    "crossFade",
-    "fallbackResource",
-    "configWidthDivider",
-    "elevationAfterLoad"
-], requireAll = false)
+@BindingAdapter(
+    value = [
+        "tmdbUrl",
+        "clipCircle",
+        "listener",
+        "dontTransform",
+        "blurImage",
+        "useBlurSupport",
+        "blurRadius",
+        "blurSampling",
+        "crossFade",
+        "fallbackResource",
+        "configWidthDivider",
+        "elevationAfterLoad"
+    ],
+    requireAll = false
+)
 fun tmdbUrl(
     imageView: ImageView,
     tmdbUrl: String?,
@@ -49,7 +51,7 @@ fun tmdbUrl(
     } else {
         imageUrl(
             imageView,
-            "https://image.tmdb.org/t/p/${config}${tmdbUrl}",
+            "https://image.tmdb.org/t/p/${config}$tmdbUrl",
             null,
             clipCircle,
             listener,

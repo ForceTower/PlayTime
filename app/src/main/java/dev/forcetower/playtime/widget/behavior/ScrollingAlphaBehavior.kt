@@ -96,5 +96,4 @@ class ScrollingAlphaBehavior @JvmOverloads constructor(
             dyConsumed, dxUnconsumed, dyUnconsumed, type, consumed
         )
     }
-
 }

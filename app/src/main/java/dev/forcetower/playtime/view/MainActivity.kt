@@ -21,7 +21,6 @@ import dev.forcetower.playtime.databinding.ActivityMainBinding
 import dev.forcetower.toolkit.components.BaseActivity
 import dev.forcetower.toolkit.lifecycle.EventObserver
 
-
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -46,16 +45,19 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupObservers() {
-        uiViewModel.onHideBottomNav.observe(this, EventObserver {
-            val params = binding.bottomNav.layoutParams as CoordinatorLayout.LayoutParams
-            val behavior = params.behavior as HideBottomViewOnScrollBehavior
+        uiViewModel.onHideBottomNav.observe(
+            this,
+            EventObserver {
+                val params = binding.bottomNav.layoutParams as CoordinatorLayout.LayoutParams
+                val behavior = params.behavior as HideBottomViewOnScrollBehavior
 
-            if (it) {
-                binding.bottomNav.doOnLayout { view -> behavior.slideUp(view) }
-            } else {
-                binding.bottomNav.doOnLayout { view -> behavior.slideDown(view) }
+                if (it) {
+                    binding.bottomNav.doOnLayout { view -> behavior.slideUp(view) }
+                } else {
+                    binding.bottomNav.doOnLayout { view -> behavior.slideDown(view) }
+                }
             }
-        })
+        )
     }
 
     private fun setupProfileOnBottomNav() {

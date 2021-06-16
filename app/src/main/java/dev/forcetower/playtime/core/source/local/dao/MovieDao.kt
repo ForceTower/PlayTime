@@ -53,8 +53,7 @@ abstract class MovieDao : BaseDao<Movie>() {
             } else {
                 updateWithComplete(value)
             }
-        }
-        else insertWithComplete(value)
+        } else insertWithComplete(value)
     }
 
     @Insert(entity = Movie::class)

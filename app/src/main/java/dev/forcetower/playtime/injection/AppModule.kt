@@ -14,8 +14,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.forcetower.playtime.BuildConfig
 import dev.forcetower.playtime.Constants
-import dev.forcetower.playtime.core.source.network.TMDbService
 import dev.forcetower.playtime.core.source.local.PlayDB
+import dev.forcetower.playtime.core.source.network.TMDbService
 import dev.forcetower.playtime.core.util.ObjectConverters
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -86,14 +86,16 @@ object AppModule {
             .readTimeout(1, TimeUnit.MINUTES)
             .writeTimeout(1, TimeUnit.MINUTES)
             .addInterceptor(interceptor)
-            .addInterceptor(HttpLoggingInterceptor {
-                Timber.d(it)
-            }.apply {
-                level = if (BuildConfig.DEBUG)
-                    HttpLoggingInterceptor.Level.BASIC
-                else
-                    HttpLoggingInterceptor.Level.NONE
-            })
+            .addInterceptor(
+                HttpLoggingInterceptor {
+                    Timber.d(it)
+                }.apply {
+                    level = if (BuildConfig.DEBUG)
+                        HttpLoggingInterceptor.Level.BASIC
+                    else
+                        HttpLoggingInterceptor.Level.NONE
+                }
+            )
             .build()
 
     @Provides

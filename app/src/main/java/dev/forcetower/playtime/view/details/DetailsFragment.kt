@@ -80,7 +80,6 @@ class DetailsFragment : BaseFragment() {
                 binding.btnMarkWatched.setBackgroundColor(dominantAlpha)
                 binding.btnWarnMe.setBackgroundColor(dominantAlpha)
 
-
                 binding.root.windowInsetsControllerCompat?.isAppearanceLightStatusBars = ColorUtils.calculateLuminance(dominant) > 0.1
             } else {
                 val alpha = ColorUtils.setAlphaComponent(Color.BLACK, 0xB2)
@@ -121,9 +120,11 @@ class DetailsFragment : BaseFragment() {
         postponeEnterTransition(500L, TimeUnit.MILLISECONDS)
 
         val transition = TransitionSet()
-            .addTransition(ChangeBounds().apply {
-                pathMotion = ArcMotion()
-            })
+            .addTransition(
+                ChangeBounds().apply {
+                    pathMotion = ArcMotion()
+                }
+            )
             .addTransition(ChangeTransform())
             .addTransition(ChangeClipBounds())
             .addTransition(ChangeImageTransform())

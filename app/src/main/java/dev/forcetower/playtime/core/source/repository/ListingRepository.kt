@@ -69,5 +69,4 @@ class ListingRepository @Inject constructor(
     suspend fun toggleWatchMark(movieId: Int) {
         database.watched.toggle(movieId)
     }
-
 }
