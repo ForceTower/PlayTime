@@ -10,8 +10,10 @@ import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.core.model.storage.MovieFeedIndex
 import dev.forcetower.playtime.core.model.storage.MovieGenre
 import dev.forcetower.playtime.core.model.storage.MovieReleaseFeedIndex
+import dev.forcetower.playtime.core.model.storage.MovieWatchProvider
 import dev.forcetower.playtime.core.model.storage.Release
 import dev.forcetower.playtime.core.model.storage.Video
+import dev.forcetower.playtime.core.model.storage.WatchProvider
 import dev.forcetower.playtime.core.model.storage.WatchedItem
 import dev.forcetower.playtime.core.model.storage.WatchlistItem
 import dev.forcetower.playtime.core.source.local.dao.CastDao
@@ -22,6 +24,7 @@ import dev.forcetower.playtime.core.source.local.dao.MovieDao
 import dev.forcetower.playtime.core.source.local.dao.ReleaseDao
 import dev.forcetower.playtime.core.source.local.dao.ReleaseIndexDao
 import dev.forcetower.playtime.core.source.local.dao.VideoDao
+import dev.forcetower.playtime.core.source.local.dao.WatchProviderDao
 import dev.forcetower.playtime.core.source.local.dao.WatchedItemDao
 import dev.forcetower.playtime.core.source.local.dao.WatchlistItemDao
 
@@ -37,9 +40,11 @@ import dev.forcetower.playtime.core.source.local.dao.WatchlistItemDao
         MovieFeedIndex::class,
         WatchedItem::class,
         WatchlistItem::class,
-        MovieReleaseFeedIndex::class
+        MovieReleaseFeedIndex::class,
+        WatchProvider::class,
+        MovieWatchProvider::class
     ],
-    version = 1, exportSchema = true
+    version = 2, exportSchema = true
 )
 @TypeConverters(value = [DateConverters::class])
 abstract class PlayDB : RoomDatabase() {
@@ -53,4 +58,5 @@ abstract class PlayDB : RoomDatabase() {
     abstract val releaseFeedIndex: ReleaseIndexDao
     abstract val watchlist: WatchlistItemDao
     abstract val watched: WatchedItemDao
+    abstract val providers: WatchProviderDao
 }

@@ -48,6 +48,8 @@ import java.util.concurrent.TimeUnit
 class DetailsFragment : BaseFragment() {
     private lateinit var binding: FragmentMovieDetailsBinding
     private lateinit var imagesAdapter: ImagesAdapter
+    private lateinit var providersAdapter: ProviderAdapter
+
     private val args by navArgs<DetailsFragmentArgs>()
     private val viewModel: DetailsViewModel by viewModels()
     private val uiViewModel: UIViewModel by activityViewModels()
@@ -148,8 +150,15 @@ class DetailsFragment : BaseFragment() {
         }.root
 
         imagesAdapter = ImagesAdapter()
+        providersAdapter = ProviderAdapter()
         binding.recyclerImages.apply {
             adapter = imagesAdapter
+            itemAnimator?.run {
+                changeDuration = 0L
+            }
+        }
+        binding.recyclerProviders.apply {
+            adapter = providersAdapter
             itemAnimator?.run {
                 changeDuration = 0L
             }
@@ -197,6 +206,11 @@ class DetailsFragment : BaseFragment() {
         viewModel.releaseDate(args.movieId).observe(viewLifecycleOwner) {
             binding.release = it
             binding.executePendingBindings()
+        }
+
+        viewModel.providers(args.movieId).observe(viewLifecycleOwner) {
+            providersAdapter.submitList(it)
+            binding.providers = it
         }
 
         viewModel.watchlist(args.movieId).observe(viewLifecycleOwner) {

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.core.model.storage.Release
+import dev.forcetower.playtime.core.model.storage.WatchProvider
 import dev.forcetower.playtime.core.model.ui.MovieWithRelations
 import dev.forcetower.playtime.core.source.repository.ListingRepository
 import dev.forcetower.playtime.core.source.repository.MovieRepository
@@ -25,6 +26,10 @@ class DetailsViewModel @Inject constructor(
 
     fun releaseDate(id: Int): LiveData<Release?> {
         return repository.releaseDate(id).asLiveData()
+    }
+
+    fun providers(id: Int): LiveData<List<WatchProvider>> {
+        return repository.providers(id).asLiveData()
     }
 
     fun watched(id: Int): LiveData<Boolean> {

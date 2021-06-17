@@ -15,6 +15,7 @@ import dagger.hilt.components.SingletonComponent
 import dev.forcetower.playtime.BuildConfig
 import dev.forcetower.playtime.Constants
 import dev.forcetower.playtime.core.source.local.PlayDB
+import dev.forcetower.playtime.core.source.local.migrations.MigrationHandlers
 import dev.forcetower.playtime.core.source.network.TMDbService
 import dev.forcetower.playtime.core.util.ObjectConverters
 import okhttp3.Interceptor
@@ -36,6 +37,7 @@ object AppModule {
     @Singleton
     fun database(@ApplicationContext context: Context) =
         Room.databaseBuilder(context, PlayDB::class.java, "play.db")
+            .addMigrations(*MigrationHandlers.migrations)
             .enableMultiInstanceInvalidation()
             .fallbackToDestructiveMigration()
             .build()

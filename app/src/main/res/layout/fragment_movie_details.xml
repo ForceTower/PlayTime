@@ -7,6 +7,9 @@
         <variable
             name="value"
             type="dev.forcetower.playtime.core.model.ui.MovieWithRelations" />
+        <variable
+            name="providers"
+            type="java.util.List&lt;dev.forcetower.playtime.core.model.storage.WatchProvider&gt;" />
 
         <variable
             name="lastImage"
@@ -261,6 +264,30 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="24dp"
+                        android:layout_marginTop="16dp"
+                        app:goneUnless="@{providers.size() > 0}"
+                        android:text="@string/movie_watch_on"
+                        android:textSize="18sp"
+                        android:textAlignment="gravity"
+                        android:textColor="?attr/colorOnMovieFeatured"
+                        android:gravity="start"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_providers"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal"
+                        android:clipToPadding="false"
+                        android:paddingHorizontal="20dp"
+                        app:goneUnless="@{providers.size() > 0}"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/item_movie_watch_provider"/>
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
                         android:layout_marginHorizontal="24dp"
                         app:goneUnless="@{value.images.size() > 0}"
@@ -281,9 +308,7 @@
                         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                         tools:listitem="@layout/item_movie_backdrop"
                         tools:itemCount="4" />
-
                 </androidx.appcompat.widget.LinearLayoutCompat>
-
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.core.widget.NestedScrollView>
 
