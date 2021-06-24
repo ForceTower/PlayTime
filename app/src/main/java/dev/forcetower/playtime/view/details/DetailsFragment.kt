@@ -123,9 +123,7 @@ class DetailsFragment : BaseFragment() {
 
         val transition = TransitionSet()
             .addTransition(
-                ChangeBounds().apply {
-                    pathMotion = ArcMotion()
-                }
+                ChangeBounds().apply { pathMotion = ArcMotion() }
             )
             .addTransition(ChangeTransform())
             .addTransition(ChangeClipBounds())

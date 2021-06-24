@@ -24,6 +24,6 @@ abstract class WatchProviderDao : BaseDao<WatchProvider>() {
     @Query("DELETE FROM MovieWatchProvider WHERE movieId = :movieId")
     abstract suspend fun deleteAssociationsFromMovie(movieId: Int)
 
-    @Query("SELECT DISTINCT WP.* FROM WatchProvider WP INNER JOIN MovieWatchProvider MWP ON MWP.providerId = WP.id WHERE MWP.movieId = :movieId")
-    abstract fun getProvidersOf(movieId: Int): Flow<List<WatchProvider>>
+    @Query("SELECT DISTINCT WP.* FROM WatchProvider WP INNER JOIN MovieWatchProvider MWP ON MWP.providerId = WP.id WHERE MWP.movieId = :movieId AND MWP.locale = :locale")
+    abstract fun getProvidersOf(movieId: Int, locale: String): Flow<List<WatchProvider>>
 }

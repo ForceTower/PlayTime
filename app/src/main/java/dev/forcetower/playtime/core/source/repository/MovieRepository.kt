@@ -31,6 +31,7 @@ import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException
 import java.time.LocalDate
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.abs
@@ -135,7 +136,8 @@ class MovieRepository @Inject constructor(
     }
 
     fun providers(movieId: Int): Flow<List<WatchProvider>> {
-        return database.providers.getProvidersOf(movieId).map {
+        val locale = Locale.getDefault().country
+        return database.providers.getProvidersOf(movieId, locale).map {
             it.distinctBy { wp -> wp.name }
         }
     }
