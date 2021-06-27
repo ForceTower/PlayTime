@@ -39,4 +39,9 @@
             android:id="@+id/action_releases_to_movie_details"
             app:destination="@id/movie_details" />
     </fragment>
+    <fragment
+        android:id="@+id/login"
+        android:name="dev.forcetower.playtime.auth.view.login.LoginFragment"
+        app:moduleName="PlayTime.auth"
+        android:label="LoginFragment" />
 </navigation>

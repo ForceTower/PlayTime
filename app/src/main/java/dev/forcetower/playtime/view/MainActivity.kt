@@ -53,8 +53,13 @@ class MainActivity : BaseActivity() {
 
         Timber.d("Based AF ${base.based} ${base.value}")
         lifecycleScope.launch {
-            delay(5000L)
-            startActivity(Intent(this@MainActivity, BasedActivity::class.java))
+            delay(2000L)
+            val intent = Intent(Intent.ACTION_VIEW).setClassName(
+                packageName,
+                "dev.forcetower.playtime.auth.view.AuthActivity"
+            )
+
+            startActivity(intent)
         }
     }
 

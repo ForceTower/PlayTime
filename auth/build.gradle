@@ -1,70 +1,28 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.dynamic-feature'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'androidx.navigation.safeargs'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "dev.forcetower.playtime"
+        applicationId "dev.forcetower.playtime.auth"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 2
+        versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += [
-                    "room.schemaLocation": "$projectDir/schemas".toString()
-                ]
-            }
-        }
-
-        ndkVersion "21.3.6528147"
-    }
-
-    signingConfigs {
-        release {
-            def password = System.getenv("APP_KEYSTORE_PASSWORD")
-            if (password == null)
-                password = "android"
-
-            def alias = System.getenv("APP_KEYSTORE_ALIAS")
-            if (alias == null)
-                alias = "androiddebugkey"
-
-            def keyPass = System.getenv("APP_KEYSTORE_PRIVATE_KEY_PASSWORD")
-            if (keyPass == null)
-                keyPass = "android"
-
-            def signFile = rootProject.file("sign.jks")
-            if (!signFile.exists())
-                signFile = rootProject.file("debug.keystore")
-
-            storeFile signFile
-            storePassword password
-            keyAlias alias
-            keyPassword keyPass
-        }
     }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-        debug {
-            applicationIdSuffix ".debug"
         }
     }
 
@@ -82,16 +40,12 @@ android {
     compileOptions {
         coreLibraryDesugaringEnabled true
     }
-    dynamicFeatures = [':auth']
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
-    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation project(":app")
     implementation project(':toolkit')
-    implementation project(':core')
-    implementation project(':impressive')
-
+    implementation project(':hilt-dynamic')
     // Android X
     implementation "androidx.core:core-ktx:$ktx"
     implementation "androidx.annotation:annotation:$annotation"
@@ -113,7 +67,6 @@ dependencies {
 
     implementation "androidx.navigation:navigation-ui-ktx:$navigation"
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation"
-    implementation "androidx.navigation:navigation-dynamic-features-fragment:$navigation"
 
     implementation "androidx.work:work-runtime-ktx:$work_manager"
 
@@ -152,9 +105,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
 
-    implementation 'com.eightbitlab:blurview:1.6.6'
 
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.annotation:annotation:1.2.0'
 }

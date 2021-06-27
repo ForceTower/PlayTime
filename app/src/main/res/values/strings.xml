@@ -1,5 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools"
-    tools:locale="pt_BR">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="pt_BR">
     <string name="app_name">PlayTime</string>
     <string name="movie_overview">Sinopse</string>
     <string name="watch_trailer">Assistir Trailer</string>
@@ -46,4 +45,5 @@
     <string name="movie_release_notification_description_single">%1$s foi lançado!</string>
     <string name="movie_release_notification_description_multiple">%1$s e outros %2$d filmes foram lançados!</string>
     <string name="movie_watch_on">Onde assistir</string>
+    <string name="title_auth">Authentication</string>
 </resources>

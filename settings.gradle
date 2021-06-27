@@ -4,3 +4,5 @@ rootProject.name = "PlayTime"
 include ':impressive'
 include ':core'
 include ':relatable'
+include ':auth'
+include ':hilt-dynamic'
