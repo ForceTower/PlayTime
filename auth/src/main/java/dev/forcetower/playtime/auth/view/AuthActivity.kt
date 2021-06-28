@@ -13,7 +13,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @DynamicAndroidEntryPoint
-class AuthActivity : BaseActivity() {
+class AuthActivity : DynamicHilt_AuthActivity() {
     private lateinit var binding: FragmentLoginBinding
     @Inject lateinit var token: AuthToken
     private val viewModel by viewModels<LoginViewModel>()
