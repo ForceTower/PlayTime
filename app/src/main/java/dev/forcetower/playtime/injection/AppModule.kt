@@ -35,7 +35,7 @@ import javax.inject.Singleton
 object AppModule {
     @Provides
     @Singleton
-    fun database(@ApplicationContext context: Context) =
+    fun database(@ApplicationContext context: Context): PlayDB =
         Room.databaseBuilder(context, PlayDB::class.java, "play.db")
             .addMigrations(*MigrationHandlers.migrations)
             .enableMultiInstanceInvalidation()
@@ -54,7 +54,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun interceptor() = Interceptor { chain ->
+    fun interceptor(): Interceptor = Interceptor { chain ->
         val request = chain.request()
         val host = request.url.host
         if (host.contains(Constants.TMDB_URL, ignoreCase = true)) {
