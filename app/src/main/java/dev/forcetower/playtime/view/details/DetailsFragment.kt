@@ -56,6 +56,7 @@ class DetailsFragment : BaseFragment() {
     private var videoLoaded = false
     private var animationsRun = false
 
+    // TODO Extract into Binding Adapter
     private val listener = object : RequestListener<Drawable> {
         override fun onLoadFailed(
             e: GlideException?,
@@ -81,8 +82,6 @@ class DetailsFragment : BaseFragment() {
                 binding.overlay.setBackgroundColor(dominantAlpha)
                 binding.btnMarkWatched.setBackgroundColor(dominantAlpha)
                 binding.btnWarnMe.setBackgroundColor(dominantAlpha)
-
-                binding.root.windowInsetsControllerCompat?.isAppearanceLightStatusBars = ColorUtils.calculateLuminance(dominant) > 0.1
             } else {
                 val alpha = ColorUtils.setAlphaComponent(Color.BLACK, 0xB2)
                 binding.overlay.setBackgroundColor(alpha)
