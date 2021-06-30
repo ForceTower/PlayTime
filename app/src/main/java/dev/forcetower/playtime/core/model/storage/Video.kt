@@ -6,11 +6,14 @@ import androidx.room.ForeignKey.CASCADE
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(foreignKeys = [
-    ForeignKey(entity = Movie::class, parentColumns = ["id"], childColumns = ["movieId"], onDelete = CASCADE, onUpdate = CASCADE)
-], indices = [
-    Index("movieId")
-])
+@Entity(
+    foreignKeys = [
+        ForeignKey(entity = Movie::class, parentColumns = ["id"], childColumns = ["movieId"], onDelete = CASCADE, onUpdate = CASCADE)
+    ],
+    indices = [
+        Index("movieId")
+    ]
+)
 data class Video(
     @PrimaryKey
     val id: String,

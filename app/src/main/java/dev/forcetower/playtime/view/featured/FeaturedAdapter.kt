@@ -4,14 +4,11 @@ import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dev.forcetower.playtime.R
 import dev.forcetower.playtime.core.model.storage.Movie
-import dev.forcetower.playtime.core.model.ui.MovieSimpleUI
 import dev.forcetower.playtime.databinding.ItemMovieFeaturedBinding
 import dev.forcetower.toolkit.extensions.inflate
-import timber.log.Timber
 
 class FeaturedAdapter(
     private val actions: MovieActions,

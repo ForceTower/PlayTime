@@ -48,12 +48,15 @@ import java.util.concurrent.TimeUnit
 class DetailsFragment : BaseFragment() {
     private lateinit var binding: FragmentMovieDetailsBinding
     private lateinit var imagesAdapter: ImagesAdapter
+    private lateinit var providersAdapter: ProviderAdapter
+
     private val args by navArgs<DetailsFragmentArgs>()
     private val viewModel: DetailsViewModel by viewModels()
     private val uiViewModel: UIViewModel by activityViewModels()
     private var videoLoaded = false
     private var animationsRun = false
 
+    // TODO Extract into Binding Adapter
     private val listener = object : RequestListener<Drawable> {
         override fun onLoadFailed(
             e: GlideException?,
@@ -79,9 +82,6 @@ class DetailsFragment : BaseFragment() {
                 binding.overlay.setBackgroundColor(dominantAlpha)
                 binding.btnMarkWatched.setBackgroundColor(dominantAlpha)
                 binding.btnWarnMe.setBackgroundColor(dominantAlpha)
-
-
-                binding.root.windowInsetsControllerCompat?.isAppearanceLightStatusBars = ColorUtils.calculateLuminance(dominant) > 0.1
             } else {
                 val alpha = ColorUtils.setAlphaComponent(Color.BLACK, 0xB2)
                 binding.overlay.setBackgroundColor(alpha)
@@ -121,9 +121,9 @@ class DetailsFragment : BaseFragment() {
         postponeEnterTransition(500L, TimeUnit.MILLISECONDS)
 
         val transition = TransitionSet()
-            .addTransition(ChangeBounds().apply {
-                pathMotion = ArcMotion()
-            })
+            .addTransition(
+                ChangeBounds().apply { pathMotion = ArcMotion() }
+            )
             .addTransition(ChangeTransform())
             .addTransition(ChangeClipBounds())
             .addTransition(ChangeImageTransform())
@@ -147,8 +147,15 @@ class DetailsFragment : BaseFragment() {
         }.root
 
         imagesAdapter = ImagesAdapter()
+        providersAdapter = ProviderAdapter()
         binding.recyclerImages.apply {
             adapter = imagesAdapter
+            itemAnimator?.run {
+                changeDuration = 0L
+            }
+        }
+        binding.recyclerProviders.apply {
+            adapter = providersAdapter
             itemAnimator?.run {
                 changeDuration = 0L
             }
@@ -196,6 +203,11 @@ class DetailsFragment : BaseFragment() {
         viewModel.releaseDate(args.movieId).observe(viewLifecycleOwner) {
             binding.release = it
             binding.executePendingBindings()
+        }
+
+        viewModel.providers(args.movieId).observe(viewLifecycleOwner) {
+            providersAdapter.submitList(it)
+            binding.providers = it
         }
 
         viewModel.watchlist(args.movieId).observe(viewLifecycleOwner) {

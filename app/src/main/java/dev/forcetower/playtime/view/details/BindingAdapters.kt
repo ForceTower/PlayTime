@@ -1,7 +1,6 @@
 package dev.forcetower.playtime.view.details
 
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.google.android.material.button.MaterialButton
 import dev.forcetower.playtime.R
@@ -20,7 +19,7 @@ fun TextView.releaseDateText(release: Release?) {
             val formatted = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
             if (date.isAfter(now)) {
                 context.getString(R.string.release_date_theater_future_format, formatted)
-            } else{
+            } else {
                 context.getString(R.string.release_date_theater_past_format, formatted)
             }
         }
@@ -29,7 +28,7 @@ fun TextView.releaseDateText(release: Release?) {
             val formatted = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
             if (date.isAfter(now)) {
                 context.getString(R.string.release_date_digital_future_format, formatted)
-            } else{
+            } else {
                 context.getString(R.string.release_date_digital_past_format, formatted)
             }
         }

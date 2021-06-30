@@ -32,7 +32,7 @@ class ReleasesWorker @AssistedInject constructor(
             // This work can not die :D
             Timber.e(error, "Error on worker")
         }
-        
+
         return Result.success()
     }
 

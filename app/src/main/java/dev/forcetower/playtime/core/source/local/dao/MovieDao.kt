@@ -2,7 +2,11 @@ package dev.forcetower.playtime.core.source.local.dao
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagingSource
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Update
 import dev.forcetower.playtime.core.model.insertion.MovieBase
 import dev.forcetower.playtime.core.model.insertion.MovieComplete
 import dev.forcetower.playtime.core.model.storage.Movie
@@ -49,8 +53,7 @@ abstract class MovieDao : BaseDao<Movie>() {
             } else {
                 updateWithComplete(value)
             }
-        }
-        else insertWithComplete(value)
+        } else insertWithComplete(value)
     }
 
     @Insert(entity = Movie::class)

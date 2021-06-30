@@ -9,7 +9,6 @@ import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.core.source.repository.ListingRepository
-import dev.forcetower.playtime.view.featured.MovieActions
 import dev.forcetower.toolkit.lifecycle.Event
 import javax.inject.Inject
 

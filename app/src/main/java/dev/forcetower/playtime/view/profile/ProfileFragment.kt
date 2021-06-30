@@ -8,7 +8,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.view.ViewTreeObserver.OnPreDrawListener
 import androidx.core.view.forEach
 import androidx.fragment.app.viewModels
@@ -19,7 +18,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.forcetower.playtime.R
 import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.databinding.FragmentProfileBinding
-import dev.forcetower.playtime.view.releases.ReleasesFragmentDirections
 import dev.forcetower.toolkit.components.BaseFragment
 import dev.forcetower.toolkit.extensions.executeBindingsAfter
 import dev.forcetower.toolkit.lifecycle.EventObserver

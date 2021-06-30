@@ -7,19 +7,22 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.room.withTransaction
+import dev.forcetower.playtime.core.model.dto.response.WatchProvidersResponse
 import dev.forcetower.playtime.core.model.dto.values.MovieDetailed
 import dev.forcetower.playtime.core.model.insertion.MovieBase
 import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.core.model.storage.MovieGenre
 import dev.forcetower.playtime.core.model.storage.MovieReleaseFeedIndex
+import dev.forcetower.playtime.core.model.storage.MovieWatchProvider
 import dev.forcetower.playtime.core.model.storage.Release
+import dev.forcetower.playtime.core.model.storage.WatchProvider
 import dev.forcetower.playtime.core.model.ui.ReleaseDayIndexed
 import dev.forcetower.playtime.core.model.ui.ReleasesUI
-import dev.forcetower.playtime.core.source.network.TMDbService
 import dev.forcetower.playtime.core.source.local.PlayDB
 import dev.forcetower.playtime.core.source.mediator.MoviePopularRemoteMediator
 import dev.forcetower.playtime.core.source.network.LoadCurrentReleases
 import dev.forcetower.playtime.core.source.network.MovieQuerySource
+import dev.forcetower.playtime.core.source.network.TMDbService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -28,6 +31,7 @@ import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException
 import java.time.LocalDate
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.abs
@@ -80,10 +84,41 @@ class MovieRepository @Inject constructor(
         try {
             val response = service.movieDetails(id)
             saveMovieDetails(response, database, service)
+
+            val providers = service.movieWatchProviders(id)
+            saveProviders(providers)
         } catch (error: HttpException) {
             Timber.d(error, "Error during details")
         } catch (error: IOException) {
             Timber.d(error, "Error during details")
+        }
+    }
+
+    private suspend fun saveProviders(response: WatchProvidersResponse) {
+        val movieId = response.id
+        val results = response.results
+//        val local = results[Locale.getDefault().country]
+        val providersAcc = mutableListOf<WatchProvider>()
+        val associations = results.entries.flatMap { entry ->
+            val p1 = entry.value.flatrate?.map {
+                providersAcc.add(it.asWatchProvider())
+                MovieWatchProvider(movieId, it.providerId, MovieWatchProvider.TYPE_FLATRATE, entry.key)
+            } ?: emptyList()
+            val p2 = entry.value.buy?.map {
+                providersAcc.add(it.asWatchProvider())
+                MovieWatchProvider(movieId, it.providerId, MovieWatchProvider.TYPE_BUY, entry.key)
+            } ?: emptyList()
+            val p3 = entry.value.rent?.map {
+                providersAcc.add(it.asWatchProvider())
+                MovieWatchProvider(movieId, it.providerId, MovieWatchProvider.TYPE_RENT, entry.key)
+            } ?: emptyList()
+            p1 + p2 + p3
+        }
+        val providers = providersAcc.distinctBy { it.id }
+        database.withTransaction {
+            database.providers.insertAll(providers)
+            database.providers.deleteAssociationsFromMovie(movieId)
+            database.providers.insertAssociations(associations)
         }
     }
 
@@ -98,6 +133,13 @@ class MovieRepository @Inject constructor(
                     else -> null
                 }
             }
+    }
+
+    fun providers(movieId: Int): Flow<List<WatchProvider>> {
+        val locale = Locale.getDefault().country
+        return database.providers.getProvidersOf(movieId, locale).map {
+            it.distinctBy { wp -> wp.name }
+        }
     }
 
     suspend fun loadCurrentReleasesIfNeeded() = withContext(Dispatchers.IO) {

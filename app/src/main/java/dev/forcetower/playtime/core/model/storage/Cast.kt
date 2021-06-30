@@ -5,11 +5,14 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(foreignKeys = [
-    ForeignKey(entity = Movie::class, parentColumns = ["id"], childColumns = ["movieId"], onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE)
-], indices = [
-    Index("movieId")
-])
+@Entity(
+    foreignKeys = [
+        ForeignKey(entity = Movie::class, parentColumns = ["id"], childColumns = ["movieId"], onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE)
+    ],
+    indices = [
+        Index("movieId")
+    ]
+)
 data class Cast(
     @PrimaryKey
     val creditId: String,

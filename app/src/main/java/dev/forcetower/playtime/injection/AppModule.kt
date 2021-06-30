@@ -10,12 +10,16 @@ import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.components.ViewComponent
+import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.forcetower.playtime.BuildConfig
 import dev.forcetower.playtime.Constants
-import dev.forcetower.playtime.core.source.network.TMDbService
 import dev.forcetower.playtime.core.source.local.PlayDB
+import dev.forcetower.playtime.core.source.local.migrations.MigrationHandlers
+import dev.forcetower.playtime.core.source.network.TMDbService
 import dev.forcetower.playtime.core.util.ObjectConverters
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -34,8 +38,9 @@ import javax.inject.Singleton
 object AppModule {
     @Provides
     @Singleton
-    fun database(@ApplicationContext context: Context) =
+    fun database(@ApplicationContext context: Context): PlayDB =
         Room.databaseBuilder(context, PlayDB::class.java, "play.db")
+            .addMigrations(*MigrationHandlers.migrations)
             .enableMultiInstanceInvalidation()
             .fallbackToDestructiveMigration()
             .build()
@@ -52,7 +57,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun interceptor() = Interceptor { chain ->
+    fun interceptor(): Interceptor = Interceptor { chain ->
         val request = chain.request()
         val host = request.url.host
         if (host.contains(Constants.TMDB_URL, ignoreCase = true)) {
@@ -86,14 +91,16 @@ object AppModule {
             .readTimeout(1, TimeUnit.MINUTES)
             .writeTimeout(1, TimeUnit.MINUTES)
             .addInterceptor(interceptor)
-            .addInterceptor(HttpLoggingInterceptor {
-                Timber.d(it)
-            }.apply {
-                level = if (BuildConfig.DEBUG)
-                    HttpLoggingInterceptor.Level.BASIC
-                else
-                    HttpLoggingInterceptor.Level.NONE
-            })
+            .addInterceptor(
+                HttpLoggingInterceptor {
+                    Timber.d(it)
+                }.apply {
+                    level = if (BuildConfig.DEBUG)
+                        HttpLoggingInterceptor.Level.BASIC
+                    else
+                        HttpLoggingInterceptor.Level.NONE
+                }
+            )
             .build()
 
     @Provides

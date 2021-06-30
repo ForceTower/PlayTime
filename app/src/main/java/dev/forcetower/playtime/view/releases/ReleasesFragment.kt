@@ -24,8 +24,6 @@ import dev.forcetower.playtime.core.model.ui.ReleaseDayIndexed
 import dev.forcetower.playtime.core.model.ui.ReleaseDayIndexed.Companion.days
 import dev.forcetower.playtime.core.model.ui.ReleasesUI
 import dev.forcetower.playtime.databinding.FragmentMovieReleasesBinding
-import dev.forcetower.playtime.view.featured.FeaturedAdapter
-import dev.forcetower.playtime.view.featured.MoviesFeaturedFragmentDirections
 import dev.forcetower.playtime.widget.decoration.BubbleDecoration
 import dev.forcetower.playtime.widget.decoration.ReleaseMonthSeparatorItemDecoration
 import dev.forcetower.toolkit.components.BaseFragment
@@ -33,10 +31,7 @@ import dev.forcetower.toolkit.extensions.clearDecorations
 import dev.forcetower.toolkit.extensions.executeBindingsAfter
 import dev.forcetower.toolkit.layout.JumpSmoothScroller
 import dev.forcetower.toolkit.lifecycle.EventObserver
-import kotlinx.coroutines.flow.collectLatest
-import timber.log.Timber
 import java.time.LocalDate
-import java.time.ZonedDateTime
 
 @AndroidEntryPoint
 class ReleasesFragment : BaseFragment() {
@@ -71,7 +66,7 @@ class ReleasesFragment : BaseFragment() {
         dayAdapter = DayAdapter(viewModel, this)
         adapter = ReleasesAdapter(viewModel)
 
-        val view =  FragmentMovieReleasesBinding.inflate(inflater, container, false).also {
+        val view = FragmentMovieReleasesBinding.inflate(inflater, container, false).also {
             binding = it
         }.root
 
@@ -126,22 +121,25 @@ class ReleasesFragment : BaseFragment() {
             onUiUpdate(it)
         }
 
-        viewModel.scrollToEvent.observe(viewLifecycleOwner, EventObserver { scrollEvent ->
-            if (scrollEvent.targetPosition != -1) {
-                binding.recyclerReleases.run {
-                    post {
-                        val lm = layoutManager as LinearLayoutManager
-                        if (scrollEvent.smoothScroll) {
-                            val scroller = JumpSmoothScroller(requireContext())
-                            scroller.targetPosition = scrollEvent.targetPosition
-                            lm.startSmoothScroll(scroller)
-                        } else {
-                            lm.scrollToPositionWithOffset(scrollEvent.targetPosition, 0)
+        viewModel.scrollToEvent.observe(
+            viewLifecycleOwner,
+            EventObserver { scrollEvent ->
+                if (scrollEvent.targetPosition != -1) {
+                    binding.recyclerReleases.run {
+                        post {
+                            val lm = layoutManager as LinearLayoutManager
+                            if (scrollEvent.smoothScroll) {
+                                val scroller = JumpSmoothScroller(requireContext())
+                                scroller.targetPosition = scrollEvent.targetPosition
+                                lm.startSmoothScroll(scroller)
+                            } else {
+                                lm.scrollToPositionWithOffset(scrollEvent.targetPosition, 0)
+                            }
                         }
                     }
                 }
             }
-        })
+        )
 
         viewModel.movieClick.observe(
             viewLifecycleOwner,
@@ -181,7 +179,6 @@ class ReleasesFragment : BaseFragment() {
                 )
             }
         }
-
 
         binding.executeBindingsAfter {
             isEmpty = data.movies.isEmpty()

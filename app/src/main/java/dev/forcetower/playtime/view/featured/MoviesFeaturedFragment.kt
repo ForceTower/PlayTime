@@ -159,5 +159,4 @@ class MoviesFeaturedFragment : BaseFragment() {
         }
         return group
     }
-
 }

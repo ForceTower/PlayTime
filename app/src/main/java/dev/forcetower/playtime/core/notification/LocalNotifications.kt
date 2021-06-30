@@ -52,7 +52,7 @@ object LocalNotifications {
         when (val image = movie.backdropPath ?: movie.posterPath) {
             null -> NotificationCompat.BigTextStyle(builder).bigText(description)
             else -> {
-                val tmdbUrl = "https://image.tmdb.org/t/p/w1280${image}"
+                val tmdbUrl = "https://image.tmdb.org/t/p/w1280$image"
                 val bitmap = Glide.with(context).asBitmap().load(tmdbUrl).submit().get()
                 NotificationCompat.BigPictureStyle(builder).bigPicture(bitmap)
             }
