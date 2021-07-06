@@ -1,3 +1,5 @@
+import java.nio.file.Files
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
@@ -61,9 +63,11 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources true
+            manifestPlaceholders = [crashlyticsEnabled: true]
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
+            manifestPlaceholders = [crashlyticsEnabled: false]
             applicationIdSuffix ".debug"
         }
     }
@@ -153,4 +157,9 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+}
+
+def googleServices = file("google-services.json")
+if (!googleServices.exists()) {
+    Files.copy(file("fake-google-services.json").toPath(), googleServices.toPath())
 }
