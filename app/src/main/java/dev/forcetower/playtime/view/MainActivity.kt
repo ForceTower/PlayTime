@@ -48,14 +48,14 @@ class MainActivity : BaseActivity() {
         uiViewModel.onHideBottomNav.observe(
             this,
             EventObserver {
-                val params = binding.bottomNav.layoutParams as CoordinatorLayout.LayoutParams
-                val behavior = params.behavior as HideBottomViewOnScrollBehavior
+//                val params = binding.bottomNav.layoutParams as CoordinatorLayout.LayoutParams
+//                val behavior = params.behavior as HideBottomViewOnScrollBehavior
 
-                if (it) {
-                    binding.bottomNav.doOnLayout { view -> behavior.slideUp(view) }
-                } else {
-                    binding.bottomNav.doOnLayout { view -> behavior.slideDown(view) }
-                }
+//                if (it) {
+//                    binding.bottomNav.doOnLayout { view -> behavior.slideUp(view) }
+//                } else {
+//                    binding.bottomNav.doOnLayout { view -> behavior.slideDown(view) }
+//                }
             }
         )
     }
