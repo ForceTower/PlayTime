@@ -1,19 +1,14 @@
 package dev.forcetower.playtime.view
 
 import android.os.Bundle
-import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.WindowCompat
 import androidx.core.view.doOnLayout
-import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
-import com.bumptech.glide.Glide
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import dev.forcetower.playtime.R
@@ -42,7 +37,6 @@ class MainActivity : BaseActivity() {
 
         setupObservers()
     }
-
 
     private fun setupObservers() {
         uiViewModel.onHideBottomNav.observe(

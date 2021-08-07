@@ -79,10 +79,7 @@ class MoviesFeaturedFragment : BaseFragment() {
             }
             binding.inputSearch.doAfterTextChanged { text ->
                 val query = text.toString()
-                if (query != viewModel.query) {
-                    viewModel.query = query
-                    searchAdapter.refresh()
-                }
+                viewModel.onSearchQueryChanged(query)
             }
         }
 
@@ -138,6 +135,13 @@ class MoviesFeaturedFragment : BaseFragment() {
         viewModel.movieClick.observe(
             viewLifecycleOwner,
             EventObserver { onNavigateToMovieDetails(it) }
+        )
+
+        viewModel.onRefreshSearch.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                searchAdapter.refresh()
+            }
         )
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backHandler)

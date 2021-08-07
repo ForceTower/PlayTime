@@ -7,14 +7,19 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.forcetower.playtime.core.model.storage.Movie
-import dev.forcetower.playtime.core.source.repository.MovieRepository
+import dev.forcetower.playtime.core.usecases.list.GetPopularMoviesUseCase
+import dev.forcetower.playtime.core.usecases.list.SearchMoviesUseCase
 import dev.forcetower.toolkit.extensions.setValueIfNew
 import dev.forcetower.toolkit.lifecycle.Event
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class FeaturedViewModel @Inject constructor(
-    repository: MovieRepository
+    getPopularMovies: GetPopularMoviesUseCase,
+    searchMovies: SearchMoviesUseCase
 ) : ViewModel(), MovieActions {
     private val _movieClick = MutableLiveData<Event<Movie>>()
     val movieClick: LiveData<Event<Movie>> = _movieClick
@@ -22,10 +27,14 @@ class FeaturedViewModel @Inject constructor(
     private val _searching = MutableLiveData(false)
     val isSearching: LiveData<Boolean> = _searching
 
-    val searchSource = repository.search { query }.cachedIn(viewModelScope)
-    val movies = repository.movies().cachedIn(viewModelScope)
+    private val _onRefreshSearch = MutableLiveData<Event<Unit>>()
+    val onRefreshSearch: LiveData<Event<Unit>> = _onRefreshSearch
 
-    var query: String = ""
+    val searchSource = searchMovies { query }.cachedIn(viewModelScope)
+    val movies = getPopularMovies().cachedIn(viewModelScope)
+
+    private var searchJob: Job? = null
+    private var query: String = ""
 
     override fun onMovieClick(movie: Movie?) {
         movie ?: return
@@ -34,5 +43,21 @@ class FeaturedViewModel @Inject constructor(
 
     fun setSearching(value: Boolean) {
         _searching.setValueIfNew(value)
+    }
+
+    fun onSearchQueryChanged(newQuery: String) {
+        if (query != newQuery) {
+            query = newQuery
+            executeSearch()
+        }
+    }
+
+    private fun executeSearch() {
+        searchJob?.cancel()
+
+        searchJob = viewModelScope.launch {
+            delay(250L)
+            _onRefreshSearch.value = Event(Unit)
+        }
     }
 }
