@@ -5,19 +5,12 @@
 
     <data>
         <variable
-            name="value"
-            type="dev.forcetower.playtime.core.model.ui.MovieWithRelations" />
-        <variable
             name="providers"
             type="java.util.List&lt;dev.forcetower.playtime.core.model.storage.WatchProvider&gt;" />
 
         <variable
             name="lastImage"
             type="String" />
-
-        <variable
-            name="release"
-            type="dev.forcetower.playtime.core.model.storage.Release" />
 
         <variable
             name="listener"
@@ -30,14 +23,6 @@
         <variable
             name="actions"
             type="dev.forcetower.playtime.view.details.DetailsActions" />
-
-        <variable
-            name="watched"
-            type="Boolean" />
-
-        <variable
-            name="onWatchlist"
-            type="Boolean" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -49,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:tmdbUrl="@{value.movie.backdropPath != null ? value.movie.backdropPath : value.movie.posterPath}"
+            app:tmdbUrl="@{actions.movie.backdropPathOrDefault}"
             app:listener="@{listener}"
             app:blurImage="@{true}"
             app:blurRadius="@{25}"
@@ -95,7 +80,7 @@
                     android:elevation="8dp"
                     android:scaleType="centerCrop"
                     app:listener="@{posterListener}"
-                    app:tmdbUrl="@{value.movie.posterPath != null ? value.movie.posterPath : lastImage}"
+                    app:tmdbUrl="@{lastImage}"
                     app:roundedViewRadius="@{12}"
                     app:configWidthDivider="@{3}"
                     android:layout_gravity="center"
@@ -115,7 +100,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="24dp"
                         android:gravity="center"
-                        android:text="@{value.movie.title}"
+                        android:text="@{actions.movie.title}"
                         android:textAlignment="gravity"
                         android:textColor="?attr/colorOnMovieFeatured"
                         android:textSize="30sp"
@@ -127,12 +112,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="24dp"
                         android:layout_marginTop="8dp"
-                        android:text="@{value.movie.tagline}"
+                        android:text="@{actions.movie.tagline}"
                         android:textColor="?attr/colorOnMovieFeatured"
                         android:textSize="16sp"
                         android:textAlignment="gravity"
                         android:gravity="center"
-                        app:goneUnless="@{value.movie.tagline != null &amp;&amp; value.movie.tagline.length() > 0}"
+                        app:goneUnless="@{actions.movie.taglinePresent}"
                         tools:text="It could happen to anyone"/>
 
                     <com.google.android.material.textview.MaterialTextView
@@ -144,7 +129,7 @@
                         android:textSize="16sp"
                         android:textAlignment="gravity"
                         android:gravity="center"
-                        app:releaseDateText="@{release}"
+                        app:releaseDateText="@{actions.release}"
                         tools:text="Will be in DVD at november"/>
 
                     <androidx.appcompat.widget.LinearLayoutCompat
@@ -164,8 +149,8 @@
                             android:textAllCaps="false"
                             android:textColor="?attr/colorOnMovieFeatured"
                             android:layout_gravity="center"
-                            android:onClick="@{() -> actions.onMarkAsWatched(value.movie)}"
-                            app:watched="@{watched}"
+                            android:onClick="@{() -> actions.onMarkAsWatched(actions.movie)}"
+                            app:watched="@{actions.watched}"
                             app:icon="@drawable/ic_baseline_check_24"
                             app:cornerRadius="28dp"
                             app:elevation="0dp"
@@ -182,10 +167,10 @@
                             android:textAllCaps="false"
                             android:textColor="?attr/colorOnMovieFeatured"
                             android:layout_gravity="center"
-                            android:onClick="@{() -> actions.onAddToWatchlist(value.movie)}"
-                            android:checked="@{onWatchlist}"
-                            app:buttonReleaseAction="@{release}"
-                            app:onWatchlist="@{onWatchlist}"
+                            android:onClick="@{() -> actions.onAddToWatchlist(actions.movie)}"
+                            android:checked="@{actions.watchList}"
+                            app:buttonReleaseAction="@{actions.release}"
+                            app:onWatchlist="@{actions.watchList}"
                             app:icon="@drawable/asld_star_event"
                             app:cornerRadius="28dp"
                             app:elevation="0dp"
@@ -210,9 +195,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="?attr/colorOnMovieFeatured"
-                            android:text="@{@string/movie_runtime_format(value.movie.runtime)}"
+                            android:text="@{@string/movie_runtime_format(actions.movie.runtime)}"
                             android:layout_marginHorizontal="8dp"
-                            app:goneUnless="@{value.movie.runtime != null &amp;&amp; value.movie.runtime > 0}"
+                            app:goneUnless="@{actions.movie.runtimePresent}"
                             tools:text="148 min" />
 
                         <com.google.android.material.textview.MaterialTextView
@@ -221,8 +206,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="8dp"
                             android:textColor="?attr/colorOnMovieFeatured"
-                            android:text="@{value.genresString(2)}"
-                            app:goneUnless="@{value.genres.size() > 0}"
+                            app:genresString="@{actions.genres}"
                             tools:text="Family - Adventure" />
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -244,7 +228,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="24dp"
                         android:layout_marginTop="16dp"
-                        app:goneUnless="@{value.movie.overview != null &amp;&amp; value.movie.overview.length() > 0}"
+                        app:goneUnless="@{actions.movie.overviewPresent}"
                         android:text="@string/movie_overview"
                         android:textSize="18sp"
                         android:textAlignment="gravity"
@@ -256,8 +240,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginHorizontal="24dp"
-                        android:text="@{value.movie.overview}"
-                        app:goneUnless="@{value.movie.overview != null &amp;&amp; value.movie.overview.length() > 0}"
+                        android:text="@{actions.movie.overview}"
+                        app:goneUnless="@{actions.movie.overviewPresent}"
                         android:textColor="?android:attr/textColorSecondaryInverse"
                         tools:text="@tools:sample/lorem"/>
 
@@ -290,7 +274,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
                         android:layout_marginHorizontal="24dp"
-                        app:goneUnless="@{value.images.size() > 0}"
+                        app:goneUnless="@{actions.images.size() > 0}"
                         android:text="@string/movie_backdrops"
                         android:textSize="18sp"
                         android:textAlignment="gravity"
@@ -303,7 +287,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="20dp"
                         android:layout_marginTop="4dp"
-                        app:goneUnless="@{value.images.size() > 0}"
+                        app:goneUnless="@{actions.images.size() > 0}"
                         app:spanCount="2"
                         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                         tools:listitem="@layout/item_movie_backdrop"

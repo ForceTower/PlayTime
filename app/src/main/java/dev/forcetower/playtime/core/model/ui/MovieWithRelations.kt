@@ -22,6 +22,4 @@ data class MovieWithRelations(
     val videos: List<Video>,
     @Relation(entityColumn = "movieId", parentColumn = "id")
     val images: List<Image>
-) {
-    fun genresString(number: Int = 2) = genres.take(number).joinToString(" / ") { it.name }
-}
+)

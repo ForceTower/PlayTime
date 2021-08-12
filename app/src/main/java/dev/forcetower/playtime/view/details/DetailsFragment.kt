@@ -19,7 +19,6 @@ import android.view.animation.LinearInterpolator
 import android.view.animation.TranslateAnimation
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.graphics.ColorUtils
-import androidx.core.view.ViewCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
@@ -144,7 +143,10 @@ class DetailsFragment : BaseFragment() {
             binding.posterListener = posterListener
             binding.lastImage = args.lastImage
             binding.actions = viewModel
+            binding.lifecycleOwner = viewLifecycleOwner
         }.root
+
+        viewModel.setMovieId(args.movieId)
 
         imagesAdapter = ImagesAdapter()
         providersAdapter = ProviderAdapter()
@@ -170,52 +172,28 @@ class DetailsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ViewCompat.setTransitionName(binding.cover, getString(R.string.transition_movie_poster, args.movieId))
-        viewModel.movie(args.movieId).observe(viewLifecycleOwner) {
-            binding.value = it
+        viewModel.images.observe(viewLifecycleOwner) {
+            imagesAdapter.submitList(it)
+        }
 
-            imagesAdapter.submitList(it.images.filter { img -> img.type == 0 }.sortedByDescending { img -> img.voteAverage }.take(4))
-
-            if (!videoLoaded) {
-                val video = it.videos.firstOrNull { vid -> vid.site == "YouTube" }
-                if (video != null) {
-                    videoLoaded = true
-                    binding.youtubePlayerView.visibility = View.VISIBLE
-                    binding.youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-                        override fun onReady(youTubePlayer: YouTubePlayer) {
-                            youTubePlayer.cueVideo(video.key, 0.0f)
-                        }
-
-                        override fun onStateChange(youTubePlayer: YouTubePlayer, state: PlayerConstants.PlayerState) {
-                            when (state) {
-                                PlayerConstants.PlayerState.PLAYING -> dimBackground()
-                                PlayerConstants.PlayerState.PAUSED, PlayerConstants.PlayerState.ENDED -> resetBackground()
-                                else -> Unit
-                            }
-                        }
-                    })
+        viewModel.video.observe(viewLifecycleOwner) { video ->
+//            if (!videoLoaded) {
+//                videoLoaded = true
+            binding.youtubePlayerView.visibility = View.VISIBLE
+            binding.youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                override fun onReady(youTubePlayer: YouTubePlayer) {
+                    youTubePlayer.cueVideo(video.key, 0.0f)
                 }
-            }
 
-            binding.executePendingBindings()
-        }
-
-        viewModel.releaseDate(args.movieId).observe(viewLifecycleOwner) {
-            binding.release = it
-            binding.executePendingBindings()
-        }
-
-        viewModel.providers(args.movieId).observe(viewLifecycleOwner) {
-            providersAdapter.submitList(it)
-            binding.providers = it
-        }
-
-        viewModel.watchlist(args.movieId).observe(viewLifecycleOwner) {
-            binding.onWatchlist = it
-        }
-
-        viewModel.watched(args.movieId).observe(viewLifecycleOwner) {
-            binding.watched = it
+                override fun onStateChange(youTubePlayer: YouTubePlayer, state: PlayerConstants.PlayerState) {
+                    when (state) {
+                        PlayerConstants.PlayerState.PLAYING -> dimBackground()
+                        PlayerConstants.PlayerState.PAUSED, PlayerConstants.PlayerState.ENDED -> resetBackground()
+                        else -> Unit
+                    }
+                }
+            })
+//            }
         }
     }
 

@@ -22,6 +22,15 @@ data class Movie(
     val status: String?,
     val popularity: Double
 ) {
+    fun getBackdropPathOrDefault(): String? {
+        return backdropPath ?: posterPath
+    }
+
+    fun isTaglinePresent() = !tagline.isNullOrBlank()
+    fun isOverviewPresent() = overview.isNotBlank()
+
+    fun isRuntimePresent() = runtime != null && runtime > 0
+
     companion object {
         fun fromDTO(dto: MovieSimple): Movie {
             return Movie(

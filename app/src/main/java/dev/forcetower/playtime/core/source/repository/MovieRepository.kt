@@ -10,11 +10,14 @@ import androidx.room.withTransaction
 import dev.forcetower.playtime.core.model.dto.response.WatchProvidersResponse
 import dev.forcetower.playtime.core.model.dto.values.MovieDetailed
 import dev.forcetower.playtime.core.model.insertion.MovieBase
+import dev.forcetower.playtime.core.model.storage.Genre
+import dev.forcetower.playtime.core.model.storage.Image
 import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.core.model.storage.MovieGenre
 import dev.forcetower.playtime.core.model.storage.MovieReleaseFeedIndex
 import dev.forcetower.playtime.core.model.storage.MovieWatchProvider
 import dev.forcetower.playtime.core.model.storage.Release
+import dev.forcetower.playtime.core.model.storage.Video
 import dev.forcetower.playtime.core.model.storage.WatchProvider
 import dev.forcetower.playtime.core.model.ui.ReleaseDayIndexed
 import dev.forcetower.playtime.core.model.ui.ReleasesUI
@@ -80,7 +83,7 @@ class MovieRepository @Inject constructor(
     }
 
     fun movie(id: Int) = liveData(Dispatchers.IO) {
-        emitSource(database.movies().getByIdWithRelations(id))
+        emitSource(database.movies().getById(id))
         try {
             val response = service.movieDetails(id)
             saveMovieDetails(response, database, service)
@@ -120,6 +123,18 @@ class MovieRepository @Inject constructor(
             database.providers.deleteAssociationsFromMovie(movieId)
             database.providers.insertAssociations(associations)
         }
+    }
+
+    fun genres(movieId: Int): Flow<List<Genre>> {
+        return database.genres().getGenres(movieId)
+    }
+
+    fun images(movieId: Int): Flow<List<Image>> {
+        return database.images.getTop4ImagesFromMovie(movieId, 0)
+    }
+
+    fun video(movieId: Int): Flow<Video?> {
+        return database.videos().getFirstYouTubeVideo(movieId)
     }
 
     fun releaseDate(movieId: Int): Flow<Release?> {

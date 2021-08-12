@@ -1,9 +1,12 @@
 package dev.forcetower.playtime.view.details
 
+import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.textview.MaterialTextView
 import dev.forcetower.playtime.R
+import dev.forcetower.playtime.core.model.storage.Genre
 import dev.forcetower.playtime.core.model.storage.Release
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -67,5 +70,15 @@ fun MaterialButton.buttonWatchedAction(watchedParam: Boolean?) {
         context.getString(R.string.mark_already_watched)
     } else {
         context.getString(R.string.remove_already_watched)
+    }
+}
+
+@BindingAdapter("genresString")
+fun MaterialTextView.genresString(genres: List<Genre>?) {
+    if (genres == null || genres.isEmpty()) {
+        visibility = View.GONE
+    } else {
+        visibility = View.VISIBLE
+        text = genres.take(2).joinToString(" / ") { it.name }
     }
 }
