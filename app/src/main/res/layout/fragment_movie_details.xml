@@ -5,20 +5,8 @@
 
     <data>
         <variable
-            name="providers"
-            type="java.util.List&lt;dev.forcetower.playtime.core.model.storage.WatchProvider&gt;" />
-
-        <variable
             name="lastImage"
             type="String" />
-
-        <variable
-            name="listener"
-            type="com.bumptech.glide.request.RequestListener&lt;android.graphics.drawable.Drawable&gt;" />
-
-        <variable
-            name="posterListener"
-            type="com.bumptech.glide.request.RequestListener&lt;android.graphics.drawable.Drawable&gt;" />
 
         <variable
             name="actions"
@@ -35,7 +23,7 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             app:tmdbUrl="@{actions.movie.backdropPathOrDefault}"
-            app:listener="@{listener}"
+            app:listener="@{actions.backdropListener}"
             app:blurImage="@{true}"
             app:blurRadius="@{25}"
             app:crossFade="@{true}"
@@ -79,7 +67,7 @@
                     android:layout_marginTop="120dp"
                     android:elevation="8dp"
                     android:scaleType="centerCrop"
-                    app:listener="@{posterListener}"
+                    app:listener="@{actions.posterListener}"
                     app:tmdbUrl="@{lastImage}"
                     app:roundedViewRadius="@{12}"
                     app:configWidthDivider="@{3}"
@@ -250,7 +238,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="24dp"
                         android:layout_marginTop="16dp"
-                        app:goneUnless="@{providers.size() > 0}"
+                        app:goneUnless="@{actions.providersAvailable}"
                         android:text="@string/movie_watch_on"
                         android:textSize="18sp"
                         android:textAlignment="gravity"
@@ -265,7 +253,7 @@
                         android:orientation="horizontal"
                         android:clipToPadding="false"
                         android:paddingHorizontal="20dp"
-                        app:goneUnless="@{providers.size() > 0}"
+                        app:goneUnless="@{actions.providersAvailable}"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         tools:listitem="@layout/item_movie_watch_provider"/>
 
@@ -274,7 +262,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
                         android:layout_marginHorizontal="24dp"
-                        app:goneUnless="@{actions.images.size() > 0}"
+                        app:goneUnless="@{actions.imagesAvailable}"
                         android:text="@string/movie_backdrops"
                         android:textSize="18sp"
                         android:textAlignment="gravity"
@@ -287,7 +275,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="20dp"
                         android:layout_marginTop="4dp"
-                        app:goneUnless="@{actions.images.size() > 0}"
+                        app:goneUnless="@{actions.imagesAvailable}"
                         app:spanCount="2"
                         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                         tools:listitem="@layout/item_movie_backdrop"

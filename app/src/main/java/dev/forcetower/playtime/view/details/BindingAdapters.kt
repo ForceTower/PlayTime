@@ -45,7 +45,6 @@ fun MaterialButton.buttonReleaseAction(release: Release?, onWatchlist: Boolean?)
     val now = ZonedDateTime.now()
     when {
         release == null || release.releaseDate.isAfter(now) -> {
-//            icon = ContextCompat.getDrawable(context, R.drawable.ic_outline_notifications_active_24)
             text = if (!watchlist) {
                 context.getString(R.string.get_notified)
             } else {
@@ -53,7 +52,6 @@ fun MaterialButton.buttonReleaseAction(release: Release?, onWatchlist: Boolean?)
             }
         }
         release.releaseDate.isBefore(now) -> {
-//            icon = ContextCompat.getDrawable(context, R.drawable.ic_baseline_add_24)
             text = if (!watchlist) {
                 context.getString(R.string.add_to_watchlist)
             } else {

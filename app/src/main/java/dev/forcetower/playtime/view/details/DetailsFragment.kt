@@ -1,8 +1,6 @@
 package dev.forcetower.playtime.view.details
 
-import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.transition.ArcMotion
 import android.transition.ChangeBounds
@@ -18,29 +16,23 @@ import android.view.animation.AnimationSet
 import android.view.animation.LinearInterpolator
 import android.view.animation.TranslateAnimation
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.palette.graphics.Palette
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import dagger.hilt.android.AndroidEntryPoint
 import dev.forcetower.playtime.R
-import dev.forcetower.playtime.core.util.PaletteUtils.getFirstNonBright
 import dev.forcetower.playtime.databinding.FragmentMovieDetailsBinding
 import dev.forcetower.playtime.view.UIViewModel
 import dev.forcetower.playtime.widget.behavior.ScrollingAlphaBehavior
 import dev.forcetower.toolkit.components.BaseFragment
 import dev.forcetower.toolkit.extensions.windowInsetsControllerCompat
+import dev.forcetower.toolkit.lifecycle.EventObserver
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
@@ -50,69 +42,11 @@ class DetailsFragment : BaseFragment() {
     private lateinit var providersAdapter: ProviderAdapter
 
     private val args by navArgs<DetailsFragmentArgs>()
-    private val viewModel: DetailsViewModel by viewModels()
-    private val uiViewModel: UIViewModel by activityViewModels()
-    private var videoLoaded = false
+    private val viewModel by viewModels<DetailsViewModel>()
+    private val uiViewModel by activityViewModels<UIViewModel>()
+
+    private var overlayAnimator: ValueAnimator? = null
     private var animationsRun = false
-
-    // TODO Extract into Binding Adapter
-    private val listener = object : RequestListener<Drawable> {
-        override fun onLoadFailed(
-            e: GlideException?,
-            model: Any?,
-            target: Target<Drawable>?,
-            isFirstResource: Boolean
-        ): Boolean {
-            return false
-        }
-
-        override fun onResourceReady(
-            resource: Drawable,
-            model: Any,
-            target: Target<Drawable>,
-            dataSource: DataSource,
-            isFirstResource: Boolean
-        ): Boolean {
-            if (resource is BitmapDrawable) {
-                val palette = Palette.from(resource.bitmap).generate()
-
-                val dominant = palette.getFirstNonBright()
-                val dominantAlpha = ColorUtils.setAlphaComponent(dominant, 0xB2)
-                binding.overlay.setBackgroundColor(dominantAlpha)
-                binding.btnMarkWatched.setBackgroundColor(dominantAlpha)
-                binding.btnWarnMe.setBackgroundColor(dominantAlpha)
-            } else {
-                val alpha = ColorUtils.setAlphaComponent(Color.BLACK, 0xB2)
-                binding.overlay.setBackgroundColor(alpha)
-                binding.btnMarkWatched.setBackgroundColor(alpha)
-                binding.btnWarnMe.setBackgroundColor(alpha)
-            }
-            return false
-        }
-    }
-
-    private val posterListener = object : RequestListener<Drawable> {
-        override fun onLoadFailed(
-            e: GlideException?,
-            model: Any?,
-            target: Target<Drawable>?,
-            isFirstResource: Boolean
-        ): Boolean {
-            startPostponedEnterTransition()
-            return false
-        }
-
-        override fun onResourceReady(
-            resource: Drawable?,
-            model: Any?,
-            target: Target<Drawable>?,
-            dataSource: DataSource?,
-            isFirstResource: Boolean
-        ): Boolean {
-            startPostponedEnterTransition()
-            return false
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -139,14 +73,10 @@ class DetailsFragment : BaseFragment() {
     ): View {
         val view = FragmentMovieDetailsBinding.inflate(inflater, container, false).also {
             binding = it
-            binding.listener = listener
-            binding.posterListener = posterListener
             binding.lastImage = args.lastImage
             binding.actions = viewModel
             binding.lifecycleOwner = viewLifecycleOwner
         }.root
-
-        viewModel.setMovieId(args.movieId)
 
         imagesAdapter = ImagesAdapter()
         providersAdapter = ProviderAdapter()
@@ -166,7 +96,7 @@ class DetailsFragment : BaseFragment() {
         binding.up.setOnClickListener { findNavController().popBackStack() }
         binding.cover.transitionName = getString(R.string.transition_movie_poster, args.movieId)
         lifecycle.addObserver(binding.youtubePlayerView)
-
+        viewModel.setMovieId(args.movieId)
         return view
     }
 
@@ -176,9 +106,18 @@ class DetailsFragment : BaseFragment() {
             imagesAdapter.submitList(it)
         }
 
+        viewModel.onPosterLoaded.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                startPostponedEnterTransition()
+            }
+        )
+
+        viewModel.overlayColor.observe(viewLifecycleOwner) {
+            animateColorOverlayTo(it)
+        }
+
         viewModel.video.observe(viewLifecycleOwner) { video ->
-//            if (!videoLoaded) {
-//                videoLoaded = true
             binding.youtubePlayerView.visibility = View.VISIBLE
             binding.youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
                 override fun onReady(youTubePlayer: YouTubePlayer) {
@@ -193,12 +132,30 @@ class DetailsFragment : BaseFragment() {
                     }
                 }
             })
-//            }
         }
+    }
+
+    private fun animateColorOverlayTo(next: Int) {
+        overlayAnimator?.cancel()
+        val current = overlayAnimator?.animatedValue as? Int ?: DetailsViewModel.DEFAULT_OVERLAY_COLOR
+        overlayAnimator = ValueAnimator.ofArgb(current, next)
+        overlayAnimator?.apply {
+            duration = 250L
+            addUpdateListener {
+                setOverlayColors(it.animatedValue as Int)
+            }
+        }?.start()
+    }
+
+    private fun setOverlayColors(color: Int) {
+        binding.overlay.setBackgroundColor(color)
+        binding.btnMarkWatched.setBackgroundColor(color)
+        binding.btnWarnMe.setBackgroundColor(color)
     }
 
     override fun startPostponedEnterTransition() {
         super.startPostponedEnterTransition()
+        // prevent start animations from running after
         if (animationsRun) return
         animationsRun = true
 
