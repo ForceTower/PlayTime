@@ -43,12 +43,12 @@
                 android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:src="@drawable/ic_baseline_search_24"
-                android:tint="?attr/colorOnSurface"
                 android:contentDescription="@string/nav_search"
                 style="@style/Widget.AppCompat.ButtonBar.AlertDialog"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:tint="?attr/colorOnSurface" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -96,12 +96,12 @@
                 android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:src="@drawable/ic_baseline_close_24"
-                android:tint="?attr/colorOnPrimary"
                 android:contentDescription="@string/nav_search"
                 style="@style/Widget.AppCompat.ButtonBar.AlertDialog"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:tint="?attr/colorOnPrimary" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </merge>
 </layout>

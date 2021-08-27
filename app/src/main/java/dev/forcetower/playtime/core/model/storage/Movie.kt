@@ -25,11 +25,15 @@ data class Movie(
     fun getBackdropPathOrDefault(): String? {
         return backdropPath ?: posterPath
     }
+    fun getPosterPathOrDefault(): String? {
+        return posterPath ?: backdropPath
+    }
 
     fun isTaglinePresent() = !tagline.isNullOrBlank()
     fun isOverviewPresent() = overview.isNotBlank()
 
     fun isRuntimePresent() = runtime != null && runtime > 0
+    fun isVoteAveragePresent() = voteAverage != 0.0
 
     companion object {
         fun fromDTO(dto: MovieSimple): Movie {

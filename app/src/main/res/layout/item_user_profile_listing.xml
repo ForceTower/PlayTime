@@ -10,7 +10,6 @@
         <variable
             name="movie"
             type="dev.forcetower.playtime.core.model.storage.Movie" />
-
         <variable
             name="actions"
             type="dev.forcetower.playtime.view.profile.ProfileActions" />
@@ -22,7 +21,7 @@
         android:layout_margin="4dp"
         android:transitionName="@{@string/transition_movie_poster(movie.id)}"
         android:onClick="@{() -> actions.onMovieClick(movie, adapter)}"
-        app:tmdbUrl="@{movie.posterPath != null ? movie.posterPath : movie.backdropPath}"
+        app:tmdbUrl="@{movie.posterPathOrDefault}"
         app:roundedViewRadius="@{12}"
         app:elevationAfterLoad="@{3}"
         app:configWidthDivider="@{3}"
