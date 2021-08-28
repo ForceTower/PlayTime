@@ -1,5 +1,6 @@
 package dev.forcetower.playtime.core.source.local
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -47,7 +48,11 @@ import dev.forcetower.playtime.core.source.local.dao.WatchlistItemDao
         MovieWatchProvider::class,
         MovieRecommendation::class
     ],
-    version = 3, exportSchema = true
+    version = 3,
+    exportSchema = true,
+    autoMigrations = [
+        AutoMigration(from = 2, to = 3)
+    ]
 )
 @TypeConverters(value = [DateConverters::class])
 abstract class PlayDB : RoomDatabase() {

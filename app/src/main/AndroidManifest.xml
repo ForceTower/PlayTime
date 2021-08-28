@@ -19,7 +19,8 @@
             android:value="${crashlyticsEnabled}" />
         <activity
             android:name=".view.MainActivity"
-            android:theme="@style/PlayTime.Home">
+            android:theme="@style/PlayTime.Home"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

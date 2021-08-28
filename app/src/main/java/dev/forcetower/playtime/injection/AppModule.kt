@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import androidx.room.Room
+import androidx.room.migration.AutoMigrationSpec
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -39,7 +40,6 @@ object AppModule {
         Room.databaseBuilder(context, PlayDB::class.java, "play.db")
             .addMigrations(*MigrationHandlers.migrations)
             .enableMultiInstanceInvalidation()
-            .fallbackToDestructiveMigration()
             .build()
 
     @Provides
