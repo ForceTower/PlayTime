@@ -148,7 +148,7 @@ dependencies {
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
 
     // Firebase
-    implementation platform('com.google.firebase:firebase-bom:28.1.0')
+    implementation platform('com.google.firebase:firebase-bom:28.4.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
 
@@ -161,5 +161,6 @@ dependencies {
 
 def googleServices = file("google-services.json")
 if (!googleServices.exists()) {
+    println("Using fake google-services.json ...")
     Files.copy(file("fake-google-services.json").toPath(), googleServices.toPath())
 }
