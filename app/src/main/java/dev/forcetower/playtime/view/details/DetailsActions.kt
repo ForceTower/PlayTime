@@ -23,6 +23,7 @@ interface DetailsActions {
     val watchList: LiveData<Boolean>
     fun onMarkAsWatched(movie: Movie?)
     fun onAddToWatchlist(movie: Movie?)
+    fun onRecommendationClicked(movie: Movie?)
 
     val overlayColor: LiveData<Int>
     val posterListener: RequestListener<Drawable>

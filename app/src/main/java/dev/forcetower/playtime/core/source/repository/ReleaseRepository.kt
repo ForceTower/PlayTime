@@ -45,17 +45,16 @@ class ReleaseRepository @Inject constructor(
                 val added = it.watchlistItem.addedAt.toLocalDate()
                 target.isAfter(added)
             }
-            if (data.isNotEmpty()) {
-                val count = data.size
-                val selected = data.map { it.movie }.shuffled().minByOrNull {
-                    when {
-                        it.backdropPath != null -> 1
-                        it.posterPath != null -> 2
-                        else -> 3
-                    }
-                }!!
-                LocalNotifications.notificationForMovie(selected, count, context)
+
+            val count = data.size
+            val selected = data.map { it.movie }.shuffled().minByOrNull {
+                when {
+                    it.backdropPath != null -> 1
+                    it.posterPath != null -> 2
+                    else -> 3
+                }
             }
+            if (selected != null) LocalNotifications.notificationForMovie(selected, count, context)
 
             database.watchlist.markNotified(values.map { it.movie.id }, today)
         } catch (error: HttpException) {

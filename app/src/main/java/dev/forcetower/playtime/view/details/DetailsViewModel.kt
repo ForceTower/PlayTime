@@ -12,6 +12,8 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import androidx.palette.graphics.Palette
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -21,9 +23,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.core.source.repository.ListingRepository
 import dev.forcetower.playtime.core.source.repository.MovieRepository
+import dev.forcetower.playtime.core.usecases.movie.GetRecommendationsFromMovieUseCase
 import dev.forcetower.playtime.core.util.PaletteUtils.getFirstNonBright
 import dev.forcetower.toolkit.extensions.setValueIfNew
 import dev.forcetower.toolkit.lifecycle.Event
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
@@ -32,7 +36,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
     private val repository: MovieRepository,
-    private val listing: ListingRepository
+    private val listing: ListingRepository,
+    private val recommendationsFromMovieUseCase: GetRecommendationsFromMovieUseCase
 ) : ViewModel(), DetailsActions {
     private val _movieId = MutableLiveData<Int>()
 
@@ -41,6 +46,9 @@ class DetailsViewModel @Inject constructor(
 
     private val _onPosterLoaded = MutableLiveData<Event<Unit>>()
     val onPosterLoaded: LiveData<Event<Unit>> = _onPosterLoaded
+
+    private val _onRecommendationsClicked = MutableLiveData<Event<Movie>>()
+    val onRecommendationsClicked: LiveData<Event<Movie>> = _onRecommendationsClicked
 
     override val movie = _movieId.switchMap { repository.movie(it) }
     override val genres = _movieId.switchMap { repository.genres(it).asLiveData() }
@@ -59,8 +67,16 @@ class DetailsViewModel @Inject constructor(
             .asLiveData()
     }
 
+//    val recommendations = _movieId.asFlow()
+//        .filterNotNull()
+//        .flatMapLatest { recommendationsFromMovieUseCase(it) }
+
     fun setMovieId(id: Int) {
         _movieId.setValueIfNew(id)
+    }
+
+    fun recommendations(movieId: Int): Flow<PagingData<Movie>> {
+        return recommendationsFromMovieUseCase(movieId).cachedIn(viewModelScope)
     }
 
     override fun onMarkAsWatched(movie: Movie?) {
@@ -71,6 +87,11 @@ class DetailsViewModel @Inject constructor(
     override fun onAddToWatchlist(movie: Movie?) {
         movie ?: return
         viewModelScope.launch { listing.toggleFromWatchlist(movie.id) }
+    }
+
+    override fun onRecommendationClicked(movie: Movie?) {
+        movie ?: return
+        _onRecommendationsClicked.value = Event(movie)
     }
 
     private fun getColorFromResource(bitmap: Bitmap) {

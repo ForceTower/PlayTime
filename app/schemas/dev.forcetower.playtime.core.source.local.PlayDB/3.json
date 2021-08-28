@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "111d5a40de25c3f323fb209b10e7aabf",
+    "identityHash": "4a00748e98c3f8361124a752524fcac6",
     "entities": [
       {
         "tableName": "Genre",
@@ -32,7 +32,7 @@
       },
       {
         "tableName": "Movie",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT NOT NULL, `overview` TEXT NOT NULL, `posterPath` TEXT, `backdropPath` TEXT, `runtime` INTEGER, `video` INTEGER NOT NULL, `adult` INTEGER NOT NULL, `voteAverage` REAL NOT NULL, `releaseDate` INTEGER, `tagline` TEXT, `position` INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT NOT NULL, `overview` TEXT NOT NULL, `posterPath` TEXT, `backdropPath` TEXT, `runtime` INTEGER, `video` INTEGER NOT NULL, `adult` INTEGER NOT NULL, `voteAverage` REAL NOT NULL, `releaseDate` INTEGER, `tagline` TEXT, `status` TEXT, `popularity` REAL NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -101,11 +101,16 @@
             "notNull": false
           },
           {
-            "fieldPath": "position",
-            "columnName": "position",
-            "affinity": "INTEGER",
-            "notNull": true,
-            "defaultValue": "0"
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "popularity",
+            "columnName": "popularity",
+            "affinity": "REAL",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -185,8 +190,8 @@
         ]
       },
       {
-        "tableName": "MovieVideo",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `movieId` INTEGER NOT NULL, `name` TEXT NOT NULL, `site` TEXT NOT NULL, `type` TEXT NOT NULL, `key` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "tableName": "Video",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `movieId` INTEGER NOT NULL, `name` TEXT NOT NULL, `site` TEXT NOT NULL, `type` TEXT NOT NULL, `key` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`movieId`) REFERENCES `Movie`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -231,14 +236,675 @@
           ],
           "autoGenerate": false
         },
+        "indices": [
+          {
+            "name": "index_Video_movieId",
+            "unique": false,
+            "columnNames": [
+              "movieId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Video_movieId` ON `${TABLE_NAME}` (`movieId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Movie",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "movieId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Cast",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`creditId` TEXT NOT NULL, `movieId` INTEGER NOT NULL, `castId` INTEGER NOT NULL, `character` TEXT NOT NULL, `id` INTEGER NOT NULL, `name` TEXT NOT NULL, `profilePath` TEXT, `order` INTEGER NOT NULL, PRIMARY KEY(`creditId`), FOREIGN KEY(`movieId`) REFERENCES `Movie`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "creditId",
+            "columnName": "creditId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "movieId",
+            "columnName": "movieId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "castId",
+            "columnName": "castId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "character",
+            "columnName": "character",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "profilePath",
+            "columnName": "profilePath",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "order",
+            "columnName": "order",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "creditId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_Cast_movieId",
+            "unique": false,
+            "columnNames": [
+              "movieId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Cast_movieId` ON `${TABLE_NAME}` (`movieId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Movie",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "movieId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Release",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`movieId` INTEGER NOT NULL, `iso` TEXT NOT NULL, `certification` TEXT NOT NULL, `type` INTEGER NOT NULL, `releaseDate` INTEGER NOT NULL, PRIMARY KEY(`movieId`, `type`, `iso`, `releaseDate`))",
+        "fields": [
+          {
+            "fieldPath": "movieId",
+            "columnName": "movieId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "iso",
+            "columnName": "iso",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "certification",
+            "columnName": "certification",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "releaseDate",
+            "columnName": "releaseDate",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "movieId",
+            "type",
+            "iso",
+            "releaseDate"
+          ],
+          "autoGenerate": false
+        },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "Image",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`movieId` INTEGER NOT NULL, `filePath` TEXT NOT NULL, `voteAverage` REAL NOT NULL, `voteCount` INTEGER NOT NULL, `width` INTEGER NOT NULL, `height` INTEGER NOT NULL, `lang` TEXT, `type` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(`movieId`) REFERENCES `Movie`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "movieId",
+            "columnName": "movieId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "filePath",
+            "columnName": "filePath",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "voteAverage",
+            "columnName": "voteAverage",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "voteCount",
+            "columnName": "voteCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "width",
+            "columnName": "width",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "height",
+            "columnName": "height",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lang",
+            "columnName": "lang",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_Image_type",
+            "unique": false,
+            "columnNames": [
+              "type"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Image_type` ON `${TABLE_NAME}` (`type`)"
+          },
+          {
+            "name": "index_Image_lang",
+            "unique": false,
+            "columnNames": [
+              "lang"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Image_lang` ON `${TABLE_NAME}` (`lang`)"
+          },
+          {
+            "name": "index_Image_movieId",
+            "unique": false,
+            "columnNames": [
+              "movieId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Image_movieId` ON `${TABLE_NAME}` (`movieId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Movie",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "movieId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "MovieFeedIndex",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`movieId` INTEGER NOT NULL, `position` INTEGER NOT NULL, PRIMARY KEY(`movieId`), FOREIGN KEY(`movieId`) REFERENCES `Movie`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "movieId",
+            "columnName": "movieId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "position",
+            "columnName": "position",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "movieId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_MovieFeedIndex_position",
+            "unique": false,
+            "columnNames": [
+              "position"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_MovieFeedIndex_position` ON `${TABLE_NAME}` (`position`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Movie",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "movieId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "WatchedItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`movieId` INTEGER NOT NULL, `addedAt` INTEGER NOT NULL, PRIMARY KEY(`movieId`), FOREIGN KEY(`movieId`) REFERENCES `Movie`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "movieId",
+            "columnName": "movieId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "addedAt",
+            "columnName": "addedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "movieId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Movie",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "movieId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "WatchlistItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`movieId` INTEGER NOT NULL, `targetDate` INTEGER, `notifiedAt` INTEGER, `addedAt` INTEGER NOT NULL, PRIMARY KEY(`movieId`), FOREIGN KEY(`movieId`) REFERENCES `Movie`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "movieId",
+            "columnName": "movieId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "targetDate",
+            "columnName": "targetDate",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "notifiedAt",
+            "columnName": "notifiedAt",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "addedAt",
+            "columnName": "addedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "movieId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_WatchlistItem_targetDate",
+            "unique": false,
+            "columnNames": [
+              "targetDate"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WatchlistItem_targetDate` ON `${TABLE_NAME}` (`targetDate`)"
+          },
+          {
+            "name": "index_WatchlistItem_addedAt",
+            "unique": false,
+            "columnNames": [
+              "addedAt"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WatchlistItem_addedAt` ON `${TABLE_NAME}` (`addedAt`)"
+          },
+          {
+            "name": "index_WatchlistItem_notifiedAt",
+            "unique": false,
+            "columnNames": [
+              "notifiedAt"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WatchlistItem_notifiedAt` ON `${TABLE_NAME}` (`notifiedAt`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Movie",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "movieId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "MovieReleaseFeedIndex",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`movieId` INTEGER NOT NULL, `position` INTEGER NOT NULL, `startReleaseDate` INTEGER NOT NULL, PRIMARY KEY(`movieId`), FOREIGN KEY(`movieId`) REFERENCES `Movie`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "movieId",
+            "columnName": "movieId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "position",
+            "columnName": "position",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startReleaseDate",
+            "columnName": "startReleaseDate",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "movieId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_MovieReleaseFeedIndex_position",
+            "unique": false,
+            "columnNames": [
+              "position"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_MovieReleaseFeedIndex_position` ON `${TABLE_NAME}` (`position`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Movie",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "movieId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "WatchProvider",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `logoPath` TEXT, `priority` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "logoPath",
+            "columnName": "logoPath",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "priority",
+            "columnName": "priority",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "MovieWatchProvider",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`movieId` INTEGER NOT NULL, `providerId` INTEGER NOT NULL, `type` INTEGER NOT NULL, `locale` TEXT NOT NULL, PRIMARY KEY(`movieId`, `providerId`, `locale`, `type`), FOREIGN KEY(`movieId`) REFERENCES `Movie`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`providerId`) REFERENCES `WatchProvider`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "movieId",
+            "columnName": "movieId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "providerId",
+            "columnName": "providerId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "locale",
+            "columnName": "locale",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "movieId",
+            "providerId",
+            "locale",
+            "type"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_MovieWatchProvider_movieId",
+            "unique": false,
+            "columnNames": [
+              "movieId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_MovieWatchProvider_movieId` ON `${TABLE_NAME}` (`movieId`)"
+          },
+          {
+            "name": "index_MovieWatchProvider_providerId",
+            "unique": false,
+            "columnNames": [
+              "providerId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_MovieWatchProvider_providerId` ON `${TABLE_NAME}` (`providerId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Movie",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "movieId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "WatchProvider",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "providerId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "MovieRecommendation",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`movieId` INTEGER NOT NULL, `recommendedId` INTEGER NOT NULL, `position` INTEGER NOT NULL, PRIMARY KEY(`movieId`, `recommendedId`), FOREIGN KEY(`movieId`) REFERENCES `Movie`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`recommendedId`) REFERENCES `Movie`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "movieId",
+            "columnName": "movieId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "recommendedId",
+            "columnName": "recommendedId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "position",
+            "columnName": "position",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "movieId",
+            "recommendedId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_MovieRecommendation_movieId",
+            "unique": false,
+            "columnNames": [
+              "movieId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_MovieRecommendation_movieId` ON `${TABLE_NAME}` (`movieId`)"
+          },
+          {
+            "name": "index_MovieRecommendation_recommendedId",
+            "unique": false,
+            "columnNames": [
+              "recommendedId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_MovieRecommendation_recommendedId` ON `${TABLE_NAME}` (`recommendedId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Movie",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "movieId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Movie",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "recommendedId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '111d5a40de25c3f323fb209b10e7aabf')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4a00748e98c3f8361124a752524fcac6')"
     ]
   }
 }

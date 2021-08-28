@@ -46,4 +46,6 @@
     <string name="movie_release_notification_description_single">%1$s foi lançado!</string>
     <string name="movie_release_notification_description_multiple">%1$s e outros %2$d filmes foram lançados!</string>
     <string name="movie_watch_on">Onde assistir</string>
+    <string name="nav_search_cancel">Cancelar busca</string>
+    <string name="movie_recommendations">Recomendações deste filme</string>
 </resources>

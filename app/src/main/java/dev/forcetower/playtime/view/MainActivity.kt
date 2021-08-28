@@ -14,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.forcetower.playtime.R
 import dev.forcetower.playtime.databinding.ActivityMainBinding
 import dev.forcetower.toolkit.components.BaseActivity
+import dev.forcetower.toolkit.extensions.windowInsetsControllerCompat
 import dev.forcetower.toolkit.lifecycle.EventObserver
 
 @AndroidEntryPoint
@@ -30,12 +31,11 @@ class MainActivity : BaseActivity() {
 
         binding.root.doOnLayout {
             NavigationUI.setupWithNavController(binding.bottomNav, navController)
+            setupObservers()
         }
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
         WindowCompat.getInsetsController(window, binding.root)?.isAppearanceLightStatusBars = true
-
-        setupObservers()
     }
 
     private fun setupObservers() {
@@ -52,6 +52,16 @@ class MainActivity : BaseActivity() {
                 }
             }
         )
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.movie_details) {
+                uiViewModel.hideBottomNav()
+                binding.root.windowInsetsControllerCompat?.isAppearanceLightStatusBars = false
+            } else {
+                uiViewModel.showBottomNav()
+                binding.root.windowInsetsControllerCompat?.isAppearanceLightStatusBars = true
+            }
+        }
     }
 
     override fun onSupportNavigateUp() = navController.navigateUp()

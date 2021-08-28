@@ -12,6 +12,7 @@
         android:layout_height="36dp"
         android:scaleType="centerCrop"
         android:layout_marginHorizontal="4dp"
+        android:contentDescription="@{provider.name}"
         app:roundedViewRadius="@{4}"
         app:tmdbUrl="@{provider.logoPath}"
         app:configWidthDivider="@{10}"

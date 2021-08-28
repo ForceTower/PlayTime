@@ -23,6 +23,7 @@ import dev.forcetower.playtime.core.model.ui.ReleaseDayIndexed
 import dev.forcetower.playtime.core.model.ui.ReleasesUI
 import dev.forcetower.playtime.core.source.local.PlayDB
 import dev.forcetower.playtime.core.source.mediator.MoviePopularRemoteMediator
+import dev.forcetower.playtime.core.source.mediator.MovieRecommendationRemoteMediator
 import dev.forcetower.playtime.core.source.network.LoadCurrentReleases
 import dev.forcetower.playtime.core.source.network.MovieQuerySource
 import dev.forcetower.playtime.core.source.network.TMDbService
@@ -51,6 +52,15 @@ class MovieRepository @Inject constructor(
             config = PagingConfig(pageSize = 20),
             pagingSourceFactory = { database.movies().getMovieSource() },
             remoteMediator = MoviePopularRemoteMediator(database, service)
+        ).flow
+    }
+
+    @OptIn(ExperimentalPagingApi::class)
+    fun recommendations(movieId: Int): Flow<PagingData<Movie>> {
+        return Pager(
+            config = PagingConfig(pageSize = 20),
+            pagingSourceFactory = { database.recommendations.getRecommendationsForMovie(movieId) },
+            remoteMediator = MovieRecommendationRemoteMediator(movieId, database, service)
         ).flow
     }
 

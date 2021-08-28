@@ -67,6 +67,7 @@
             android:textSize="12sp"
             android:maxLines="3"
             android:ellipsize="end"
+            app:goneUnless="@{movie.overviewPresent}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cover"
             app:layout_constraintTop_toBottomOf="@+id/title"

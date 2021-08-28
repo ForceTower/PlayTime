@@ -13,12 +13,22 @@ import retrofit2.http.Query
 import java.util.Locale
 
 interface TMDbService {
+    // --------- Providers
     @GET("watch/providers/movie")
     suspend fun providers(): Results<WatchProviderDTO>
 
+    // --------- Genres
     @GET("genre/movie/list")
     suspend fun genres(): GenresResponse
 
+    // --------- Search
+    @GET("search/movie")
+    suspend fun searchMovie(
+        @Query("query") query: String,
+        @Query("page") page: Int
+    ): MoviesResponse
+
+    // -------- Movies
     @GET("discover/movie")
     suspend fun moviesByRelease(
         @Query("page") page: Int = 1,
@@ -50,9 +60,9 @@ interface TMDbService {
         @Query("language") lang: String = Locale.getDefault().toLanguageTag()
     ): Results<MovieVideo>
 
-    @GET("search/movie")
-    suspend fun searchMovie(
-        @Query("query") query: String,
+    @GET("movie/{movieId}/recommendations")
+    suspend fun movieRecommendations(
+        @Path("movieId") movieId: Int,
         @Query("page") page: Int
     ): MoviesResponse
 }

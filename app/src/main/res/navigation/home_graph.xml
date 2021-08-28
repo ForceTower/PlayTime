@@ -22,6 +22,9 @@
             android:name="lastImage"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_movie_details_self"
+            app:destination="@id/movie_details" />
     </fragment>
     <fragment
         android:id="@+id/releases"

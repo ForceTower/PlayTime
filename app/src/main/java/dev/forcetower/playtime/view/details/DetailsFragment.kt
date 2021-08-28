@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.transition.ArcMotion
 import android.transition.ChangeBounds
 import android.transition.ChangeClipBounds
-import android.transition.ChangeImageTransform
 import android.transition.ChangeTransform
 import android.transition.TransitionSet
 import android.view.LayoutInflater
@@ -16,10 +15,12 @@ import android.view.animation.AnimationSet
 import android.view.animation.LinearInterpolator
 import android.view.animation.TranslateAnimation
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.fragment.app.activityViewModels
+import androidx.core.view.forEach
 import androidx.fragment.app.viewModels
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
@@ -27,12 +28,13 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import dagger.hilt.android.AndroidEntryPoint
 import dev.forcetower.playtime.R
+import dev.forcetower.playtime.core.model.storage.Movie
 import dev.forcetower.playtime.databinding.FragmentMovieDetailsBinding
-import dev.forcetower.playtime.view.UIViewModel
 import dev.forcetower.playtime.widget.behavior.ScrollingAlphaBehavior
 import dev.forcetower.toolkit.components.BaseFragment
-import dev.forcetower.toolkit.extensions.windowInsetsControllerCompat
 import dev.forcetower.toolkit.lifecycle.EventObserver
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
@@ -40,17 +42,16 @@ class DetailsFragment : BaseFragment() {
     private lateinit var binding: FragmentMovieDetailsBinding
     private lateinit var imagesAdapter: ImagesAdapter
     private lateinit var providersAdapter: ProviderAdapter
+    private lateinit var recommendationsAdapter: RecommendationAdapter
 
     private val args by navArgs<DetailsFragmentArgs>()
     private val viewModel by viewModels<DetailsViewModel>()
-    private val uiViewModel by activityViewModels<UIViewModel>()
 
     private var overlayAnimator: ValueAnimator? = null
     private var animationsRun = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        uiViewModel.hideBottomNav()
         postponeEnterTransition(500L, TimeUnit.MILLISECONDS)
 
         val transition = TransitionSet()
@@ -59,7 +60,6 @@ class DetailsFragment : BaseFragment() {
             )
             .addTransition(ChangeTransform())
             .addTransition(ChangeClipBounds())
-            .addTransition(ChangeImageTransform())
             .setOrdering(TransitionSet.ORDERING_TOGETHER)
             .setInterpolator(FastOutSlowInInterpolator())
 
@@ -80,6 +80,7 @@ class DetailsFragment : BaseFragment() {
 
         imagesAdapter = ImagesAdapter()
         providersAdapter = ProviderAdapter()
+        recommendationsAdapter = RecommendationAdapter(viewModel)
         binding.recyclerImages.apply {
             adapter = imagesAdapter
             itemAnimator?.run {
@@ -88,6 +89,12 @@ class DetailsFragment : BaseFragment() {
         }
         binding.recyclerProviders.apply {
             adapter = providersAdapter
+            itemAnimator?.run {
+                changeDuration = 0L
+            }
+        }
+        binding.recyclerMoviesSimilar.apply {
+            adapter = recommendationsAdapter
             itemAnimator?.run {
                 changeDuration = 0L
             }
@@ -106,12 +113,22 @@ class DetailsFragment : BaseFragment() {
             imagesAdapter.submitList(it)
         }
 
+        viewModel.providers.observe(viewLifecycleOwner) {
+            providersAdapter.submitList(it)
+        }
+
         viewModel.onPosterLoaded.observe(
             viewLifecycleOwner,
             EventObserver {
                 startPostponedEnterTransition()
             }
         )
+
+        lifecycleScope.launch {
+            viewModel.recommendations(args.movieId).collectLatest {
+                recommendationsAdapter.submitData(it)
+            }
+        }
 
         viewModel.overlayColor.observe(viewLifecycleOwner) {
             animateColorOverlayTo(it)
@@ -133,6 +150,29 @@ class DetailsFragment : BaseFragment() {
                 }
             })
         }
+
+        viewModel.onRecommendationsClicked.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                onNavigateToRecommendation(it)
+            }
+        )
+    }
+
+    private fun onNavigateToRecommendation(movie: Movie) {
+        val view = findViewForTransition(binding.recyclerMoviesSimilar, movie.id)
+        val directions = DetailsFragmentDirections.actionMovieDetailsSelf(movie.id, movie.posterPath ?: movie.backdropPath)
+        val extras = FragmentNavigatorExtras(view to view.transitionName)
+        findNavController().navigate(directions, extras)
+    }
+
+    private fun findViewForTransition(group: ViewGroup, id: Int): View {
+        group.forEach {
+            if (it.getTag(R.id.movie_id_tag) == id) {
+                return it.findViewById(R.id.cover)
+            }
+        }
+        return group
     }
 
     private fun animateColorOverlayTo(next: Int) {
@@ -174,12 +214,6 @@ class DetailsFragment : BaseFragment() {
         set.startOffset = 250
         binding.detailsAnimGroup.startAnimation(set)
         set.start()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        uiViewModel.showBottomNav()
-        binding.root.windowInsetsControllerCompat?.isAppearanceLightStatusBars = true
     }
 
     private fun dimBackground() {
