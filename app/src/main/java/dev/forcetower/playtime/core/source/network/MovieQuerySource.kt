@@ -12,6 +12,7 @@ class MovieQuerySource(
     private val service: TMDbService
 ) : PagingSource<Int, Movie>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
+
         val page = params.key ?: 1
         val query = queryProvider()
         if (query.isBlank()) return LoadResult.Page(emptyList(), null, null)

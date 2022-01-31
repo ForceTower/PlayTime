@@ -41,7 +41,7 @@ buildscript {
         gson = '2.8.8'
 
         // Build Versions
-        android_gradle_plugin = '7.0.2'
+        android_gradle_plugin = '7.0.4'
         play_publisher = "3.5.0"
     }
     repositories {

@@ -182,6 +182,7 @@
                     android:gravity="center"
                     app:goneUnless="@{!hasWatchedItems}"/>
 
+
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.core.widget.NestedScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -43,4 +43,9 @@
         <item name="verticalBias">0.67</item>
     </style>
 
+    <style name="TextAppearance.PlayTime.Thing" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textAlignment">gravity</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
 </resources>
