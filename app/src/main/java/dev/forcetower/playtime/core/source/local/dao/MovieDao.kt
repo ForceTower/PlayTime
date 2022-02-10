@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
@@ -28,7 +29,7 @@ abstract class MovieDao : BaseDao<Movie>() {
     @Update(entity = Movie::class)
     abstract suspend fun updateWithBase(value: List<MovieBase>)
 
-    @Insert(entity = Movie::class)
+    @Insert(entity = Movie::class, onConflict = OnConflictStrategy.IGNORE)
     abstract suspend fun insertWithBase(value: List<MovieBase>): List<Long>
 
     @Transaction
@@ -54,7 +55,7 @@ abstract class MovieDao : BaseDao<Movie>() {
         }
     }
 
-    @Insert(entity = Movie::class)
+    @Insert(entity = Movie::class, onConflict = OnConflictStrategy.IGNORE)
     abstract suspend fun insertWithComplete(value: MovieComplete): Long
 
     @Update(entity = Movie::class)

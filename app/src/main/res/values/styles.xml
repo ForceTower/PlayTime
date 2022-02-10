@@ -1,10 +1,16 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="BaseTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="BaseTheme" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">#6200EE</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorPrimaryDark">#3700B3</item>
+        <item name="colorSecondary">#03DAC5</item>
+        <item name="colorOnSecondary">#000000</item>
+        <item name="colorTertiary">#1FAEEF</item>
+
+        <item name="colorSurface">#FFFFFF</item>
+
         <item name="fontFamily">@font/product_sans_regular</item>
 
         <item name="colorOnMovieFeatured">#FFFFFF</item>
@@ -43,7 +49,7 @@
         <item name="verticalBias">0.67</item>
     </style>
 
-    <style name="TextAppearance.PlayTime.Thing" parent="TextAppearance.MaterialComponents.Caption">
+    <style name="TextAppearance.PlayTime.Thing" parent="TextAppearance.Material3.BodySmall">
         <item name="android:textAlignment">gravity</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_gravity">center</item>
