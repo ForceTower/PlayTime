@@ -15,10 +15,6 @@ abstract class MovieRecommendationDao : BaseDao<MovieRecommendation>() {
     @Query("SELECT * FROM MovieRecommendation WHERE movieId = :movieId AND recommendedId = :recommendedId")
     abstract suspend fun getRecommendationByMovieAndReference(movieId: Int, recommendedId: Int): MovieRecommendation?
 
-    override suspend fun getValueByIDDirect(value: MovieRecommendation): MovieRecommendation? {
-        return getRecommendationByMovieAndReference(value.movieId, value.recommendedId)
-    }
-
     @Query("DELETE FROM MovieRecommendation")
     abstract suspend fun deleteIndex()
 }

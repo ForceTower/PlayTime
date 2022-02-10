@@ -8,10 +8,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class ImageDao : BaseDao<Image>() {
-    override suspend fun getValueByIDDirect(value: Image): Image? {
-        return getImageByIdDirect(value.id)
-    }
-
     @Query("SELECT * FROM Image WHERE id = :id")
     abstract suspend fun getImageByIdDirect(id: Int): Image?
 

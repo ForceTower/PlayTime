@@ -14,10 +14,6 @@ abstract class WatchProviderDao : BaseDao<WatchProvider>() {
     @Query("SELECT * FROM WatchProvider WHERE id = :id")
     abstract suspend fun getByIdDirect(id: Int): WatchProvider?
 
-    override suspend fun getValueByIDDirect(value: WatchProvider): WatchProvider? {
-        return getByIdDirect(value.id)
-    }
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     abstract suspend fun insertAssociations(associations: List<MovieWatchProvider>)
 

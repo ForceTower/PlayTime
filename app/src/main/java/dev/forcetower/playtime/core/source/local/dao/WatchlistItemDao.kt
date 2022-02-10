@@ -14,13 +14,6 @@ import java.time.LocalDate
 
 @Dao
 abstract class WatchlistItemDao : BaseDao<WatchlistItem>() {
-    @Query("SELECT * FROM WatchlistItem WHERE movieId = :movieId")
-    protected abstract suspend fun getItemByIDDirect(movieId: Int): WatchlistItem?
-
-    override suspend fun getValueByIDDirect(value: WatchlistItem): WatchlistItem? {
-        return getItemByIDDirect(value.movieId)
-    }
-
     @Query("SELECT M.* FROM WatchlistItem WLI INNER JOIN Movie M ON WLI.movieId = M.id WHERE M.releaseDate > :today ORDER BY M.releaseDate")
     abstract fun getWatchlistUnreleased(today: LocalDate = LocalDate.now()): PagingSource<Int, Movie>
 

@@ -7,10 +7,6 @@ import dev.forcetower.toolkit.database.dao.BaseDao
 
 @Dao
 abstract class ReleaseIndexDao : BaseDao<MovieReleaseFeedIndex>() {
-    override suspend fun getValueByIDDirect(value: MovieReleaseFeedIndex): MovieReleaseFeedIndex? {
-        return getReleaseIndexByIdDirect(value.movieId)
-    }
-
     @Query("SELECT * FROM MovieReleaseFeedIndex WHERE movieId = :id")
     abstract suspend fun getReleaseIndexByIdDirect(id: Int): MovieReleaseFeedIndex?
 

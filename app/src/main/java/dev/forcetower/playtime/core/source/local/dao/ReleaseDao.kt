@@ -9,10 +9,6 @@ import java.time.ZonedDateTime
 
 @Dao
 abstract class ReleaseDao : BaseDao<Release>() {
-    override suspend fun getValueByIDDirect(value: Release): Release? {
-        return getByIdDirect(value.movieId, value.type, value.iso, value.releaseDate)
-    }
-
     @Query("SELECT * FROM `Release` WHERE movieId = :movieId AND type = :type AND iso = :iso AND releaseDate = :releaseDate")
     abstract suspend fun getByIdDirect(movieId: Int, type: Int, iso: String, releaseDate: ZonedDateTime): Release?
 

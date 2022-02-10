@@ -13,7 +13,6 @@ import dev.forcetower.toolkit.bindings.imageUrl
         "listener",
         "dontTransform",
         "blurImage",
-        "useBlurSupport",
         "blurRadius",
         "blurSampling",
         "crossFade",
@@ -30,7 +29,6 @@ fun tmdbUrl(
     listener: RequestListener<Drawable>?,
     dontTransform: Boolean?,
     blurImage: Boolean?,
-    useBlurSupport: Boolean?,
     blurRadius: Int?,
     blurSampling: Int?,
     crossFade: Boolean?,
@@ -47,7 +45,7 @@ fun tmdbUrl(
         else -> "original"
     }
     if (tmdbUrl == null) {
-        imageUrl(imageView, "https://image.freepik.com/vetores-gratis/erro-com-efeito-de-falha-na-tela-erro-404-pagina-nao-encontrada_143407-1.jpg", null, clipCircle, listener, dontTransform, blurImage, useBlurSupport, blurRadius, blurSampling, fallbackResource, crossFade, elevationAfterLoad)
+        imageUrl(imageView, "https://image.freepik.com/vetores-gratis/erro-com-efeito-de-falha-na-tela-erro-404-pagina-nao-encontrada_143407-1.jpg", null, clipCircle, listener, dontTransform, blurImage, blurRadius, blurSampling, fallbackResource, crossFade, elevationAfterLoad)
     } else {
         imageUrl(
             imageView,
@@ -57,7 +55,6 @@ fun tmdbUrl(
             listener,
             dontTransform,
             blurImage,
-            useBlurSupport,
             blurRadius,
             blurSampling,
             fallbackResource,

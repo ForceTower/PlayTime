@@ -19,10 +19,6 @@ abstract class MovieDao : BaseDao<Movie>() {
     @Query("SELECT * FROM Movie WHERE id = :id")
     protected abstract suspend fun getByIdDirect(id: Int): Movie?
 
-    override suspend fun getValueByIDDirect(value: Movie): Movie? {
-        return getByIdDirect(value.id)
-    }
-
     @Query("SELECT M.* FROM Movie M INNER JOIN MovieFeedIndex MFI ON M.id = MFI.movieId ORDER BY MFI.position")
     abstract fun getMovieSource(): PagingSource<Int, Movie>
 
@@ -30,34 +26,36 @@ abstract class MovieDao : BaseDao<Movie>() {
     abstract fun getMovieReleaseSource(): PagingSource<Int, Movie>
 
     @Update(entity = Movie::class)
-    abstract suspend fun updateWithBase(value: MovieBase)
+    abstract suspend fun updateWithBase(value: List<MovieBase>)
 
     @Insert(entity = Movie::class)
-    abstract suspend fun insertWithBase(value: MovieBase)
+    abstract suspend fun insertWithBase(value: List<MovieBase>): List<Long>
 
     @Transaction
     open suspend fun insertOrUpdateSimple(values: List<MovieBase>) {
-        values.forEach { value ->
-            val current = getByIdDirect(value.id)
-            if (current != null) updateWithBase(value)
-            else insertWithBase(value)
+        val result = insertWithBase(values)
+        val update = mutableListOf<MovieBase>()
+        result.forEachIndexed { index, value ->
+            if (value == -1L) update += values[index]
         }
+        if (update.isNotEmpty()) updateWithBase(update)
     }
 
     @Transaction
     open suspend fun insertOrUpdateComplete(value: MovieComplete) {
-        val current = getByIdDirect(value.id)
-        if (current != null) {
+        val result = insertWithComplete(value)
+        if (result == -1L) {
+            val current = getByIdDirect(value.id) ?: return
             if (current.releaseDate != null && value.releaseDate == null) {
                 updateWithComplete(value.copy(releaseDate = current.releaseDate))
             } else {
                 updateWithComplete(value)
             }
-        } else insertWithComplete(value)
+        }
     }
 
     @Insert(entity = Movie::class)
-    abstract suspend fun insertWithComplete(value: MovieComplete)
+    abstract suspend fun insertWithComplete(value: MovieComplete): Long
 
     @Update(entity = Movie::class)
     abstract suspend fun updateWithComplete(value: MovieComplete)

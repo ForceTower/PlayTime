@@ -8,10 +8,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class CastDao : BaseDao<Cast>() {
-    override suspend fun getValueByIDDirect(value: Cast): Cast? {
-        return getByIdDirect(value.creditId)
-    }
-
     @Query("SELECT * FROM `Cast` WHERE creditId = :id")
     abstract suspend fun getByIdDirect(id: String): Cast?
 

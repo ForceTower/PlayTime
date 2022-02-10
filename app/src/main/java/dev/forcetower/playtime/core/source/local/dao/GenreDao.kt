@@ -11,13 +11,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class GenreDao : BaseDao<Genre>() {
-    @Query("SELECT * FROM Genre WHERE id = :id")
-    protected abstract suspend fun getByIdDirect(id: Int): Genre?
-
-    override suspend fun getValueByIDDirect(value: Genre): Genre? {
-        return getByIdDirect(value.id)
-    }
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     abstract suspend fun insertAssociations(values: List<MovieGenre>)
 
