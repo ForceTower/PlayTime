@@ -14,7 +14,7 @@
     <string name="mark_already_watched">Já assisti</string>
     <string name="remove_already_watched">Assistido</string>
     <string name="navigate_up">Voltar</string>
-    <string name="add_to_watchlist">Adicionar à lista</string>
+    <string name="add_to_watchlist">Por na lista</string>
     <string name="movie_rating_format">%1$.1f</string>
     <string name="out_of_10">/10</string>
     <string name="logo_name_start">Play</string>
@@ -28,7 +28,7 @@
     <string name="listing_watched">Assistidos</string>
     <string name="profile">Perfil</string>
     <string name="remove_get_notified">Não me avise</string>
-    <string name="remove_from_watchlist">Adicionado à lista</string>
+    <string name="remove_from_watchlist">Na lista</string>
     <string name="nav_movies_releases">Lançamentos</string>
     <string name="releases_empty">Nenhum lançamento no periodo</string>
     <string name="last_month">Mês passado</string>
